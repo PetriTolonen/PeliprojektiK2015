@@ -86,6 +86,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="IncludeHelper.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Tank.cpp" />
     <ClCompile Include="Tank_hull.cpp" />
@@ -93,8 +95,11 @@
     <ClCompile Include="Tank_turret.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="Weapon.cpp" />
+    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="IncludeHelper.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Tank.h" />
     <ClInclude Include="Tank_hull.h" />
@@ -102,6 +107,7 @@
     <ClInclude Include="Tank_turret.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="Weapon.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
