@@ -13,12 +13,17 @@ void Game::run()
 	view->setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 
 	level_creation();
+
 	gameloop(window, view);
 }
 
 //-----Game_loop-----//
 void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 {
+	Tank_hull player("tank_hull");
+	player.set_position(2048.0f, 2048.0f - (screen_height / 2));
+	view->setCenter(player.get_position());
+
 	while (window->isOpen())
 	{
 		sf::Clock clock;
@@ -45,6 +50,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 		window->clear(sf::Color(100,200,0));
 		window->setView(*view);
 		window->draw(map);
+		player.draw(window);
 		//window.draw(sprite_tank_hull);
 		//window.draw(sprite_tank_turret);
 		window->draw(map2);

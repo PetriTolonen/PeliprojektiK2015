@@ -3,6 +3,8 @@
 
 Object::Object()
 {
+	enabled = true;
+	destroyed = false;
 }
 
 
@@ -34,4 +36,37 @@ float Object::get_rotation()
 void Object::set_position(sf::Vector2f vector)
 {
 	sprite_name.setPosition(vector);
+}
+
+void Object::set_position(float x, float y)
+{
+	sprite_name.setPosition(x, y);
+}
+
+bool Object::is_destroyed() const
+{
+	return destroyed;
+}
+
+void Object::destroy()
+{
+	destroyed = true;
+}
+
+void Object::update()
+{
+	if (!enabled || destroyed)
+	{
+		return;
+	}
+	on_update();
+}
+
+void Object::draw(sf::RenderWindow* win)
+{
+	if (!enabled || destroyed)
+	{
+		return;
+	}
+	on_draw(win);
 }

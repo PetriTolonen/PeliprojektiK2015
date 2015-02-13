@@ -13,8 +13,12 @@ public:
 	~Tank_hull(void);
 
 
+
 protected:
 	std::string texture_name;
 	std::string tank_name;
+
+	void on_update();
+	void on_draw(sf::RenderWindow* win);
 };
 #endif
