@@ -17,6 +17,8 @@ void Object::set_texture(std::string texture_name)
 	object_texture.loadFromFile(texture_name);
 	sprite_name.setTexture(object_texture);
 	sprite_name.setOrigin(object_texture.getSize().x / 2, object_texture.getSize().y / 2);
+	object_texture.setSmooth(true);
+	
 }
 
 sf::Vector2f Object::get_position()
