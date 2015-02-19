@@ -20,7 +20,7 @@ void Game::run()
 //-----Game_loop-----//
 void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 {
-	Tank_hull player("tank_hull");
+	Tank_hull player("tank_hull", 0.4, 0.2, 1, 2, 1);
 	player.set_position(2048.0f, 2048.0f - (screen_height / 2));
 	view->setCenter(player.get_position());
 

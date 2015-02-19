@@ -5,10 +5,11 @@
 #include "Tank_turret.h"
 #include "Weapon.h"
 #include "Tank_part.h"
+#include "Object.h"
 
 
-
-class Tank
+class Tank :
+	public Object
 {
 
 public:
@@ -21,6 +22,6 @@ public:
 
 protected:
 	std::vector<Tank_part*> tank_parts;
-
+	
 };
 #endif;
