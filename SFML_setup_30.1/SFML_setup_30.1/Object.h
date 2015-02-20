@@ -19,6 +19,7 @@ public:
 	void destroy();
 	void update();
 	void draw(sf::RenderWindow* win);
+	
 
 protected:
 

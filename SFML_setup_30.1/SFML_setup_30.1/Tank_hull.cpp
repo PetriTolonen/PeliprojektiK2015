@@ -3,7 +3,9 @@
 Tank_hull::Tank_hull(std::string tank_hull_name, float acf, float acb, float trs, float msf, float msb)
 {
 	texture_name = tank_hull_name + "_256.png";
+	
 	set_texture(texture_name);
+	object_texture.setSmooth(true);
 	acceleration_forward = acf;
 	acceleration_backward = acb;
 	traverse_speed = trs;
@@ -34,7 +36,7 @@ void Tank_hull::on_update()
 
 void Tank_hull::on_draw(sf::RenderWindow* win)
 {
-	win->draw(sprite_name);
+	win->draw(sprite_name);//hull_sprite_name);
 }
 
 
@@ -61,4 +63,14 @@ float Tank_hull::get_max_speed_forward()
 float Tank_hull::get_max_speed_backward()
 {
 	return max_speed_backward;
+}
+
+std::string Tank_hull::get_hull_tank_name()
+{
+	return tank_hull_name;
+}
+
+sf::Sprite& Tank_hull::get_sprite()
+{
+	return hull_sprite_name;
 }

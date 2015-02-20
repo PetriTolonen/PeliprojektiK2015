@@ -1,8 +1,9 @@
 #include "Player.h"
 
-Player::Player()
+Player::Player(Tank_hull t)
 {
-
+	this->t = t;
+	//player_sprite_hull.setTexture(Tank_hull);
 }
 
 Player::~Player(void)
@@ -11,7 +12,7 @@ Player::~Player(void)
 }
 
 
-void Player::update(float elapsed_time)
+void Player::update()
 {
 	//----------Clock-----------------//
 	sf::Time t1 = sf::seconds(0.1f);
@@ -27,6 +28,7 @@ void Player::update(float elapsed_time)
 	float momentary_acceleration_forward = 0;
 	float momentary_acceleration_backward = 0;
 	float momentary_max_speed_forward = 0;
+	std::string tank_name;
 
 	momentary_acceleration_forward = tank_hull.get_acceleration_forward();
 	momentary_max_speed_forward = tank_hull.get_max_speed_forward();
@@ -44,6 +46,13 @@ void Player::update(float elapsed_time)
 		{
 			momentary_speed_forward = momentary_max_speed_forward;
 		}
+
+
+		t.get_sprite().rotate(2);
+
+		
+		
+		
 
 		//tank_hull
 
@@ -93,6 +102,21 @@ void Player::update(float elapsed_time)
 
 	}
 
+	
 
+}
 
+void Player::set_position(float x, float y)
+{
+	t.set_position(x, y);
+}
+
+sf::Vector2f Player::get_position()
+{
+	return	t.get_position();
+}
+
+void Player::on_draw(sf::RenderWindow* win)
+{
+	t.on_draw(win);
 }

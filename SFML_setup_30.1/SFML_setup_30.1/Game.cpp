@@ -1,5 +1,5 @@
 #include "Game.h"
-
+#include "Player.h"
 void Game::run()
 {
 	//------Screen setup------//
@@ -20,15 +20,14 @@ void Game::run()
 //-----Game_loop-----//
 void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 {
-	Tank_hull player("tank_hull", 0.4, 0.2, 1, 2, 1);
+	Player player(Tank_hull ("tank_hull", 0.4, 0.2, 1, 2, 1));
 	player.set_position(2048.0f, 2048.0f - (screen_height / 2));
 	view->setCenter(player.get_position());
-
+		
 	while (window->isOpen())
 	{
 		sf::Clock clock;
 		sf::Time elapsed = clock.getElapsedTime();
-
 
 		sf::Event event;
 		while (window->pollEvent(event))
@@ -50,7 +49,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 		window->clear(sf::Color(100,200,0));
 		window->setView(*view);
 		window->draw(map);
-		player.draw(window);
+		player.on_draw(window);
 		//window.draw(sprite_tank_hull);
 		//window.draw(sprite_tank_turret);
 		window->draw(map2);
