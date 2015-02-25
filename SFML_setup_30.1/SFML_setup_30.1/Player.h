@@ -7,7 +7,7 @@
 class Player
 {
 public:
-	Player(Tank_hull t);
+	Player(Tank_hull* t);
 	~Player(void);
 	void update();
 	void reduce_health(int amount);
@@ -21,7 +21,7 @@ public:
 private:
 	int health;
 	//sf::Sprite player_sprite_hull;
-	Tank_hull t;
+	Tank_hull* t;
 //	float x;
 //	float y;
 

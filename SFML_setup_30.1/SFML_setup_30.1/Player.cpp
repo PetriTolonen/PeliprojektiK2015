@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(Tank_hull t)
+Player::Player(Tank_hull* t)
 {
 	this->t = t;
 	//player_sprite_hull.setTexture(Tank_hull);
@@ -48,7 +48,7 @@ void Player::update()
 		}
 
 
-		t.get_sprite().rotate(2);
+		t->get_sprite().rotate(2);
 
 		
 		
@@ -108,15 +108,15 @@ void Player::update()
 
 void Player::set_position(float x, float y)
 {
-	t.set_position(x, y);
+	t->set_position(x, y);
 }
 
 sf::Vector2f Player::get_position()
 {
-	return	t.get_position();
+	return	t->get_position();
 }
 
 void Player::on_draw(sf::RenderWindow* win)
 {
-	t.on_draw(win);
+	t->on_draw(win);
 }
