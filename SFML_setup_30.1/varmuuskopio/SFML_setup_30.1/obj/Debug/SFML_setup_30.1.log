@@ -1,0 +1,28 @@
+﻿Build started 27.2.2015 13:46:52.
+     1>Project "C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\SFML_setup_30.1\SFML_setup_30.1.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\SFML_setup_30.1\include\ /I"C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\..\SFML-2.2\include\\" /ZI /nologo /W4 /WX- /Od /Oy- /D SFML_STATIC /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\SFML_setup_30.1\obj\Debug\\" /Fd"C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\SFML_setup_30.1\obj\Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Player.cpp
+         Player.cpp
+     1>c:\users\ttv14saleksil\desktop\peliprojektik2015\peliprojektik2015\sfml_setup_30.1\sfml_setup_30.1\player.h(40): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>c:\users\ttv14saleksil\desktop\peliprojektik2015\peliprojektik2015\sfml_setup_30.1\sfml_setup_30.1\player.cpp(8): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\ttv14saleksil\desktop\peliprojektik2015\peliprojektik2015\sfml_setup_30.1\sfml_setup_30.1\player.cpp(119): warning C4100: 'rotation_speed' : unreferenced formal parameter
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\Debug\SFML_setup_30.1.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\..\SFML-2.2\lib" freetype.lib glew.lib jpeg.lib opengl32.lib "sfml-window-s-d.lib" "sfml-system-s-d.lib" "sfml-graphics-s-d.lib" winmm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\Debug\SFML_setup_30.1.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"mainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\Debug\SFML_setup_30.1.lib" /MACHINE:X86 C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\SFML_setup_30.1\obj\Debug\Game.obj
+         C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\SFML_setup_30.1\obj\Debug\IncludeHelper.obj
+         C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\SFML_setup_30.1\obj\Debug\Main.obj
+         C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\SFML_setup_30.1\obj\Debug\Object.obj
+         C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\SFML_setup_30.1\obj\Debug\ObjectManager.obj
+         C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\SFML_setup_30.1\obj\Debug\Player.obj
+         C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\SFML_setup_30.1\obj\Debug\Tank.obj
+         C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\SFML_setup_30.1\obj\Debug\Tank_hull.obj
+         C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\SFML_setup_30.1\obj\Debug\Tank_part.obj
+         C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\SFML_setup_30.1\obj\Debug\Tank_turret.obj
+         C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\SFML_setup_30.1\obj\Debug\TileMap.obj
+         C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\SFML_setup_30.1\obj\Debug\Weapon.obj
+         C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\SFML_setup_30.1\obj\Debug\World.obj
+         SFML_setup_30.1.vcxproj -> C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\Debug\SFML_setup_30.1.exe
+     1>Done Building Project "C:\Users\ttv14saleksil\Desktop\PeliprojektiK2015\PeliprojektiK2015\SFML_setup_30.1\SFML_setup_30.1\SFML_setup_30.1.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.74

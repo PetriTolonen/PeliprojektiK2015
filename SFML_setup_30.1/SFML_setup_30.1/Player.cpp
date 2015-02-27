@@ -1,9 +1,10 @@
 #include "Player.h"
 
-Player::Player(Tank_hull t)
+Player::Player(Tank_hull* t, float msf, float msb, float maf, float mab, float mmsf)
+	: momentary_speed_forward(msf), momentary_speed_backward(msb), momentary_acceleration_forward(maf), momentary_acceleration_backward(mab), momentary_max_speed_forward(mmsf)
 {
 	this->t = t;
-	//player_sprite_hull.setTexture(Tank_hull);
+	rotation_speed = t->get_traverse_speed();
 }
 
 Player::~Player(void)
@@ -14,32 +15,29 @@ Player::~Player(void)
 
 void Player::update()
 {
-	//----------Clock-----------------//
-	sf::Time t1 = sf::seconds(0.1f);
-	float _elapsed = t1.asSeconds();
+	//t->get_sprite().move(0.5, 0);
 
 
-	//---------Tank_hull_statistics------//
-	Tank_hull tank_hull;
-	float M_PI = 3.14159265358979323846;
-	float angle = 60 * M_PI / 2;
-	float momentary_speed_forward = 0;
-	float momentary_speed_backward = 0;
-	float momentary_acceleration_forward = 0;
-	float momentary_acceleration_backward = 0;
-	float momentary_max_speed_forward = 0;
-	std::string tank_name;
-
-	momentary_acceleration_forward = tank_hull.get_acceleration_forward();
-	momentary_max_speed_forward = tank_hull.get_max_speed_forward();
-
+	
 	//----------------Key_Pressing_check--------------------------------------//
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		
+		momentary_acceleration_forward = tank_hull.get_acceleration_forward();
+		momentary_max_speed_forward = tank_hull.get_max_speed_forward();
+		momentary_speed_forward += _elapsed * momentary_acceleration_forward;
 
-		
-
+		if (momentary_speed_forward > momentary_max_speed_forward)
+		{
+			momentary_speed_forward = momentary_max_speed_forward;
+		}
+				
+		set_position(x + (sin(t->get_rotation()*M_PI/180)*momentary_speed_forward), y + (cos(t->get_rotation()*M_PI/180)*momentary_speed_forward));
+			
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	{
+		momentary_acceleration_forward = tank_hull.get_acceleration_forward();
+		momentary_max_speed_forward = tank_hull.get_max_speed_forward();
 		momentary_speed_forward += _elapsed * momentary_acceleration_forward;
 
 		if (momentary_speed_forward > momentary_max_speed_forward)
@@ -47,11 +45,21 @@ void Player::update()
 			momentary_speed_forward = momentary_max_speed_forward;
 		}
 
+		set_position(x + (sin(t->get_rotation()*M_PI / 180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_forward));
 
-		t.get_sprite().rotate(2);
-
-		
-		
+	}
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
+		if (t == nullptr) {
+			std::abort();
+		}
+		t->get_sprite().rotate(0.8f);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
+		t->get_sprite().rotate(-0.8);
+	}
 		
 
 		//tank_hull
@@ -100,23 +108,38 @@ void Player::update()
 		*/
 					
 
-	}
-
 	
+
+	//on_draw();
 
 }
 
 void Player::set_position(float x, float y)
 {
-	t.set_position(x, y);
+	this->x = x;
+	this->y = y;
+
+	t->set_position(this ->x, this->y);
+	
+}
+
+float Player::rotate(float rotation_speed)
+{
+	return 0;//t->set_rotation(rotation_speed);
+
 }
 
 sf::Vector2f Player::get_position()
 {
-	return	t.get_position();
+	return	t->get_position();
 }
 
 void Player::on_draw(sf::RenderWindow* win)
 {
-	t.on_draw(win);
+	t->on_draw(win);
+}
+
+void Player::set_rotation(float rot)
+{
+	//rotation = rot;
 }

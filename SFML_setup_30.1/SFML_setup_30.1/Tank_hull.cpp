@@ -1,6 +1,6 @@
 #include "Tank_hull.h"
 
-Tank_hull::Tank_hull(std::string tank_hull_name, float acf, float acb, float trs, float msf, float msb)
+Tank_hull::Tank_hull(std::string tank_hull_name, float acf, float acb, float trs, float msf, float msb) : Object()
 {
 	texture_name = tank_hull_name + "_256.png";
 	
@@ -13,7 +13,7 @@ Tank_hull::Tank_hull(std::string tank_hull_name, float acf, float acb, float trs
 	max_speed_backward = msb;
 }
 
-Tank_hull::Tank_hull()
+Tank_hull::Tank_hull() : Object()
 {
 	
 	set_texture(texture_name);
@@ -70,7 +70,3 @@ std::string Tank_hull::get_hull_tank_name()
 	return tank_hull_name;
 }
 
-sf::Sprite& Tank_hull::get_sprite()
-{
-	return hull_sprite_name;
-}
