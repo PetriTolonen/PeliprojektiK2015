@@ -7,24 +7,47 @@
 class Player
 {
 public:
-	Player(Tank_hull* t);
+	Player(Tank_hull* t, float m_pi, float ang, float msf, float msb, float maf, float mab, float mmsf);
 	~Player(void);
 	void update();
 	void reduce_health(int amount);
 	void increase_health(int amount);
 	void set_health();
-	void set_position(float x, float y);
+
 	sf::Vector2f get_position();
 	void on_draw(sf::RenderWindow* win);
-	
+	float get_position_x();
+	float get_position_y();
+	void set_position(float x, float y);
+	void rotate();
 
 private:
 	int health;
 	//sf::Sprite player_sprite_hull;
 	Tank_hull* t;
-//	float x;
-//	float y;
+	float x;
+	float y;
+	float rotation;
+	//----------Clock-----------------//
+	sf::Time t1 = sf::seconds(0.1f);
+	float _elapsed = t1.asSeconds();
 
+
+	//---------Tank_hull_statistics------//
+	Tank_hull tank_hull;
+	float M_PI = 3.14159265358979323846;
+	float angle = 60 * M_PI / 2;
+	float momentary_speed_forward = 0;
+	float momentary_speed_backward = 0;
+	float momentary_acceleration_forward = 0;
+	float momentary_acceleration_backward = 0;
+	float momentary_max_speed_forward = 0;
+	//std::string tank_name;
+
+	/*
+	float momentary_acceleration_forward = tank_hull.get_acceleration_forward();
+	float momentary_max_speed_forward = tank_hull.get_max_speed_forward();
+	*/
 
 
 };

@@ -70,7 +70,7 @@ std::string Tank_hull::get_hull_tank_name()
 	return tank_hull_name;
 }
 
-sf::Sprite& Tank_hull::get_sprite()
+sf::Sprite&Tank_hull::get_sprite()
 {
 	return hull_sprite_name;
 }

@@ -1,8 +1,22 @@
 #include "Player.h"
 
-Player::Player(Tank_hull* t)
+Player::Player(Tank_hull* t, float m_pi, float ang, float msf, float msb, float maf, float mab, float mmsf)
 {
 	this->t = t;
+	rotation_speed = t->get_traverse_speed();
+
+	 m_pi = 3.14159265358979323846;
+	 ang = 60 * M_PI / 2;
+	msf = momentary_speed_forward;
+	msb = momentary_speed_backward;
+	maf = momentary_acceleration_forward;
+	mab = momentary_acceleration_backward;
+	mmsf = momentary_max_speed_forward;
+	//std::string tank_name;
+
+	
+
+
 	//player_sprite_hull.setTexture(Tank_hull);
 }
 
@@ -14,32 +28,17 @@ Player::~Player(void)
 
 void Player::update()
 {
-	//----------Clock-----------------//
-	sf::Time t1 = sf::seconds(0.1f);
-	float _elapsed = t1.asSeconds();
+	//t->get_sprite().move(0.5, 0);
 
 
-	//---------Tank_hull_statistics------//
-	Tank_hull tank_hull;
-	float M_PI = 3.14159265358979323846;
-	float angle = 60 * M_PI / 2;
-	float momentary_speed_forward = 0;
-	float momentary_speed_backward = 0;
-	float momentary_acceleration_forward = 0;
-	float momentary_acceleration_backward = 0;
-	float momentary_max_speed_forward = 0;
-	std::string tank_name;
-
-	momentary_acceleration_forward = tank_hull.get_acceleration_forward();
-	momentary_max_speed_forward = tank_hull.get_max_speed_forward();
-
+	
 	//----------------Key_Pressing_check--------------------------------------//
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		
 
-		
 
+		momentary_acceleration_forward = tank_hull.get_acceleration_forward();
+		momentary_max_speed_forward = tank_hull.get_max_speed_forward();
 		momentary_speed_forward += _elapsed * momentary_acceleration_forward;
 
 		if (momentary_speed_forward > momentary_max_speed_forward)
@@ -48,8 +47,19 @@ void Player::update()
 		}
 
 
-		t->get_sprite().rotate(2);
+		// Voi heittää helvettiin.
+		momentary_speed_forward = 5.0f;
 
+		//float x = sin(t->get_sprite().getRotation()*3.14159265*momentary_speed_forward);
+		//float y = cos(t->get_sprite().getRotation()*3.14159265)*momentary_speed_forward;
+		set_position();
+		
+		//t->get_sprite().move(sin(t->get_sprite().getRotation()*3.14159265*momentary_speed_forward), cos(t->get_sprite().getRotation()*3.14159265)*momentary_speed_forward);
+		//t->get_sprite().setPosition(t->get_sprite().getPosition().x + x, t->get_sprite().getPosition().y + y);
+
+		//t->set_position(t->get_position().x + x, t->get_position().y + y);
+		
+	}
 		
 		
 		
@@ -100,15 +110,24 @@ void Player::update()
 		*/
 					
 
-	}
-
 	
+
+	//on_draw();
 
 }
 
 void Player::set_position(float x, float y)
 {
-	t->set_position(x, y);
+	this->x = x;
+	this->y = y;
+
+	t->set_position(this ->x, this->y);
+	
+}
+
+void Player::rotate()
+{
+	
 }
 
 sf::Vector2f Player::get_position()
