@@ -14,7 +14,8 @@ public:
 	float get_rotation();
 	void set_position(sf::Vector2f vector);
 	void set_position(float x, float y);
-	float set_rotation();
+	void set_rotation(float r);
+	void rotate();//float r);
 	bool is_destroyed() const;
 	void destroy();
 	void update();

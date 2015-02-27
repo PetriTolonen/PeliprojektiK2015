@@ -7,7 +7,7 @@
 class Player
 {
 public:
-	Player(Tank_hull* t, float m_pi, float ang, float msf, float msb, float maf, float mab, float mmsf);
+	Player(Tank_hull* t, float rop, float m_pi, float ang, float msf, float msb, float maf, float mab, float mmsf);
 	~Player(void);
 	void update();
 	void reduce_health(int amount);
@@ -19,7 +19,8 @@ public:
 	float get_position_x();
 	float get_position_y();
 	void set_position(float x, float y);
-	void rotate();
+	float rotate(float rotation_speed);
+	void set_rotation(float rot);
 
 private:
 	int health;
@@ -27,6 +28,7 @@ private:
 	Tank_hull* t;
 	float x;
 	float y;
+	float rotation_speed;
 	float rotation;
 	//----------Clock-----------------//
 	sf::Time t1 = sf::seconds(0.1f);

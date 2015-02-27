@@ -1,10 +1,10 @@
 #include "Player.h"
 
-Player::Player(Tank_hull* t, float m_pi, float ang, float msf, float msb, float maf, float mab, float mmsf)
+Player::Player(Tank_hull* t, float rop, float m_pi, float ang, float msf, float msb, float maf, float mab, float mmsf)
 {
 	this->t = t;
 	rotation_speed = t->get_traverse_speed();
-
+	
 	 m_pi = 3.14159265358979323846;
 	 ang = 60 * M_PI / 2;
 	msf = momentary_speed_forward;
@@ -12,6 +12,7 @@ Player::Player(Tank_hull* t, float m_pi, float ang, float msf, float msb, float 
 	maf = momentary_acceleration_forward;
 	mab = momentary_acceleration_backward;
 	mmsf = momentary_max_speed_forward;
+	rop = rotation;
 	//std::string tank_name;
 
 	
@@ -52,7 +53,7 @@ void Player::update()
 
 		//float x = sin(t->get_sprite().getRotation()*3.14159265*momentary_speed_forward);
 		//float y = cos(t->get_sprite().getRotation()*3.14159265)*momentary_speed_forward;
-		set_position();
+		//set_position(x, y);
 		
 		//t->get_sprite().move(sin(t->get_sprite().getRotation()*3.14159265*momentary_speed_forward), cos(t->get_sprite().getRotation()*3.14159265)*momentary_speed_forward);
 		//t->get_sprite().setPosition(t->get_sprite().getPosition().x + x, t->get_sprite().getPosition().y + y);
@@ -60,7 +61,7 @@ void Player::update()
 		//t->set_position(t->get_position().x + x, t->get_position().y + y);
 		
 	}
-		
+
 		
 		
 
@@ -125,9 +126,10 @@ void Player::set_position(float x, float y)
 	
 }
 
-void Player::rotate()
+float Player::rotate(float rotation_speed)
 {
-	
+	return 0;//t->set_rotation(rotation_speed);
+
 }
 
 sf::Vector2f Player::get_position()
@@ -138,4 +140,11 @@ sf::Vector2f Player::get_position()
 void Player::on_draw(sf::RenderWindow* win)
 {
 	t->on_draw(win);
+}
+
+void Player::set_rotation(float rot)
+{
+
+	rotation = rot;
+
 }
