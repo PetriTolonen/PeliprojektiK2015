@@ -1,8 +1,10 @@
 #include "Object.h"
 
 
-Object::Object() : enabled(true), destroyed(false)
+Object::Object()
 {
+	enabled = true;
+	destroyed = false;
 }
 
 
@@ -16,6 +18,7 @@ void Object::set_texture(std::string texture_name)
 	sprite_name.setTexture(object_texture);
 	sprite_name.setOrigin(object_texture.getSize().x / 2, object_texture.getSize().y / 2);
 	object_texture.setSmooth(true);
+	
 }
 
 sf::Vector2f Object::get_position()
@@ -75,9 +78,4 @@ void Object::draw(sf::RenderWindow* win)
 		return;
 	}
 	on_draw(win);
-}
-
-sf::Sprite&Object::get_sprite()
-{
-	return sprite_name;
 }

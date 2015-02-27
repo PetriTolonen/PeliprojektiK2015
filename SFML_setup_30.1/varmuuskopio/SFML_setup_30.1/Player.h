@@ -7,11 +7,9 @@
 class Player
 {
 public:
-	Player(Tank_hull* t, float msf, float msb, float maf, float mab, float mmsf);
+	Player(Tank_hull* t, float rop, float m_pi, float ang, float msf, float msb, float maf, float mab, float mmsf);
 	~Player(void);
-
 	void update();
-	
 	void reduce_health(int amount);
 	void increase_health(int amount);
 	void set_health();
@@ -31,6 +29,7 @@ private:
 	float x;
 	float y;
 	float rotation_speed;
+	float rotation;
 	//----------Clock-----------------//
 	sf::Time t1 = sf::seconds(0.1f);
 	float _elapsed = t1.asSeconds();

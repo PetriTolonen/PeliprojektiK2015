@@ -20,7 +20,6 @@ public:
 	void destroy();
 	void update();
 	void draw(sf::RenderWindow* win);
-	sf::Sprite& get_sprite();
 	
 
 protected:
