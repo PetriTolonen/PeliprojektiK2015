@@ -26,8 +26,6 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 	Player player(&h, 0, 0, 0, 0, 0);
 
 	player.set_position(2048.0f, 2048.0f - (screen_height / 2));
-	view->setCenter(player.get_position());
-
 	
 	
 	while (window->isOpen())
@@ -53,6 +51,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 
 		}
 
+		view->setCenter(player.get_position());
 
 		window->clear(sf::Color(100,200,0));
 		window->setView(*view);

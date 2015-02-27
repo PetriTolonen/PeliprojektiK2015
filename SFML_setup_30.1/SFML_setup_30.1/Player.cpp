@@ -31,8 +31,7 @@ void Player::update()
 			momentary_speed_forward = momentary_max_speed_forward;
 		}
 				
-		set_position(x + (sin(t->get_rotation()*M_PI/180)*momentary_speed_forward), y + (cos(t->get_rotation()*M_PI/180)*momentary_speed_forward));
-			
+		set_position(x + (sin(t->get_rotation()*M_PI/180)*momentary_speed_forward), y + (cos(t->get_rotation()*M_PI/180)*-momentary_speed_forward));
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
@@ -45,20 +44,19 @@ void Player::update()
 			momentary_speed_forward = momentary_max_speed_forward;
 		}
 
-		set_position(x + (sin(t->get_rotation()*M_PI / 180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_forward));
-
+		set_position(x + (sin(t->get_rotation()*M_PI / 180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI / 180)*momentary_speed_forward));
 	}
 	
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		if (t == nullptr) {
 			std::abort();
 		}
-		t->get_sprite().rotate(0.8f);
+		t->get_sprite().rotate(rotation_speed);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		t->get_sprite().rotate(-0.8);
+		t->get_sprite().rotate(-rotation_speed);
 	}
 		
 
