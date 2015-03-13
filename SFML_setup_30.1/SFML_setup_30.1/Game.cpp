@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "Player.h"
+
 
 
 void Game::run()
@@ -13,9 +13,10 @@ void Game::run()
 	sf::View *view = new sf::View(sf::FloatRect(0, 0, screen_dimensions.x, screen_dimensions.y));
 	//view.reset(sf::FloatRect(0, 0, screen_dimensions.x, screen_dimensions.y));
 	view->setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
-
+	view->rotate(180);
 	level_creation();
 
+	begin_of_game = 0;
 	gameloop(window, view);
 }
 
@@ -23,9 +24,9 @@ void Game::run()
 void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 {
 	Tank_hull h("tank_hull", 0.4, 0.2, 1, 2, 1);
-	Player player(&h, 0, 0, 0, 0, 0);
+	Player *player = new Player(&h, 0, 0, 0, 0, 0);
 
-	player.set_position(2048.0f, 2048.0f - (screen_height / 2));
+	player->set_position(2048.0f, 0 + (screen_height / 2));
 	
 	
 	while (window->isOpen())
@@ -50,14 +51,14 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 			}
 
 		}
-
-		view->setCenter(player.get_position());
+		set_view(view, player);
+		//view->setCenter(player.get_position());
 
 		window->clear(sf::Color(100,200,0));
 		window->setView(*view);
 		window->draw(map);
-		player.update();
-		player.on_draw(window);
+		player->update();
+		player->on_draw(window);
 		//window.draw(sprite_tank_hull);
 		//window.draw(sprite_tank_turret);
 		window->draw(map2);
@@ -105,4 +106,19 @@ void Game::level_creation()
 			};
 		
 			map2.load("tileset_trees.png", sf::Vector2u(256, 256), level_trees, 16, 16);
+}
+
+void Game::set_view(sf::View *view, Player *player)
+{
+	//Alussa siirretään kamera pelaajaan.
+	if ((view->getCenter().y < 2045.0f - (screen_height / 2)) && begin_of_game == 0)
+	{
+		view->setCenter(player->get_position());
+		begin_of_game = 1;
+	}
+
+
+	view->setCenter(player->get_distance_traveled());
+	
+	
 }

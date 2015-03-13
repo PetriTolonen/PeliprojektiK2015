@@ -109,7 +109,8 @@ void Player::update()
 	
 
 	//on_draw();
-
+	if (t->get_position().y > distance_traveled.y) distance_traveled.y = t->get_position().y;
+	if (t->get_position().x > 0 + (screen_widht / 2) && t->get_position().x < 4096.f - (screen_widht/2)) distance_traveled.x = t->get_position().x;
 }
 
 void Player::set_position(float x, float y)
