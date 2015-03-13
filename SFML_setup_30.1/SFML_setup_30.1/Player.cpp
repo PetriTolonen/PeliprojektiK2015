@@ -31,7 +31,7 @@ void Player::update()
 			momentary_speed_forward = momentary_max_speed_forward;
 		}
 				
-		set_position(x + (sin(t->get_rotation()*M_PI/180)*momentary_speed_forward), y + (cos(t->get_rotation()*M_PI/180)*-momentary_speed_forward));
+		set_position(x + (sin(t->get_rotation()*M_PI/180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI/180)*momentary_speed_forward));
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
@@ -44,7 +44,7 @@ void Player::update()
 			momentary_speed_forward = momentary_max_speed_forward;
 		}
 
-		set_position(x + (sin(t->get_rotation()*M_PI / 180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI / 180)*momentary_speed_forward));
+		set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_forward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_forward));
 	}
 	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
@@ -108,9 +108,15 @@ void Player::update()
 
 	
 
-	//on_draw();
-	if (t->get_position().y > distance_traveled.y) distance_traveled.y = t->get_position().y;
-	if (t->get_position().x > 0 + (screen_widht / 2) && t->get_position().x < 4096.f - (screen_widht/2)) distance_traveled.x = t->get_position().x;
+	//Distance travelled.
+	if (t->get_position().y > distance_traveled.y)
+	{
+		distance_traveled.y = t->get_position().y;
+	}
+	if (t->get_position().x > 0 + (1920 / 2) && t->get_position().x < 4096.f - (1920 / 2))
+	{
+		distance_traveled.x = t->get_position().x;
+	}
 }
 
 void Player::set_position(float x, float y)

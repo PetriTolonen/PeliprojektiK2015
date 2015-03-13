@@ -18,9 +18,9 @@ public:
 	void set_view(sf::View *view, Player *player);
 
 private:
-	static const int screen_widht = 1280;
-	static const int screen_height = 720;
-	int level[512];
+	static const int screen_widht = 1920;
+	static const int screen_height = 1080;
+	int level[1024];
 	int level_trees[256];
 	TileMap map;
 	TileMap map2;
