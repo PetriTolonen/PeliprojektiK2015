@@ -14,6 +14,7 @@ void Game::run()
 	//view.reset(sf::FloatRect(0, 0, screen_dimensions.x, screen_dimensions.y));
 	view->setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 	view->rotate(180);
+	
 	level_creation();
 
 	begin_of_game = 0;
@@ -59,6 +60,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 		window->draw(map);
 		player->update();
 		player->on_draw(window);
+
 		//window.draw(sprite_tank_hull);
 		//window.draw(sprite_tank_turret);
 		window->draw(map2);
