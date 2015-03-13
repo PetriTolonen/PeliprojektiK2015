@@ -37,7 +37,7 @@ void Tank_hull::on_update()
 
 void Tank_hull::on_draw(sf::RenderWindow* win)
 {
-	win->draw(sprite_name);//hull_sprite_name);
+	win->draw(sprite_name);
 }
 
 
