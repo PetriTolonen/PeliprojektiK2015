@@ -18,6 +18,7 @@ void Object::set_texture(std::string texture_name)
 	object_texture.setSmooth(true);
 }
 
+
 sf::Vector2f Object::get_position()
 {
 	sf::Vector2f location;

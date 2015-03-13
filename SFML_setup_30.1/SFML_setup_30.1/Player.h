@@ -7,10 +7,10 @@
 class Player
 {
 public:
-	Player(Tank_hull* t, float msf, float msb, float maf, float mab, float mmsf);
+	Player(Tank_hull* t, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m);
 	~Player(void);
 
-	void update();
+	void update(sf::Event event);
 	
 	void reduce_health(int amount);
 	void increase_health(int amount);
@@ -23,6 +23,7 @@ public:
 	void set_position(float x, float y);
 	float rotate(float rotation_speed);
 	void set_rotation(float rot);
+	void set_weight(float weight_hull); // + float weight_turret); sitten kun turret implementoidaan
 
 private:
 	int health;
@@ -45,6 +46,9 @@ private:
 	float momentary_acceleration_forward = 0;
 	float momentary_acceleration_backward = 0;
 	float momentary_max_speed_forward = 0;
+	float momentary_max_speed_backward = 0;
+	float momentum = 0;
+	float weight = 0;
 	//std::string tank_name;
 
 	/*

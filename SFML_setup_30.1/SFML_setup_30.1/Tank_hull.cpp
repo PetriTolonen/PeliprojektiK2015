@@ -1,6 +1,6 @@
 #include "Tank_hull.h"
 
-Tank_hull::Tank_hull(std::string tank_hull_name, float acf, float acb, float trs, float msf, float msb) : Object()
+Tank_hull::Tank_hull(std::string tank_hull_name, float acf, float acb, float trs, float msf, float msb, float w) : Object()
 {
 	texture_name = tank_hull_name + "_256.png";
 	
@@ -11,6 +11,7 @@ Tank_hull::Tank_hull(std::string tank_hull_name, float acf, float acb, float trs
 	traverse_speed = trs;
 	max_speed_forward = msf;
 	max_speed_backward = msb;
+	weight = w;
 }
 
 Tank_hull::Tank_hull() : Object()
