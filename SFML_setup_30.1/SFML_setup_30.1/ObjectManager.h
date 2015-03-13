@@ -11,15 +11,15 @@ public:
 	ObjectManager();
 	~ObjectManager();
 
-	void addObject(Object* const object);
-	bool containsObject(const Object* const entity) const;
+	void add_object(Object* const object);
+	bool contains_object(const Object* const entity) const;
 	void update();
 	void draw();
 private:
 	std::list<Object* const> objects;
-	std::vector<Object* const> findResults;
-	std::list<Object* const> destroyedObjects;
+	std::vector<Object* const> find_results;
+	std::list<Object* const> destroyed_objects;
 
-	void freeObjects();
+	void free_objects();
 };
 #endif

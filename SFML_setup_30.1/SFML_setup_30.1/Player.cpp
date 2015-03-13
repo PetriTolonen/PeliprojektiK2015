@@ -35,7 +35,7 @@ void Player::update( sf::Event event)
 			momentary_speed_forward = momentary_max_speed_forward;
 		}
 				
-		set_position(x + (sin(t->get_rotation()*M_PI/180)*momentary_speed_forward), y + (cos(t->get_rotation()*M_PI/180)*-momentary_speed_forward));
+		set_position(x + (sin(t->get_rotation()*M_PI/180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI/180)*momentary_speed_forward));
 
 
 	}
@@ -50,7 +50,7 @@ void Player::update( sf::Event event)
 			momentary_speed_backward = momentary_max_speed_backward;
 		}
 
-		set_position(x + (sin(t->get_rotation()*M_PI / 180)*-momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*momentary_speed_backward));
+		set_position(x + (sin(t->get_rotation()*M_PI / 180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI / 180)*momentary_speed_forward));
 	}
 	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
@@ -187,4 +187,12 @@ void Player::set_weight(float weight_turret) //, float weight_hull)
 
 	
 
-//on_draw();
+	//Distance travelled.
+	if (t->get_position().y > distance_traveled.y)
+	{
+		distance_traveled.y = t->get_position().y;
+	}
+	if (t->get_position().x > 0 + (1920 / 2) && t->get_position().x < 4096.f - (1920 / 2))
+	{
+		distance_traveled.x = t->get_position().x;
+	}
