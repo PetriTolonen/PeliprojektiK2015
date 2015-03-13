@@ -1,6 +1,6 @@
 #include "Game.h"
 
-
+#include "AnimatedSprite.h"
 
 void Game::run()
 {
@@ -29,11 +29,27 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 
 	player->set_position(2048.0f, 0 + (screen_height / 2));
 	
+	//----Animation test----//
+	sf::Texture animtexture;
+	animtexture.loadFromFile("tileset_trees.png");
+
+	Animation psykotrees;
+	psykotrees.setSpriteSheet(animtexture);
+	psykotrees.addFrame(sf::IntRect(256, 0, 256, 256));
+	psykotrees.addFrame(sf::IntRect(0, 0, 256, 256));
+	psykotrees.addFrame(sf::IntRect(512, 0, 256, 256));
+	psykotrees.addFrame(sf::IntRect(768, 0, 256, 256));
+
+	Animation* currentAnimation = &psykotrees;
+
+	AnimatedSprite animatedSprite(sf::seconds(0.2f), true, false);
+	animatedSprite.setPosition(2048, 1080/2);
+	//----Animation test----//
 	
+	sf::Clock clock;
 	while (window->isOpen())
-	{
-		sf::Clock clock;
-		sf::Time elapsed = clock.getElapsedTime();
+	{		
+		sf::Time elapsed = clock.restart();
 		
 		sf::Event event;
 		while (window->pollEvent(event))
@@ -52,6 +68,12 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 			}
 
 		}
+
+		//----Animation test----//
+		animatedSprite.play(*currentAnimation);
+		animatedSprite.update(elapsed);
+		//----Animation test----//
+
 		set_view(view, player);
 		//view->setCenter(player.get_position());
 
@@ -60,6 +82,8 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 		window->draw(map);
 		player->update();
 		player->on_draw(window);
+
+		window->draw(animatedSprite);
 
 		//window.draw(sprite_tank_hull);
 		//window.draw(sprite_tank_turret);
