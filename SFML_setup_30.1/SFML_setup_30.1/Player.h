@@ -25,7 +25,9 @@ public:
 	void set_rotation(float rot);
 	void set_weight(float weight_hull); // + float weight_turret); sitten kun turret implementoidaan
 
+	sf::Vector2f get_distance_traveled() { return distance_traveled; }
 private:
+	
 	int health;
 	//sf::Sprite player_sprite_hull;
 	Tank_hull* t;
@@ -56,7 +58,7 @@ private:
 	float momentary_max_speed_forward = tank_hull.get_max_speed_forward();
 	*/
 
-
+	sf::Vector2f distance_traveled;
 };
 
 

@@ -5,41 +5,41 @@ ObjectManager::ObjectManager()
 {
 }
 
-void ObjectManager::freeObjects() {
-	std::for_each(destroyedObjects.begin(), destroyedObjects.end(), [this](Object* e) {
+void ObjectManager::free_objects() {
+	std::for_each(destroyed_objects.begin(), destroyed_objects.end(), [this](Object* e) {
 		objects.remove(e);
 
 		delete e;
 		e = nullptr;
 	});
 
-	destroyedObjects.clear();
+	destroyed_objects.clear();
 }
 
-void ObjectManager::addObject(Object* const object) {
+void ObjectManager::add_object(Object* const object) {
 	assert(object != nullptr && !object->is_destroyed());
 
-	bool add = !containsObject(object);
+	bool add = !contains_object(object);
 
 	if (add) {
 		objects.push_back(object);
 	}
 }
 
-bool ObjectManager::containsObject(const Object* const entity) const 
+bool ObjectManager::contains_object(const Object* const entity) const 
 {
 	return std::find(objects.begin(), objects.end(), entity) != objects.end();
 }
 
 void ObjectManager::update()
 {
-	freeObjects();
+	free_objects();
 
 	std::for_each(objects.begin(), objects.end(), [this](Object* e)
 	{
 		if (e->is_destroyed())
 		{
-			destroyedObjects.push_back(e);
+			destroyed_objects.push_back(e);
 			return;
 		}
 		e->update();
