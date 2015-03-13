@@ -25,7 +25,7 @@ void Game::run()
 void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 {
 	Tank_hull h("tank_hull", 0.4, 0.2, 1, 2, 1, 38000);
-	Player *player = new Player(&h, 0, 0, 0, 0, 0);
+	Player *player = new Player(&h, 0, 0, 0, 0, 0,0,0);
 
 	player->set_position(2048.0f, 0 + (screen_height / 2));
 	
@@ -58,7 +58,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 		window->clear(sf::Color(100,200,0));
 		window->setView(*view);
 		window->draw(map);
-		player.update(event);
+		player->update(event);
 		player->on_draw(window);
 
 		//window.draw(sprite_tank_hull);
