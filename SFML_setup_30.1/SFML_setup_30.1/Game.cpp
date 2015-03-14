@@ -31,19 +31,19 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 	
 	//----Animation test----//
 	sf::Texture animtexture;
-	animtexture.loadFromFile("tileset_trees.png");
+	animtexture.loadFromFile("hit_explosion_animation.png");
 
-	Animation psykotrees;
-	psykotrees.setSpriteSheet(animtexture);
-	psykotrees.addFrame(sf::IntRect(256, 0, 256, 256));
-	psykotrees.addFrame(sf::IntRect(0, 0, 256, 256));
-	psykotrees.addFrame(sf::IntRect(512, 0, 256, 256));
-	psykotrees.addFrame(sf::IntRect(768, 0, 256, 256));
+	Animation explosion;
+	explosion.setSpriteSheet(animtexture);
+	
+	for (int i = 0; i <= 12; i++)
+	{
+		explosion.addFrame(sf::IntRect(i * 256, 0, 256, 256));
+	}
 
-	Animation* currentAnimation = &psykotrees;
+	Animation* currentAnimation = &explosion;
 
-	AnimatedSprite animatedSprite(sf::seconds(0.2f), true, false);
-	animatedSprite.setPosition(2048, 1080/2);
+	AnimatedSprite animatedSprite(sf::seconds(0.05f), true, false);
 	//----Animation test----//
 	
 	sf::Clock clock;
@@ -70,7 +70,14 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 		}
 
 		//----Animation test----//
-		animatedSprite.play(*currentAnimation);
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			animatedSprite.play(*currentAnimation);
+			//animatedSprite.setPosition(player->get_position().x - 128 + sin(player->get_rotation()*3.14159265358979323846 / 180) * -400, player->get_position().y - 128 + cos(player->get_rotation()*3.14159265358979323846 / 180) * 400);
+			sf::Vector2i pixel_pos = sf::Mouse::getPosition(*window);
+			sf::Vector2f coord_pos = window->mapPixelToCoords(pixel_pos);
+			animatedSprite.setPosition(coord_pos.x-100,coord_pos.y-100);
+		}		
 		animatedSprite.update(elapsed);
 		//----Animation test----//
 
@@ -83,7 +90,9 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 		player->update();
 		player->on_draw(window);
 
+		//----Animation test----//
 		window->draw(animatedSprite);
+		//----Animation test----//
 
 		//window.draw(sprite_tank_hull);
 		//window.draw(sprite_tank_turret);

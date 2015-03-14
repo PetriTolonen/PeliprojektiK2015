@@ -23,6 +23,7 @@ public:
 	void set_position(float x, float y);
 	float rotate(float rotation_speed);
 	void set_rotation(float rot);
+	float get_rotation();
 
 	sf::Vector2f get_distance_traveled() { return distance_traveled; }
 private:

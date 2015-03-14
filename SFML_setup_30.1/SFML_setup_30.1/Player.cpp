@@ -148,3 +148,8 @@ void Player::set_rotation(float rot)
 {
 	//rotation = rot;
 }
+
+float Player::get_rotation()
+{
+	return t->get_rotation();
+}
