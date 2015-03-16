@@ -7,7 +7,7 @@
 class Player
 {
 public:
-	Player(Tank_hull* t, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m);
+	Player(Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m);
 	~Player(void);
 
 	void update(sf::Event event);
@@ -30,6 +30,7 @@ private:
 	
 	int health;
 	//sf::Sprite player_sprite_hull;
+	Tank_turret* tt;
 	Tank_hull* t;
 	float x;
 	float y;

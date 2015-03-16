@@ -25,7 +25,8 @@ void Game::run()
 void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 {
 	Tank_hull h("tank_hull", 0.4, 0.2, 1, 2, 1, 38000);
-	Player *player = new Player(&h, 0, 0, 0, 0, 0,0,0);
+	Tank_turret t("turret", 10, 10, 10, 10, 45, 100, 0.8, 1.5);
+	Player *player = new Player(&h, &t, 0, 0, 0, 0, 0,0,0);
 
 	player->set_position(2048.0f, 0 + (screen_height / 2));
 	

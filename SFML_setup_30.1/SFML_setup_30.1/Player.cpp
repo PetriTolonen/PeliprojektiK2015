@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(Tank_hull* t, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m)
+Player::Player(Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m)
 	: momentary_speed_forward(msf), momentary_speed_backward(msb), momentary_acceleration_forward(maf), momentary_acceleration_backward(mab), momentary_max_speed_forward(mmsf), momentary_max_speed_backward(mmsb), momentum(m)
 {
 	this->t = t;
