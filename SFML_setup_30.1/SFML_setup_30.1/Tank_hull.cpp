@@ -28,6 +28,7 @@ Tank_hull::Tank_hull() : Object()
 
 Tank_hull::~Tank_hull(void)
 {
+	//delete[]
 }
 
 void Tank_hull::on_update()

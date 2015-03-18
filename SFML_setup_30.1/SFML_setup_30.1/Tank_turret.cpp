@@ -21,6 +21,7 @@ Tank_turret::Tank_turret(std::string tank_turret_name, int af, int al, int ari, 
 
 Tank_turret::Tank_turret() : Object()
 {
+	texture_name = "tank_tower_256.png";
 	//name = "panzer part";
 	set_texture(texture_name);
 	armor_front = 15;
@@ -28,7 +29,9 @@ Tank_turret::Tank_turret() : Object()
 	armor_rear = 15;
 	armor_right = 15;
 	rotation_speed = 1;
-
+	ammo_count = 100;
+	accuracy = 0.35;
+	aim_time = 1.7;
 }
 
 Tank_turret::~Tank_turret(void)
@@ -48,4 +51,9 @@ void Tank_turret::rotate(float angle)
 void Tank_turret::on_draw(sf::RenderWindow* win)
 {
 	win->draw(sprite_name);//hull_sprite_name);
+}
+
+void Tank_turret::on_update()
+{
+
 }
