@@ -9,7 +9,7 @@ class Tank_hull : public Object
 public:
 
 	Tank_hull(std::string tank_name, float acf, float acb, float trs,
-		float msf, float msb, float w);
+		float msf, float msb, float w, int hp);
 	Tank_hull();
 	~Tank_hull(void);
 
@@ -30,7 +30,8 @@ protected:
 	float max_speed_forward;
 	float max_speed_backward;
 	float weight;
-
+	int horsepower;
+	
 	void on_update();
 	
 };
