@@ -46,6 +46,24 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 	AnimatedSprite animatedSprite(sf::seconds(0.05f), true, false);
 	//----Animation test----//
 	
+	//----Animation test----//
+	sf::Texture animtexture2;
+	animtexture2.loadFromFile("animation_cloud_explosion_512.png");
+
+	Animation explosion2;
+	explosion2.setSpriteSheet(animtexture2);
+
+	for (int i = 0; i <= 16; i++)
+	{
+		explosion2.addFrame(sf::IntRect(i * 512, 0, 512, 512));
+	}
+
+	Animation* currentAnimation2 = &explosion2;
+
+	AnimatedSprite animatedSprite2(sf::seconds(0.05f), true, false);
+	//----Animation test----//
+
+
 	sf::Clock clock;
 	while (window->isOpen())
 	{		
@@ -80,6 +98,15 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 		}		
 		animatedSprite.update(elapsed);
 		//----Animation test----//
+		//----Animation test----//
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+		{
+			animatedSprite2.play(*currentAnimation2);
+			animatedSprite2.setPosition(player->get_position().x-258,player->get_position().y-258);
+		}
+		animatedSprite2.update(elapsed);
+		//----Animation test----//
+
 
 		set_view(view, player);
 		//view->setCenter(player.get_position());
@@ -92,6 +119,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 
 		//----Animation test----//
 		window->draw(animatedSprite);
+		window->draw(animatedSprite2);
 		//----Animation test----//
 
 		//window.draw(sprite_tank_hull);
