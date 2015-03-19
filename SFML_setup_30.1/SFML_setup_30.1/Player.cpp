@@ -4,6 +4,7 @@ Player::Player(Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, f
 	: momentary_speed_forward(msf), momentary_speed_backward(msb), momentary_acceleration_forward(maf), momentary_acceleration_backward(mab), momentary_max_speed_forward(mmsf), momentary_max_speed_backward(mmsb), momentum(m)
 {
 	this->t = t;
+	this->tt = tt;
 	rotation_speed = t->get_traverse_speed();
 }
 
@@ -13,10 +14,13 @@ Player::~Player(void)
 }
 
 
-void Player::update( sf::Event event)
+void Player::update( sf::Event event, sf::RenderWindow* win)
 {
-	
 
+	//----turret_to_mouse----//
+
+	//sf::Vector2i position = sf::Mouse::getPosition(*win);
+	//position = sf::Vector2i(*win->mapPixelToCoords(position, ));
 	
 	
 	//----------------Key_Pressing_check--------------------------------------//
@@ -112,6 +116,7 @@ void Player::set_position(float x, float y)
 	this->y = y;
 
 	t->set_position(this ->x, this->y);
+	tt->set_position(this->x, this->y);
 	
 }
 
@@ -129,6 +134,7 @@ sf::Vector2f Player::get_position()
 void Player::on_draw(sf::RenderWindow* win)
 {
 	t->on_draw(win);
+	tt->on_draw(win);
 }
 
 void Player::set_rotation(float rot)
