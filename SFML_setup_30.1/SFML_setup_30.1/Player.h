@@ -10,7 +10,7 @@ public:
 	Player(Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m);
 	~Player(void);
 
-	void update(sf::Event event);
+	void update(sf::Event event, sf::RenderWindow* win);
 	
 	void reduce_health(int amount);
 	void increase_health(int amount);

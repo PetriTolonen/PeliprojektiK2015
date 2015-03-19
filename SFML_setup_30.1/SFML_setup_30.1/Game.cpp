@@ -59,7 +59,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 		window->clear(sf::Color(100,200,0));
 		window->setView(*view);
 		window->draw(map);
-		player->update(event);
+		player->update(event, window);
 		player->on_draw(window);
 
 		//window.draw(sprite_tank_hull);

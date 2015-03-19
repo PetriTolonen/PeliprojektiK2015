@@ -14,14 +14,34 @@ Player::~Player(void)
 }
 
 
-void Player::update( sf::Event event)
+void Player::update( sf::Event event, sf::RenderWindow* win)
 {
 
-	//----turret_to_mouse----//
+	////----turret_to_mouse----//
 
-	//sf::Vector2i position = sf::Mouse::getPosition(*win);
-	//position = sf::Vector2i(*win->mapPixelToCoords(position, ));
-	
+	sf::Vector2i pixel_pos = sf::Mouse::getPosition(*win);
+	sf::Vector2f coord_pos = win->mapPixelToCoords(pixel_pos);
+
+	float dx = x - coord_pos.x;
+	float dy = y - coord_pos.y;
+	float rotation = (atan2(dy, dx)) * 180 / M_PI;
+
+	if (tt->get_rotation() == rotation)
+	{
+		//stop
+	}
+	else
+	{
+		if (tt->get_rotation()<rotation + 180)
+		{
+			tt->get_sprite().rotate(rotation_speed);
+		}
+
+		if (tt->get_rotation()>rotation + 180)
+		{
+			tt->get_sprite().rotate(-rotation_speed);
+		}
+	}
 	
 	//----------------Key_Pressing_check--------------------------------------//
 	//Checks movement stuff
