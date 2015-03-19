@@ -14,7 +14,7 @@ Player::~Player(void)
 }
 
 
-void Player::update( sf::Event event, sf::RenderWindow* win)
+void Player::update( sf::Event event)
 {
 
 	//----turret_to_mouse----//
