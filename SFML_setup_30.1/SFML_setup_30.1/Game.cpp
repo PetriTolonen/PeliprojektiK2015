@@ -1,5 +1,6 @@
 #include "Game.h"
 
+#include "AnimatedSprite.h"
 
 
 void Game::run()
@@ -30,11 +31,45 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 
 	player->set_position(2048.0f, 0 + (screen_height / 2));
 	
+	//----Animation test----//
+	sf::Texture animtexture;
+	animtexture.loadFromFile("hit_explosion_animation.png");
+
+	Animation explosion;
+	explosion.setSpriteSheet(animtexture);
 	
-	while (window->isOpen())
+	for (int i = 0; i <= 12; i++)
 	{
-		sf::Clock clock;
-		sf::Time elapsed = clock.getElapsedTime();
+		explosion.addFrame(sf::IntRect(i * 256, 0, 256, 256));
+	}
+
+	Animation* currentAnimation = &explosion;
+
+	AnimatedSprite animatedSprite(sf::seconds(0.05f), true, false);
+	//----Animation test----//
+	
+	//----Animation test----//
+	sf::Texture animtexture2;
+	animtexture2.loadFromFile("animation_cloud_explosion_512.png");
+
+	Animation explosion2;
+	explosion2.setSpriteSheet(animtexture2);
+
+	for (int i = 0; i <= 16; i++)
+	{
+		explosion2.addFrame(sf::IntRect(i * 512, 0, 512, 512));
+	}
+
+	Animation* currentAnimation2 = &explosion2;
+
+	AnimatedSprite animatedSprite2(sf::seconds(0.05f), true, false);
+	//----Animation test----//
+
+
+	sf::Clock clock;
+	while (window->isOpen())
+	{		
+		sf::Time elapsed = clock.restart();
 		
 		sf::Event event;
 		while (window->pollEvent(event))
@@ -53,6 +88,28 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 			}
 
 		}
+
+		//----Animation test----//
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			animatedSprite.play(*currentAnimation);
+			//animatedSprite.setPosition(player->get_position().x - 128 + sin(player->get_rotation()*3.14159265358979323846 / 180) * -400, player->get_position().y - 128 + cos(player->get_rotation()*3.14159265358979323846 / 180) * 400);
+			sf::Vector2i pixel_pos = sf::Mouse::getPosition(*window);
+			sf::Vector2f coord_pos = window->mapPixelToCoords(pixel_pos);
+			animatedSprite.setPosition(coord_pos.x-100,coord_pos.y-100);
+		}		
+		animatedSprite.update(elapsed);
+		//----Animation test----//
+		//----Animation test----//
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+		{
+			animatedSprite2.play(*currentAnimation2);
+			animatedSprite2.setPosition(player->get_position().x-258,player->get_position().y-258);
+		}
+		animatedSprite2.update(elapsed);
+		//----Animation test----//
+
+
 		set_view(view, player);
 		//view->setCenter(player.get_position());
 
@@ -61,6 +118,11 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 		window->draw(map);
 		player->update(event, window);
 		player->on_draw(window);
+
+		//----Animation test----//
+		window->draw(animatedSprite);
+		window->draw(animatedSprite2);
+		//----Animation test----//
 
 		//window.draw(sprite_tank_hull);
 		//window.draw(sprite_tank_turret);
