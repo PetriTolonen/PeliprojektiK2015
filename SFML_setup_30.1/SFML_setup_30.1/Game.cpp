@@ -21,20 +21,7 @@ void Game::run()
 	begin_of_game = 0;
 	_game_state = Game::showing_splash;
 	
-	while (!is_exiting())
-	{
-		gameloop(window, view);
-	}
-	window->close();
-	
-}
-
-bool Game::is_exiting()
-{
-	if (_game_state == Game::exiting)
-		return true;
-	else
-		return false;
+	gameloop(window, view);	
 }
 
 //-----Game_loop-----//
@@ -44,8 +31,6 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 	Tank_turret turret("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.5);
 	Player *player = new Player(&hull, &turret, 0, 0, 0, 0, 0,0,0);
 	
-
-
 	player->set_position(2048.0f, 0 + (screen_height / 2));
 	o_manager.add_object(player);
 	//----Animation test----//
@@ -84,74 +69,80 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 
 	set_view(view, player);
 	//view->setCenter(player.get_position());
-
+	
 	sf::Clock clock;
-
-	sf::Event event;
-	window->pollEvent(event);
-
-	switch (_game_state)
-	{			
-	case Game::showing_menu:
+	while (!is_exiting())
 	{
-		show_menu(window);
-		break;
-	}
-	case Game::showing_splash:
-	{
-		show_splash_screen(window);
-		break;
-	}
-	case Game::playing:
-	{		
-		sf::Time elapsed = clock.restart();
+		sf::Event event;
+		window->pollEvent(event);
 
-		//----Animation test----//
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		switch (_game_state)
 		{
-			animatedSprite.play(*currentAnimation);
-			//animatedSprite.setPosition(player->get_position().x - 128 + sin(player->get_rotation()*3.14159265358979323846 / 180) * -400, player->get_position().y - 128 + cos(player->get_rotation()*3.14159265358979323846 / 180) * 400);
-			sf::Vector2i pixel_pos = sf::Mouse::getPosition(*window);
-			sf::Vector2f coord_pos = window->mapPixelToCoords(pixel_pos);
-			animatedSprite.setPosition(coord_pos.x - 100, coord_pos.y - 100);
-		}
-		animatedSprite.update(elapsed);
-		//----Animation test----//
-		//----Animation test----//
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+		case Game::showing_menu:
 		{
-			animatedSprite2.play(*currentAnimation2);
-			animatedSprite2.setPosition(player->get_position().x - 258, player->get_position().y - 258);
+			show_menu(window);
+			break;
 		}
-		animatedSprite2.update(elapsed);
-		//----Animation test----//
-
-		window->clear(sf::Color(100, 200, 0));
-		window->setView(*view);
-		window->draw(map);
-		//player->update(event, window);
-		//player->on_draw(window);*/
-		o_manager.update(event, window);
-		o_manager.draw(window);
-		//----Animation test----//
-		window->draw(animatedSprite);
-		window->draw(animatedSprite2);
-		//----Animation test----//
-
-		//window.draw(sprite_tank_hull);
-		//window.draw(sprite_tank_turret);
-		window->draw(map2);
-		window->display();
-		
-		if (event.type == sf::Event::Closed) _game_state = Game::exiting;
-
-		if (event.type == sf::Event::KeyPressed)
+		case Game::showing_splash:
 		{
-			if (event.key.code == sf::Keyboard::Escape) show_menu(window);
+			show_splash_screen(window);
+			break;
 		}
-	}
+		case Game::playing:
+		{
+			sf::Time elapsed = clock.restart();
+
+			//----Animation test----//
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				animatedSprite.play(*currentAnimation);
+				//animatedSprite.setPosition(player->get_position().x - 128 + sin(player->get_rotation()*3.14159265358979323846 / 180) * -400, player->get_position().y - 128 + cos(player->get_rotation()*3.14159265358979323846 / 180) * 400);
+				sf::Vector2i pixel_pos = sf::Mouse::getPosition(*window);
+				sf::Vector2f coord_pos = window->mapPixelToCoords(pixel_pos);
+				animatedSprite.setPosition(coord_pos.x - 100, coord_pos.y - 100);
+			}
+			animatedSprite.update(elapsed);
+			//----Animation test----//
+			//----Animation test----//
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+			{
+				animatedSprite2.play(*currentAnimation2);
+				animatedSprite2.setPosition(player->get_position().x - 258, player->get_position().y - 258);
+			}
+			animatedSprite2.update(elapsed);
+			//----Animation test----//
+
+			window->clear(sf::Color(100, 200, 0));
+			window->setView(*view);
+			window->draw(map);
+			//player->update(event, window);
+			//player->on_draw(window);*/
+			o_manager.update(event, window);
+			o_manager.draw(window);
+			//----Animation test----//
+			window->draw(animatedSprite);
+			window->draw(animatedSprite2);
+			//----Animation test----//
+
+			//window.draw(sprite_tank_hull);
+			//window.draw(sprite_tank_turret);
+			window->draw(map2);
+			window->display();
+
+			if (event.type == sf::Event::Closed) _game_state = Game::exiting;
+
+			if (event.type == sf::Event::KeyPressed)
+			{
+				if (event.key.code == sf::Keyboard::Escape) show_menu(window);
+			}
+			break;
+		}
 	}
 	
+
+	
+	}
+	window->close();
 	
 	//while (window->isOpen())
 	//{		
@@ -263,6 +254,14 @@ void Game::show_menu(sf::RenderWindow *window)
 		break;
 
 	}
+}
+
+bool Game::is_exiting()
+{
+	if (_game_state == Game::exiting)
+		return true;
+	else
+		return false;
 }
 
 Game::game_state Game::_game_state = uninitialized;
