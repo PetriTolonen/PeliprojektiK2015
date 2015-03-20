@@ -38,7 +38,8 @@ private:
 	Tank_hull* t;
 	float x;
 	float y;
-	float rotation_speed;
+	float turret_rotation_speed = 0;
+	float hull_rotation_speed = 0;
 	//----------Clock-----------------//
 	sf::Time t1 = sf::seconds(0.1f);
 	float _elapsed = t1.asSeconds();

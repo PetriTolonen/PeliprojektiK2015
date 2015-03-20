@@ -4,7 +4,9 @@ Player::Player(Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, f
 {
 	this->t = t;
 	this->tt = tt;
-	rotation_speed = t->get_traverse_speed();
+	turret_rotation_speed = tt->get_traverse_speed();
+	hull_rotation_speed = t->get_traverse_speed();
+	
 
 	momentary_speed_forward = msf;
 	momentary_max_speed_backward = msb;
@@ -22,7 +24,7 @@ Player::~Player(void)
 
 void Player::update(sf::Event event, sf::RenderWindow* win)
 {
-	//update(event, win);
+
 }
 
 void Player::on_update(sf::Event event, sf::RenderWindow* win)
@@ -43,15 +45,17 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	}
 	else
 	{
-		if (tt->get_rotation()<rotation + 180)
+		if (tt->get_rotation() < rotation + 180 )
 		{
-			tt->get_sprite().rotate(rotation_speed);
+			tt->get_sprite().rotate(0.5);
+			std::cout << " " << dx << " " << dy << " " << std::endl;
 		}
-
 		if (tt->get_rotation()>rotation + 180)
 		{
-			tt->get_sprite().rotate(-rotation_speed);
+			tt->get_sprite().rotate(-0.5);
+			std::cout << " " << dx << " " << dy << " " << std::endl;
 		}
+
 	}
 	
 	//----------------Key_Pressing_check--------------------------------------//
@@ -90,11 +94,11 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-			t->get_sprite().rotate(rotation_speed);
+			t->get_sprite().rotate(hull_rotation_speed);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		t->get_sprite().rotate(-rotation_speed);
+		t->get_sprite().rotate(-hull_rotation_speed);
 	}
 		
 	//----------------------momentum to move tank forward after key is released------------------------------------//

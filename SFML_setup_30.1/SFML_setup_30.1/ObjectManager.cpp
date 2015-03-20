@@ -57,11 +57,7 @@ void ObjectManager::update(sf::Event event, sf::RenderWindow* win)
 
 void ObjectManager::draw(sf::RenderWindow* win)
 {
-	//std::for_each(objects.begin(), objects.end(), [](Object* e)
-	//{
-	//	delete e;
-	//	e = nullptr;
-	//});
+
 
 	std::for_each(objects.begin(), objects.end(), [&win](Object* e)
 	{
