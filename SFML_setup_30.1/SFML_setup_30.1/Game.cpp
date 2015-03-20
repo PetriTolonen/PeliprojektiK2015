@@ -266,3 +266,4 @@ void Game::show_menu(sf::RenderWindow *window)
 }
 
 Game::game_state Game::_game_state = uninitialized;
+ObjectManager Game::o_manager;
