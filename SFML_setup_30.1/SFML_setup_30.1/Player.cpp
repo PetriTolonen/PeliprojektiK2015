@@ -143,6 +143,8 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 		distance_traveled.x = t->get_position().x;
 	}
 	
+	//debuggausta varten kirjoittaa consoleen pelaajan sijaintia.
+	//std::cout << tt->get_position().x << " " << tt->get_position().y << std::endl;
 }
 
 void Player::set_position(float x, float y)

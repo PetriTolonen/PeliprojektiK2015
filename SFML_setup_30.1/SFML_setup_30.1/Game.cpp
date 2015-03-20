@@ -67,7 +67,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 	AnimatedSprite animatedSprite2(sf::seconds(0.05f), true, false);
 	//----Animation test----//
 
-	set_view(view, player);
+	
 	//view->setCenter(player.get_position());
 	
 	sf::Clock clock;
@@ -90,7 +90,11 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 		}
 		case Game::playing:
 		{
+			window->clear(sf::Color(100, 200, 0));	
+
 			sf::Time elapsed = clock.restart();
+
+			set_view(view, player);
 
 			//----Animation test----//
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -112,7 +116,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 			animatedSprite2.update(elapsed);
 			//----Animation test----//
 
-			window->clear(sf::Color(100, 200, 0));
+			
 			window->setView(*view);
 			window->draw(map);
 			//player->update(event, window);
