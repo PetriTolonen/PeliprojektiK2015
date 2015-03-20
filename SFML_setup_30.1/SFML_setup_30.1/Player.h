@@ -3,19 +3,23 @@
 
 #include "Tank.h"
 #include "IncludeHelper.h"
+#include "Object.h"
 
-class Player
+
+class Player : public Object
 {
 public:
 	Player(Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m);
 	~Player(void);
 
+	void on_update(sf::Event event, sf::RenderWindow* win);
 	void update(sf::Event event, sf::RenderWindow* win);
 	
 	void reduce_health(int amount);
 	void increase_health(int amount);
 	void set_health();
 
+	
 	sf::Vector2f get_position();
 	void on_draw(sf::RenderWindow* win);
 	float get_position_x();

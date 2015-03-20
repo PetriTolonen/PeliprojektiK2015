@@ -18,7 +18,7 @@ public:
 	void rotate();//float r);
 	bool is_destroyed() const;
 	void destroy();
-	void update();
+	void update(sf::Event event, sf::RenderWindow* win);
 	void draw(sf::RenderWindow* win);
 	sf::Sprite& get_sprite();
 	
@@ -33,7 +33,7 @@ protected:
 	bool enabled;
 
 protected:
-	virtual void on_update() = 0;
+	virtual void on_update(sf::Event event, sf::RenderWindow* win);
 	virtual void on_draw(sf::RenderWindow* win) = 0;
 };
 #endif

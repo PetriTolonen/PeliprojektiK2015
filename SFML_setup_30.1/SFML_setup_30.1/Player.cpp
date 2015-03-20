@@ -1,11 +1,18 @@
 #include "Player.h"
 
-Player::Player(Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m)
-	: momentary_speed_forward(msf), momentary_speed_backward(msb), momentary_acceleration_forward(maf), momentary_acceleration_backward(mab), momentary_max_speed_forward(mmsf), momentary_max_speed_backward(mmsb), momentum(m)
+Player::Player(Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m) : Object()
 {
 	this->t = t;
 	this->tt = tt;
 	rotation_speed = t->get_traverse_speed();
+
+	momentary_speed_forward = msf;
+	momentary_max_speed_backward = msb;
+	momentary_acceleration_forward = maf;
+	momentary_acceleration_backward = mab;
+	momentary_max_speed_forward = mmsf;
+	momentary_max_speed_backward = mmsb;
+	momentum = m;
 }
 
 Player::~Player(void)
@@ -13,8 +20,12 @@ Player::~Player(void)
 
 }
 
+void Player::update(sf::Event event, sf::RenderWindow* win)
+{
+	//update(event, win);
+}
 
-void Player::update( sf::Event event, sf::RenderWindow* win)
+void Player::on_update(sf::Event event, sf::RenderWindow* win)
 {
 
 	////----turret_to_mouse----//

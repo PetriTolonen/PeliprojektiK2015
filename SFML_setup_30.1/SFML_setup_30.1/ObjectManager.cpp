@@ -5,6 +5,15 @@ ObjectManager::ObjectManager()
 {
 }
 
+ObjectManager::~ObjectManager(void)
+{
+	std::for_each(objects.begin(), objects.end(), [](Object* e)
+	{
+		delete e;
+		e = nullptr;
+	});
+}
+
 void ObjectManager::free_objects() {
 	std::for_each(destroyed_objects.begin(), destroyed_objects.end(), [this](Object* e) {
 		objects.remove(e);
@@ -31,26 +40,33 @@ bool ObjectManager::contains_object(const Object* const entity) const
 	return std::find(objects.begin(), objects.end(), entity) != objects.end();
 }
 
-void ObjectManager::update()
+void ObjectManager::update(sf::Event event, sf::RenderWindow* win)
 {
 	free_objects();
 
-	std::for_each(objects.begin(), objects.end(), [this](Object* e)
+	std::for_each(objects.begin(), objects.end(), [this, &win, &event](Object* e)
 	{
 		if (e->is_destroyed())
 		{
 			destroyed_objects.push_back(e);
 			return;
 		}
-		e->update();
+		e->update(event, win);
 	});
 }
 
-void ObjectManager::draw()
+void ObjectManager::draw(sf::RenderWindow* win)
 {
-	std::for_each(objects.begin(), objects.end(), [](Object* e)
+	//std::for_each(objects.begin(), objects.end(), [](Object* e)
+	//{
+	//	delete e;
+	//	e = nullptr;
+	//});
+
+	std::for_each(objects.begin(), objects.end(), [&win](Object* e)
 	{
-		delete e;
-		e = nullptr;
-	});
+		e->draw(win);
+
+	}
+		);
 }
