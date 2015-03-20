@@ -10,12 +10,14 @@ public:
 
 	Tank_turret();
 	Tank_turret(std::string tank_turret_name, int af,
-		int al, int ari, int are, float rot, int am, float acc, float aimt);
+		int al, int ari, int are, float rot, int am, float acc, float aimt, float ts);
 	~Tank_turret(void);
 
 	void rotate(float angle);
 	void on_draw(sf::RenderWindow* win);
 	void on_update();
+
+	float get_traverse_speed();
 
 protected:
 
@@ -29,7 +31,7 @@ protected:
 	int ammo_count;
 	float accuracy;
 	float aim_time;
-
+	float traverse_speed;
 
 
 

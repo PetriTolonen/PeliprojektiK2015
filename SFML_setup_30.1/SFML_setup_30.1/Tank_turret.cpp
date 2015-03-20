@@ -1,7 +1,7 @@
 #include "Tank_turret.h"
 
 
-Tank_turret::Tank_turret(std::string tank_turret_name, int af, int al, int ari, int are, float rot, int am, float acc, float aimt) : Object()
+Tank_turret::Tank_turret(std::string tank_turret_name, int af, int al, int ari, int are, float rot, int am, float acc, float aimt, float ts) : Object()
 {
 
 	texture_name = tank_turret_name + "_256.png";
@@ -16,6 +16,7 @@ Tank_turret::Tank_turret(std::string tank_turret_name, int af, int al, int ari, 
 	ammo_count = am;
 	accuracy = acc;
 	aim_time = aimt;
+	traverse_speed = ts;
 
 }
 
@@ -56,4 +57,9 @@ void Tank_turret::on_draw(sf::RenderWindow* win)
 void Tank_turret::on_update()
 {
 
+}
+
+float Tank_turret::get_traverse_speed()
+{
+	return traverse_speed;
 }

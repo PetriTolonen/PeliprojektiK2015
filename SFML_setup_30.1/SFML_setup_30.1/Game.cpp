@@ -41,11 +41,13 @@ bool Game::is_exiting()
 void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 {
 	Tank_hull hull("tank_hull", 0.4, 0.2, 1, 2, 1, 38000, 165);
-	Tank_turret turret("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5);
+	Tank_turret turret("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.5);
 	Player *player = new Player(&hull, &turret, 0, 0, 0, 0, 0,0,0);
+	
+
 
 	player->set_position(2048.0f, 0 + (screen_height / 2));
-	
+	o_manager.add_object(player);
 	//----Animation test----//
 	sf::Texture animtexture;
 	animtexture.loadFromFile("hit_explosion_animation.png");
@@ -127,9 +129,10 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 		window->clear(sf::Color(100, 200, 0));
 		window->setView(*view);
 		window->draw(map);
-		player->update(event, window);
-		player->on_draw(window);
-
+		//player->update(event, window);
+		//player->on_draw(window);*/
+		o_manager.update(event, window);
+		o_manager.draw(window);
 		//----Animation test----//
 		window->draw(animatedSprite);
 		window->draw(animatedSprite2);
