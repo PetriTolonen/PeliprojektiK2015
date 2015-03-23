@@ -60,36 +60,73 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	
 	//----------------Key_Pressing_check--------------------------------------//
 	//Checks movement stuff
+	
+	
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		momentary_acceleration_forward = tank_hull.get_acceleration_forward();
-		momentary_max_speed_forward = tank_hull.get_max_speed_forward();
-		momentary_speed_forward += _elapsed * momentary_acceleration_forward;
 
-
-
-		if (momentary_speed_forward > momentary_max_speed_forward)
+		if (is_moving_backward == false)
 		{
-			momentary_speed_forward = momentary_max_speed_forward;
-		}
-				
-		set_position(x + (sin(t->get_rotation()*M_PI/180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI/180)*momentary_speed_forward));
+			momentary_acceleration_forward = tank_hull.get_acceleration_forward();
+			momentary_max_speed_forward = tank_hull.get_max_speed_forward();
+			momentary_speed_forward += _elapsed * momentary_acceleration_forward;
 
+
+
+			if (momentary_speed_forward > momentary_max_speed_forward)
+			{
+				momentary_speed_forward = momentary_max_speed_forward;
+			}
+
+			set_position(x + (sin(t->get_rotation()*M_PI / 180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI / 180)*momentary_speed_forward));
+
+			is_moving_forward = true;
+		}
+
+		if (is_moving_backward == true)
+		{
+			momentary_acceleration_forward = tank_hull.get_acceleration_forward();
+			momentary_max_speed_forward = tank_hull.get_max_speed_forward();
+			momentary_speed_forward += _elapsed * momentary_acceleration_forward;
+
+			momentary_speed_backward -= momentary_speed_forward;
+		}
+		
 
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		momentary_acceleration_backward = tank_hull.get_acceleration_backward();
-		momentary_max_speed_backward = tank_hull.get_max_speed_backward();
-		momentary_speed_backward += _elapsed * momentary_acceleration_backward;
-
-		if (momentary_speed_backward > momentary_max_speed_backward)
+		if (is_moving_forward == false)
 		{
-			momentary_speed_backward = momentary_max_speed_backward;
+			momentary_acceleration_backward = tank_hull.get_acceleration_backward();
+			momentary_max_speed_backward = tank_hull.get_max_speed_backward();
+			momentary_speed_backward += _elapsed * momentary_acceleration_backward;
+
+			if (momentary_speed_backward > momentary_max_speed_backward)
+			{
+				momentary_speed_backward = momentary_max_speed_backward;
+			}
+
+			set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_backward));
+
+			is_moving_backward = true;
+
 		}
 
-		set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_backward));
+		if (is_moving_forward == true)
+		{
+
+			momentary_acceleration_backward = tank_hull.get_acceleration_backward();
+			momentary_max_speed_backward = tank_hull.get_max_speed_backward();
+			momentary_speed_backward += _elapsed * momentary_acceleration_backward;
+
+
+			momentary_speed_forward -= momentary_speed_backward;
+		}
+
+
+
 	}
 	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
@@ -101,18 +138,6 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 		t->get_sprite().rotate(-hull_rotation_speed);
 	}
 		
-	//----------------------momentum to move tank forward after key is released------------------------------------//
-	//to move tank even if key is released to make it feel more like a tank.
-	
-	/*
-	if (momentary_speed_forward > 0)
-	{
-		momentum = 0.5 *  ;		//
-	}
-	*/
-
-
-
 
 	//----------------------------------------------------Key realease events--------------------------------//
 	//So the tank is required to accelerate everytime it stops
@@ -121,7 +146,13 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	{
 		if (event.key.code == sf::Keyboard::W)
 		{
-			momentary_speed_forward = 0;
+			momentary_speed_forward -= 0.10;
+			if (momentary_speed_forward <= 0.05)
+			{
+				momentary_speed_forward = 0;
+				is_moving_forward = false;
+			}
+				
 		}
 	}
 	
@@ -129,11 +160,39 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	{
 		if (event.key.code == sf::Keyboard::S)
 		{
-			momentary_speed_backward = 0;
+			momentary_speed_backward -= 0.10;
+			if (momentary_speed_backward <= 0.05)
+			{
+				momentary_speed_backward = 0;
+				is_moving_backward = false;
+			}
+				
+			
 		}
 	}
 
-	//Distance travelled.
+
+	//----------------------momentum to move tank forward after key is released------------------------------------//
+	//to move tank even if key is released to make it feel more like a tank.
+
+	 
+
+	if (is_moving_forward == true) // && !event.KeyPressed)
+	{
+		set_position(x + (sin(t->get_rotation()*M_PI / 180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI / 180)*momentary_speed_forward));
+	}
+	
+	if (is_moving_backward == true) // && !event.KeyPressed)
+	{
+		set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_backward));
+	}
+	
+	
+
+	
+
+//----------Distance travelled--------------------------//
+
 	if (t->get_position().y > distance_traveled.y)
 	{
 		distance_traveled.y = t->get_position().y;

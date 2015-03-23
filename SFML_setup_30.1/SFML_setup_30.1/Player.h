@@ -57,6 +57,10 @@ private:
 	float momentary_max_speed_backward = 0;
 	float momentum = 0;
 	float weight = 0;
+
+	//------------------------------------//
+	bool is_moving_forward = false;
+	bool is_moving_backward = false;
 	//std::string tank_name;
 
 	/*
