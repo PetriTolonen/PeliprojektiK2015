@@ -8,6 +8,8 @@
 #include "Player.h"
 #include "ObjectManager.h"
 //#include "Tank_hull.h"
+#include "SplashScreen.h"
+#include "MainMenu.h"
 
 class Game
 {
@@ -31,5 +33,18 @@ private:
 	static ObjectManager o_manager;
 
 	int begin_of_game;
+
+	static bool is_exiting();
+	static void show_splash_screen(sf::RenderWindow *window);
+	static void show_menu(sf::RenderWindow *window);
+
+	enum game_state {
+		uninitialized,
+		showing_splash,
+		paused,
+		showing_menu,
+		playing,exiting
+	};
+	static game_state _game_state;
 };
 #endif

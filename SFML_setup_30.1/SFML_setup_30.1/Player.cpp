@@ -39,24 +39,34 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	float dy = y - coord_pos.y;
 	float rotation = (atan2(dy, dx)) * 180 / M_PI;
 
-	if (tt->get_rotation() == rotation)
+	float rotation2 = (rotation + 180) - tt->get_rotation();
+
+	if (rotation2 < 0)
 	{
-		//stop
+		rotation2 += 360;
+	}
+	
+	//If tank turret close to mouse rotation set exactly to mouse rotation
+	if (rotation2 < 180+0.6 && rotation2 > 180 - 0.6)
+	{
+		tt->get_sprite().setRotation(rotation);
 	}
 	else
 	{
-		if (tt->get_rotation() < rotation + 180 )
+		if (rotation2 >180)
 		{
-			tt->get_sprite().rotate(0.5);
-			std::cout << " " << dx << " " << dy << " " << std::endl;
-		}
-		if (tt->get_rotation()>rotation + 180)
-		{
-			tt->get_sprite().rotate(-0.5);
-			std::cout << " " << dx << " " << dy << " " << std::endl;
-		}
+			tt->get_sprite().rotate(tt->get_traverse_speed()* 10 * _elapsed);
 
+		}
+		if (rotation2 <180)
+		{
+			tt->get_sprite().rotate(-tt->get_traverse_speed()*10 * _elapsed);
 	}
+	
+		
+	}
+	//std::cout << rotation + 180 << " " << tt->get_rotation() << std::endl;
+	//std::cout << tt->get_rotation() <<"                  " << rotation +180<<  std::endl;
 	
 	//----------------Key_Pressing_check--------------------------------------//
 	//Checks movement stuff
@@ -202,6 +212,8 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 		distance_traveled.x = t->get_position().x;
 	}
 	
+	//debuggausta varten kirjoittaa consoleen pelaajan sijaintia.
+	//std::cout << tt->get_position().x << " " << tt->get_position().y << std::endl;
 }
 
 void Player::set_position(float x, float y)

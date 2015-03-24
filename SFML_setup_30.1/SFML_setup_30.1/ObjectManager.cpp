@@ -64,5 +64,5 @@ void ObjectManager::draw(sf::RenderWindow* win)
 		e->draw(win);
 
 	}
-		);
+	);
 }
