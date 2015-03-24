@@ -25,6 +25,7 @@ MainMenu::menu_result MainMenu::show(sf::RenderWindow* win)
 	menu_items.push_back(play_button);
 	menu_items.push_back(exit_button);
 			
+	win->setView(win->getDefaultView());
 	win->draw(sprite);
 	win->display();
 
