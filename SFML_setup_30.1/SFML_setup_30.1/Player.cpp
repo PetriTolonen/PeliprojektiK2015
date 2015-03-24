@@ -73,6 +73,7 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	
 	
 
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
 
@@ -92,8 +93,14 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 			set_position(x + (sin(t->get_rotation()*M_PI / 180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI / 180)*momentary_speed_forward));
 
 			is_moving_forward = true;
+			forward_is_pressed = true;
+
+			//Debug stuffia
+			if (is_moving_forward == true)
+				std::cout << __LINE__ << " - is_moving_forward = true" << std::endl;
 		}
 
+		/*
 		if (is_moving_backward == true)
 		{
 			momentary_acceleration_forward = tank_hull.get_acceleration_forward();
@@ -101,8 +108,13 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 			momentary_speed_forward += _elapsed * momentary_acceleration_forward;
 
 			momentary_speed_backward -= momentary_speed_forward;
+
+			if (momentary_speed_backward <= 0)
+			{
+				momentary_speed_backward = 0;
+			}
 		}
-		
+		*/
 
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
@@ -121,9 +133,15 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 			set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_backward));
 
 			is_moving_backward = true;
+			backward_is_pressed = true;
+
+			//debug
+			if (is_moving_backward == true)
+				std::cout << __LINE__ << " - is_moving_backward = true" << std::endl;
 
 		}
 
+		/*
 		if (is_moving_forward == true)
 		{
 
@@ -133,8 +151,13 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 
 
 			momentary_speed_forward -= momentary_speed_backward;
-		}
 
+			if (momentary_speed_forward <= 0)
+			{
+				momentary_speed_forward = 0;
+			}
+		}
+		*/
 
 
 	}
@@ -156,48 +179,67 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	{
 		if (event.key.code == sf::Keyboard::W)
 		{
-			momentary_speed_forward -= 0.10;
-			if (momentary_speed_forward <= 0.05)
-			{
-				momentary_speed_forward = 0;
-				is_moving_forward = false;
-			}
-				
+			forward_is_pressed = false;
+			//debug
+			std::cout << __LINE__ << " - forward_is_pressed = false" << std::endl;
 		}
+				
 	}
-	
+
+
 	if (event.type == sf::Event::KeyReleased)
 	{
 		if (event.key.code == sf::Keyboard::S)
 		{
-			momentary_speed_backward -= 0.10;
-			if (momentary_speed_backward <= 0.05)
-			{
-				momentary_speed_backward = 0;
-				is_moving_backward = false;
-			}
-				
-			
+			backward_is_pressed = false;
+			//debug
+			std::cout << __LINE__ << " - backward_is_pressed = false" << std::endl;
 		}
+	}
+
+	if (forward_is_pressed == false)
+	{
+		momentary_speed_forward -= 0.10;
+		if (momentary_speed_forward <= 0.05)
+		{
+			momentary_speed_forward = 0;
+			is_moving_forward = false;
+			//debug 
+			std::cout << __LINE__ << " - is_moving_forward = false" << std::endl;
+		}
+
+	}
+
+	if (backward_is_pressed == true)
+	{
+		momentary_speed_forward -= 0.10;
+		if (momentary_speed_forward <= 0.05)
+		{
+			momentary_speed_forward = 0;
+			is_moving_forward = false;
+			//debug
+			std::cout << __LINE__ << " - is_moving_forward = false" << std::endl;
+		}
+
 	}
 
 
 	//----------------------momentum to move tank forward after key is released------------------------------------//
 	//to move tank even if key is released to make it feel more like a tank.
 
-	 
+	
 
-	if (is_moving_forward == true) // && !event.KeyPressed)
-	{
-		set_position(x + (sin(t->get_rotation()*M_PI / 180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI / 180)*momentary_speed_forward));
-	}
-	
-	if (is_moving_backward == true) // && !event.KeyPressed)
-	{
-		set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_backward));
-	}
-	
-	
+	//if (is_moving_forward == true) // && !event.KeyPressed)
+	//{
+	//	set_position(x + (sin(t->get_rotation()*M_PI / 180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI / 180)*momentary_speed_forward));
+	//}
+	//
+	//if (is_moving_backward == true) // && !event.KeyPressed)
+	//{
+	//	set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_backward));
+	//}
+	//
+	//
 
 	
 

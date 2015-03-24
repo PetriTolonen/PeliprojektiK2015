@@ -61,6 +61,9 @@ private:
 	//------------------------------------//
 	bool is_moving_forward = false;
 	bool is_moving_backward = false;
+
+	bool forward_is_pressed = false;
+	bool backward_is_pressed = false;
 	//std::string tank_name;
 
 	/*
