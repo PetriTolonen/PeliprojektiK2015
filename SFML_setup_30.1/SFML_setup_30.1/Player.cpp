@@ -45,19 +45,28 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	{
 		rotation2 += 360;
 	}
-
-	if (rotation2 >180)
+	
+	//If tank turret close to mouse rotation set exactly to mouse rotation
+	if (rotation2 < 180+0.6 && rotation2 > 180 - 0.6)
 	{
-		tt->get_sprite().rotate(5 *_elapsed);
-		
+		tt->get_sprite().setRotation(rotation);
 	}
-	if (rotation2 <180)
+	else
 	{
-		tt->get_sprite().rotate(-5*_elapsed);
+		if (rotation2 >180)
+		{
+			tt->get_sprite().rotate(tt->get_traverse_speed()* 10 * _elapsed);
+
+		}
+		if (rotation2 <180)
+		{
+			tt->get_sprite().rotate(-tt->get_traverse_speed()*10 * _elapsed);
+	}
+	
 		
 	}
 	//std::cout << rotation + 180 << " " << tt->get_rotation() << std::endl;
-	std::cout << rotation2 << std::endl;
+	//std::cout << tt->get_rotation() <<"                  " << rotation +180<<  std::endl;
 	
 	//----------------Key_Pressing_check--------------------------------------//
 	//Checks movement stuff
