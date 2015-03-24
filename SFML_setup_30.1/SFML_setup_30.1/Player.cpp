@@ -39,24 +39,18 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	float dy = y - coord_pos.y;
 	float rotation = (atan2(dy, dx)) * 180 / M_PI;
 
-	if (tt->get_rotation() == rotation)
+	if (tt->get_rotation() < rotation + 180 )
 	{
-		//stop
+		tt->get_sprite().rotate(5 *_elapsed);
+		std::cout << rotation +180<< " " << tt->get_rotation() << std::endl;
 	}
-	else
+	if (tt->get_rotation()>rotation + 180)
 	{
-		if (tt->get_rotation() < rotation + 180 )
-		{
-			tt->get_sprite().rotate(0.5);
-			std::cout << " " << dx << " " << dy << " " << std::endl;
-		}
-		if (tt->get_rotation()>rotation + 180)
-		{
-			tt->get_sprite().rotate(-0.5);
-			std::cout << " " << dx << " " << dy << " " << std::endl;
-		}
+		tt->get_sprite().rotate(-5*_elapsed);
+		std::cout << rotation +180<< " " << tt->get_rotation() << std::endl;
+	}
 
-	}
+
 	
 	//----------------Key_Pressing_check--------------------------------------//
 	//Checks movement stuff
