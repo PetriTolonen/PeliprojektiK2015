@@ -76,6 +76,9 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
+		forward_is_pressed = true;
+		std::cout << "forward is pressed" << std::endl;
+
 
 		if (is_moving_backward == false)
 		{
@@ -93,14 +96,14 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 			set_position(x + (sin(t->get_rotation()*M_PI / 180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI / 180)*momentary_speed_forward));
 
 			is_moving_forward = true;
-			forward_is_pressed = true;
+			
 
 			//Debug stuffia
 			if (is_moving_forward == true)
 				std::cout << __LINE__ << " - is_moving_forward = true" << std::endl;
 		}
 
-		/*
+		
 		if (is_moving_backward == true)
 		{
 			momentary_acceleration_forward = tank_hull.get_acceleration_forward();
@@ -109,16 +112,19 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 
 			momentary_speed_backward -= momentary_speed_forward;
 
-			if (momentary_speed_backward <= 0)
+			if (momentary_speed_backward <= 0.05)
 			{
 				momentary_speed_backward = 0;
+				is_moving_backward = false;
 			}
 		}
-		*/
+		
 
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
+		backward_is_pressed = true;
+
 		if (is_moving_forward == false)
 		{
 			momentary_acceleration_backward = tank_hull.get_acceleration_backward();
@@ -133,13 +139,20 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 			set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_backward));
 
 			is_moving_backward = true;
+			std::cout << __LINE__ << " - is_moving_backward = true" << std::endl;
 			backward_is_pressed = true;
 
 			//debug
-			if (is_moving_backward == true)
-				std::cout << __LINE__ << " - is_moving_backward = true" << std::endl;
+			//if (is_moving_backward == true)
+			//	std::cout << __LINE__ << " - is_moving_backward = true" << std::endl;
 
 		}
+
+		if (is_moving_forward == true)
+		{
+			std::cout << "is_moving_forward true while trying to get S" << std::endl;
+		}
+
 
 		/*
 		if (is_moving_forward == true)
@@ -197,6 +210,8 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 		}
 	}
 
+
+	//-----------------for forward sliding------------------------------------------------------------//
 	if (forward_is_pressed == false)
 	{
 		momentary_speed_forward -= 0.10;
@@ -205,7 +220,7 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 			momentary_speed_forward = 0;
 			is_moving_forward = false;
 			//debug 
-			std::cout << __LINE__ << " - is_moving_forward = false" << std::endl;
+			//std::cout << __LINE__ << " - is_moving_forward = false" << std::endl;
 		}
 
 	}
@@ -218,10 +233,16 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 			momentary_speed_forward = 0;
 			is_moving_forward = false;
 			//debug
-			std::cout << __LINE__ << " - is_moving_forward = false" << std::endl;
+			//std::cout << __LINE__ << " - is_moving_forward = false" << std::endl;
 		}
 
 	}
+	//------------------for backward sliding-------------------------------------------------------------------------//
+
+
+
+
+
 
 
 	//----------------------momentum to move tank forward after key is released------------------------------------//
