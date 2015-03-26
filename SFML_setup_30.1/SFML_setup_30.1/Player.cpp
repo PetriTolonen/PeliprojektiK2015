@@ -210,8 +210,8 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 		}
 	}
 
-
-	//-----------------for forward sliding------------------------------------------------------------//
+	//----------------------------slow down forward movement-------------------------------------------------------------//
+	
 	if (forward_is_pressed == false)
 	{
 		momentary_speed_forward -= 0.10;
@@ -227,7 +227,9 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 
 	if (backward_is_pressed == true)
 	{
-		momentary_speed_forward -= 0.10;
+		momentary_speed_backward += _elapsed * momentary_acceleration_backward;
+		momentary_speed_forward -= (0.20 + momentary_speed_backward);
+
 		if (momentary_speed_forward <= 0.05)
 		{
 			momentary_speed_forward = 0;
@@ -237,12 +239,43 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 		}
 
 	}
-	//------------------for backward sliding-------------------------------------------------------------------------//
 
 
+	//-------------------slow down backward movement-----------------------------------------------------------------------------------------//
+	
+	if (backward_is_pressed == false)
+	{
+		momentary_speed_backward -= 0.10;
+		if (momentary_speed_backward <= 0.05)
+		{
+			momentary_speed_backward = 0;
+			is_moving_backward = false;
+		}
+	}
 
 
+	if (forward_is_pressed == true)
+	{
+		momentary_speed_forward += _elapsed * momentary_acceleration_forward;
+		momentary_speed_backward -= (0.10 + momentary_speed_forward);
 
+		if (momentary_speed_backward <= 0.05)
+		{
+			momentary_speed_backward = 0;
+			is_moving_backward = false;
+		}
+	}
+	//-----------------for sliding-----------------------------------------------------------------------------------------------------------//
+
+	if (is_moving_forward == true && forward_is_pressed == false)
+	{
+		set_position(x + (sin(t->get_rotation()*M_PI / 180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI / 180)*momentary_speed_forward));
+	}
+
+	if (is_moving_backward == true && backward_is_pressed == false)
+	{
+		set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_backward));
+	}
 
 
 	//----------------------momentum to move tank forward after key is released------------------------------------//
