@@ -68,6 +68,13 @@ MainMenu::menu_result MainMenu::get_menu_response(sf::RenderWindow* win)
 			{
 				return exit;
 			}
+			if (menu_event.type == sf::Event::KeyPressed)
+			{
+				if (menu_event.key.code == sf::Keyboard::Escape)
+				{
+					return play;
+				}
+			}
 		}
 	}
 }
