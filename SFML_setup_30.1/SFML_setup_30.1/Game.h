@@ -11,8 +11,6 @@
 #include "SplashScreen.h"
 #include "MainMenu.h"
 
-#include "Box2D\Box2D.h"
-
 class Game
 {
 public:
@@ -22,7 +20,6 @@ public:
 	void level_creation();
 	void set_view(sf::View *view, Player *player);
 
-	void CreateBox(b2World& world, int MouseX, int MouseY);
 
 
 private:
