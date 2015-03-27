@@ -5,6 +5,11 @@
 
 void Game::run()
 {
+
+	//----Main Menu------------------//
+
+	MainMenu *main_menu = new MainMenu;
+
 	//------Screen setup------//
 	sf::Vector2i screen_dimensions(screen_widht, screen_height);
 	sf::RenderWindow *window = new sf::RenderWindow(sf::VideoMode(screen_dimensions.x, screen_dimensions.y), "Tank Hunter Arcade");	
@@ -21,11 +26,11 @@ void Game::run()
 	begin_of_game = 0;
 	_game_state = Game::showing_splash;
 	
-	gameloop(window, view);	
+	gameloop(window, view, main_menu);	
 }
 
 //-----Game_loop-----//
-void Game::gameloop(sf::RenderWindow *window, sf::View *view)
+void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_menu)
 {
 	Tank_hull hull("tank_hull", 0.4, 0.2, 1, 2, 1, 38000, 165);
 	Tank_turret turret("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.5);
@@ -80,7 +85,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 		{
 		case Game::showing_menu:
 		{
-			show_menu(window);
+			show_menu(window, main_menu);
 			break;
 		}
 		case Game::showing_splash:
@@ -116,6 +121,22 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 			animatedSprite2.update(elapsed);
 			//----Animation test----//
 
+
+			//-----------------Firing Main Gun--------------------------------------//
+
+
+
+
+
+
+
+
+
+
+
+
+			//----------------end of Main Gun------------------------------------------//
+
 			
 			window->setView(*view);
 			window->draw(map);
@@ -137,7 +158,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 
 			if (event.type == sf::Event::KeyPressed)
 			{
-				if (event.key.code == sf::Keyboard::Escape) show_menu(window);
+				if (event.key.code == sf::Keyboard::Escape) show_menu(window, main_menu);
 			}
 			break;
 		}
@@ -242,10 +263,10 @@ void Game::show_splash_screen(sf::RenderWindow *window)
 	_game_state = Game::showing_menu;
 }
 
-void Game::show_menu(sf::RenderWindow *window)
+void Game::show_menu(sf::RenderWindow *window, MainMenu *main_menu)
 {
-	MainMenu main_menu;
-	MainMenu::menu_result result = main_menu.show(window);
+
+	MainMenu::menu_result result = main_menu->show(window);
 	switch (result)
 	{
 	case MainMenu::exit :
