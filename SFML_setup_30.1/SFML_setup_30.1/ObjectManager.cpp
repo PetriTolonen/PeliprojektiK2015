@@ -30,7 +30,8 @@ void ObjectManager::add_object(Object* const object) {
 
 	bool add = !contains_object(object);
 
-	if (add) {
+	if (add) 
+	{
 		objects.push_back(object);
 	}
 }

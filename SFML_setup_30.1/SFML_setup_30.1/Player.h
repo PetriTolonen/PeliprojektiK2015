@@ -4,6 +4,7 @@
 #include "Tank.h"
 #include "IncludeHelper.h"
 #include "Object.h"
+#include "Ammo.h"
 
 
 class Player : public Object
@@ -29,6 +30,8 @@ public:
 	float rotate(float rotation_speed);
 	void set_rotation(float rot);
 	void set_weight(float weight_hull); // + float weight_turret); sitten kun turret implementoidaan
+	bool get_can_fire();
+
 
 	sf::Vector2f get_distance_traveled() { return distance_traveled; }
 private:
@@ -39,12 +42,13 @@ private:
 	Tank_hull* t;
 	float x;
 	float y;
-	float turret_rotation_speed = 0;
-	float hull_rotation_speed = 0;
+	float turret_rotation_speed; //= 0;
+	float hull_rotation_speed; //= 0;
 	//----------Clock-----------------//
 	sf::Time t1 = sf::seconds(0.1f);
 	float _elapsed = t1.asSeconds();
-
+	//-----------Main Gun---------------------//
+	bool can_fire = true;
 
 	//---------Tank_hull_statistics------//
 	Tank_hull tank_hull;

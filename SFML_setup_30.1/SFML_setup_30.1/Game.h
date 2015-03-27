@@ -16,10 +16,10 @@ class Game
 public:
 	void run();
 	void update();
-	void gameloop(sf::RenderWindow *window, sf::View *view);
+	void gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_menu);
 	void level_creation();
 	void set_view(sf::View *view, Player *player);
-
+	
 
 
 private:
@@ -36,8 +36,8 @@ private:
 
 	static bool is_exiting();
 	static void show_splash_screen(sf::RenderWindow *window);
-	static void show_menu(sf::RenderWindow *window);
-
+	static void show_menu(sf::RenderWindow *window, MainMenu *main_menu);
+	MainMenu main_menu;
 	enum game_state {
 		uninitialized,
 		showing_splash,

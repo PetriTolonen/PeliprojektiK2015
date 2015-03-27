@@ -2,11 +2,12 @@
 
 Ammo::Ammo(std::string n, float s, int d, int p) :Object()
 {
+	std::cout << "luo ammuksen" << std::endl;
 	texture_name = n +".png";
 	set_texture(texture_name);
 	object_texture.setSmooth(true);
 
-	speed = s;
+	velocity = s;
 	damage = d;
 	penetration = p;
 
@@ -15,11 +16,43 @@ Ammo::Ammo(std::string n, float s, int d, int p) :Object()
 Ammo::Ammo() :Object()
 {
 	texture_name = "Ammo.png";
-	speed = 2.0;
+	set_texture(texture_name);
+	object_texture.setSmooth(true);
+
+	velocity = 2.0;
 	damage = 15;
 	penetration = 35;
 }
 
-Ammo::~Ammo()
+void on_update(sf::Event event, sf::RenderWindow* win)
 {
+
 }
+
+
+void Ammo::on_update(sf::Event event, sf::RenderWindow* win)
+{
+
+}
+
+int Ammo::get_damage()
+{
+	return damage;
+}
+
+int Ammo::get_penetration()
+{
+	return penetration;
+}
+
+void Ammo::set_position(float x, float y)
+{
+	this->x = x;
+	this->y = y;
+}
+
+void Ammo::on_draw(sf::RenderWindow* win)
+{
+	win->draw(sprite_name);
+}
+

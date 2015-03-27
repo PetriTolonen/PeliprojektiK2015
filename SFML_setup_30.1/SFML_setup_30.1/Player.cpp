@@ -77,7 +77,7 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
 		forward_is_pressed = true;
-		std::cout << "forward is pressed" << std::endl;
+
 
 
 		if (is_moving_backward == false)
@@ -96,11 +96,6 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 			set_position(x + (sin(t->get_rotation()*M_PI / 180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI / 180)*momentary_speed_forward));
 
 			is_moving_forward = true;
-			
-
-			//Debug stuffia
-			if (is_moving_forward == true)
-				std::cout << __LINE__ << " - is_moving_forward = true" << std::endl;
 		}
 
 		
@@ -139,12 +134,7 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 			set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_backward));
 
 			is_moving_backward = true;
-			std::cout << __LINE__ << " - is_moving_backward = true" << std::endl;
 			backward_is_pressed = true;
-
-			//debug
-			//if (is_moving_backward == true)
-			//	std::cout << __LINE__ << " - is_moving_backward = true" << std::endl;
 
 		}
 
@@ -186,7 +176,7 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 		
 
 	//----------------------------------------------------Key realease events--------------------------------//
-	//So the tank is required to accelerate everytime it stops
+	//The tank is required to accelerate everytime it stops
 	
 	if (event.type == sf::Event::KeyReleased)
 	{
@@ -310,6 +300,9 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	
 	//debuggausta varten kirjoittaa consoleen pelaajan sijaintia.
 	//std::cout << tt->get_position().x << " " << tt->get_position().y << std::endl;
+
+
+
 }
 
 void Player::set_position(float x, float y)

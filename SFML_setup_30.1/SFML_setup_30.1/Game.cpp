@@ -1,9 +1,15 @@
 #include "Game.h"
+
 #include "AnimatedSprite.h"
 
 
 void Game::run()
 {
+
+	//----Main Menu------------------//
+
+	MainMenu *main_menu = new MainMenu;
+
 	//------Screen setup------//
 	sf::Vector2i screen_dimensions(screen_widht, screen_height);
 	sf::RenderWindow *window = new sf::RenderWindow(sf::VideoMode(screen_dimensions.x, screen_dimensions.y), "Tank Hunter Arcade");	
@@ -20,11 +26,11 @@ void Game::run()
 	begin_of_game = 0;
 	_game_state = Game::showing_splash;
 	
-	gameloop(window, view);	
+	gameloop(window, view, main_menu);	
 }
 
 //-----Game_loop-----//
-void Game::gameloop(sf::RenderWindow *window, sf::View *view)
+void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_menu)
 {
 	//---creating box2d world---//
 	// Define the gravity vector.
@@ -106,7 +112,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 		{
 		case Game::showing_menu:
 		{
-			show_menu(window);
+			show_menu(window, main_menu);
 			break;
 		}
 		case Game::showing_splash:
@@ -154,6 +160,31 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 			
 			//Box2d
 			world.Step(1 / 60.f, 8, 3);
+
+			//-----------------Firing Main Gun--------------------------------------//
+
+			//if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			//{
+			//	
+
+			//	if(player->get_can_fire() == true)
+			//	{
+			//		std::cout << __LINE__ << std::endl;
+			//		float ammo_location_x = (player->get_position().x);
+			//		float ammo_location_y = (player->get_position().y);
+			//		
+			//		
+
+			//		Ammo *round = new Ammo();
+			//		o_manager.add_object(round);
+			//		round->set_position(ammo_location_x, ammo_location_y + 10);
+			//	}
+
+
+			//}
+
+			//----------------end of Main Gun------------------------------------------//
+
 			
 			window->setView(*view);
 			window->draw(map);
@@ -197,7 +228,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 
 			if (event.type == sf::Event::KeyPressed)
 			{
-				if (event.key.code == sf::Keyboard::Escape) show_menu(window);
+				if (event.key.code == sf::Keyboard::Escape) show_menu(window, main_menu);
 			}
 			break;
 		}
@@ -302,10 +333,10 @@ void Game::show_splash_screen(sf::RenderWindow *window)
 	_game_state = Game::showing_menu;
 }
 
-void Game::show_menu(sf::RenderWindow *window)
+void Game::show_menu(sf::RenderWindow *window, MainMenu *main_menu)
 {
-	MainMenu main_menu;
-	MainMenu::menu_result result = main_menu.show(window);
+
+	MainMenu::menu_result result = main_menu->show(window);
 	switch (result)
 	{
 	case MainMenu::exit :
