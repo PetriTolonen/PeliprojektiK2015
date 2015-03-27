@@ -43,6 +43,8 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 	
 	player->set_position(2048.0f, 0 + (screen_height / 2));
 	o_manager.add_object(player);
+
+	
 	//----Animation test----//
 	sf::Texture animtexture;
 	animtexture.loadFromFile("hit_explosion_animation.png");
@@ -77,6 +79,20 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 	AnimatedSprite animatedSprite2(sf::seconds(0.05f), true, false);
 	//----Animation test----//
 
+	//b2d
+	float SCALE = 30.f;
+	b2BodyDef BodyDef;
+	BodyDef.position = b2Vec2(player->get_position().x / SCALE, player->get_position().y / SCALE);
+	BodyDef.type = b2_staticBody;
+	b2Body* Body = world.CreateBody(&BodyDef);
+
+	b2PolygonShape Shape;
+	Shape.SetAsBox((33.f) / SCALE, (70.f) / SCALE);
+	b2FixtureDef FixtureDef;
+	FixtureDef.density = 1.f;
+	FixtureDef.friction = 0.7f;
+	FixtureDef.shape = &Shape;
+	Body->CreateFixture(&FixtureDef);
 	
 	//view->setCenter(player.get_position());
 	
@@ -134,6 +150,8 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 				CreateBox(world, coord_pos.x, coord_pos.y);
 			}
 
+			Body->SetTransform(b2Vec2(player->get_position().x / SCALE, player->get_position().y / SCALE), (player->get_rotation()/180)*b2_pi);
+			
 			//Box2d
 			world.Step(1 / 60.f, 8, 3);
 			
@@ -152,7 +170,6 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 			{
 				if (BodyIterator->GetType() == b2_dynamicBody)
 				{
-					float SCALE = 30.f;
 					sf::Sprite Sprite;
 					Sprite.setTexture(BoxTexture);
 					Sprite.setOrigin(16.f, 16.f);
@@ -160,6 +177,15 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 					Sprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
 					window->draw(Sprite);
 				}
+				//if (BodyIterator->GetType() == b2_staticBody)
+				//{
+				//	sf::Sprite Sprite;
+				//	Sprite.setTexture(BoxTexture);
+				//	Sprite.setOrigin(16.f, 16.f);
+				//	Sprite.setPosition(SCALE * BodyIterator->GetPosition().x, SCALE * BodyIterator->GetPosition().y);
+				//	Sprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
+				//	window->draw(Sprite);
+				//}
 			}
 
 			//window.draw(sprite_tank_hull);
@@ -318,6 +344,5 @@ void Game::CreateBox(b2World& world, int MouseX, int MouseY)
     FixtureDef.shape = &Shape;
     Body->CreateFixture(&FixtureDef);
 }
-
 Game::game_state Game::_game_state = uninitialized;
 ObjectManager Game::o_manager;
