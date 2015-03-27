@@ -176,7 +176,7 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 		
 
 	//----------------------------------------------------Key realease events--------------------------------//
-	//So the tank is required to accelerate everytime it stops
+	//The tank is required to accelerate everytime it stops
 	
 	if (event.type == sf::Event::KeyReleased)
 	{
@@ -337,7 +337,10 @@ void Player::set_rotation(float rot)
 	//rotation = rot;
 }
 
-
+bool Player::get_can_fire()
+{
+	return can_fire;
+}
 
 /*
 void Player::set_weight(float weight_turret) //, float weight_hull)

@@ -124,16 +124,25 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 			//-----------------Firing Main Gun--------------------------------------//
 
+			//if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			//{
+			//	
+
+			//	if(player->get_can_fire() == true)
+			//	{
+			//		std::cout << __LINE__ << std::endl;
+			//		float ammo_location_x = (player->get_position().x);
+			//		float ammo_location_y = (player->get_position().y);
+			//		
+			//		
+
+			//		Ammo *round = new Ammo();
+			//		o_manager.add_object(round);
+			//		round->set_position(ammo_location_x, ammo_location_y + 10);
+			//	}
 
 
-
-
-
-
-
-
-
-
+			//}
 
 			//----------------end of Main Gun------------------------------------------//
 

@@ -3,6 +3,7 @@
 
 #include "IncludeHelper.h"
 #include "Object.h"
+#include <iostream>
 
 class Ammo : public Object
 {
@@ -32,6 +33,7 @@ protected:
 	int penetration;
 	float x;
 	float y;
+	bool is_hit = false;
 	
 };
 #endif

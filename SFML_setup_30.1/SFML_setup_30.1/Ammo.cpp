@@ -2,6 +2,7 @@
 
 Ammo::Ammo(std::string n, float s, int d, int p) :Object()
 {
+	std::cout << "luo ammuksen" << std::endl;
 	texture_name = n +".png";
 	set_texture(texture_name);
 	object_texture.setSmooth(true);
