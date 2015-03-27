@@ -56,3 +56,7 @@ void Ammo::on_draw(sf::RenderWindow* win)
 	win->draw(sprite_name);
 }
 
+Ammo::~Ammo()
+{
+
+}
