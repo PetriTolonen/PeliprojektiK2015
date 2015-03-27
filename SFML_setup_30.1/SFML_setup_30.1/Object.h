@@ -7,7 +7,7 @@ class Object
 {
 public:
 	Object();
-	~Object();
+	virtual ~Object()=0;
 
 	void set_texture(std::string texture_name);
 	sf::Vector2f get_position();

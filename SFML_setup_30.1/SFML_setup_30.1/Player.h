@@ -19,7 +19,8 @@ public:
 	void increase_health(int amount);
 	void set_health();
 
-	
+	float get_rotation();
+
 	sf::Vector2f get_position();
 	void on_draw(sf::RenderWindow* win);
 	float get_position_x();

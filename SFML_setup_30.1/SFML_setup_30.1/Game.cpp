@@ -1,5 +1,4 @@
 #include "Game.h"
-
 #include "AnimatedSprite.h"
 
 
@@ -27,12 +26,25 @@ void Game::run()
 //-----Game_loop-----//
 void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 {
+	//---creating box2d world---//
+	// Define the gravity vector.
+	b2Vec2 gravity(0.0f, 0.0f);
+
+	// Construct a world object, which will hold and simulate the rigid bodies.
+	b2World world(gravity);
+
+	sf::Texture BoxTexture;
+	BoxTexture.loadFromFile("box.png");
+	//--------------------------//
+
 	Tank_hull hull("tank_hull", 0.4, 0.2, 1, 2, 1, 38000, 165);
 	Tank_turret turret("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.5);
 	Player *player = new Player(&hull, &turret, 0, 0, 0, 0, 0,0,0);
 	
 	player->set_position(2048.0f, 0 + (screen_height / 2));
 	o_manager.add_object(player);
+
+	
 	//----Animation test----//
 	sf::Texture animtexture;
 	animtexture.loadFromFile("hit_explosion_animation.png");
@@ -67,6 +79,20 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 	AnimatedSprite animatedSprite2(sf::seconds(0.05f), true, false);
 	//----Animation test----//
 
+	//b2d
+	float SCALE = 30.f;
+	b2BodyDef BodyDef;
+	BodyDef.position = b2Vec2(player->get_position().x / SCALE, player->get_position().y / SCALE);
+	BodyDef.type = b2_staticBody;
+	b2Body* Body = world.CreateBody(&BodyDef);
+
+	b2PolygonShape Shape;
+	Shape.SetAsBox((33.f) / SCALE, (70.f) / SCALE);
+	b2FixtureDef FixtureDef;
+	FixtureDef.density = 1.f;
+	FixtureDef.friction = 0.7f;
+	FixtureDef.shape = &Shape;
+	Body->CreateFixture(&FixtureDef);
 	
 	//view->setCenter(player.get_position());
 	
@@ -90,7 +116,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 		}
 		case Game::playing:
 		{
-			window->clear(sf::Color(100, 200, 0));	
+			window->clear(sf::Color(100, 200, 0));
 
 			sf::Time elapsed = clock.restart();
 
@@ -116,6 +142,18 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 			animatedSprite2.update(elapsed);
 			//----Animation test----//
 
+			//Box2d
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				sf::Vector2i pixel_pos = sf::Mouse::getPosition(*window);
+				sf::Vector2f coord_pos = window->mapPixelToCoords(pixel_pos);
+				CreateBox(world, coord_pos.x, coord_pos.y);
+			}
+
+			Body->SetTransform(b2Vec2(player->get_position().x / SCALE, player->get_position().y / SCALE), (player->get_rotation()/180)*b2_pi);
+			
+			//Box2d
+			world.Step(1 / 60.f, 8, 3);
 			
 			window->setView(*view);
 			window->draw(map);
@@ -127,6 +165,28 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 			window->draw(animatedSprite);
 			window->draw(animatedSprite2);
 			//----Animation test----//
+
+			for (b2Body* BodyIterator = world.GetBodyList(); BodyIterator != 0; BodyIterator = BodyIterator->GetNext())
+			{
+				if (BodyIterator->GetType() == b2_dynamicBody)
+				{
+					sf::Sprite Sprite;
+					Sprite.setTexture(BoxTexture);
+					Sprite.setOrigin(16.f, 16.f);
+					Sprite.setPosition(SCALE * BodyIterator->GetPosition().x, SCALE * BodyIterator->GetPosition().y);
+					Sprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
+					window->draw(Sprite);
+				}
+				//if (BodyIterator->GetType() == b2_staticBody)
+				//{
+				//	sf::Sprite Sprite;
+				//	Sprite.setTexture(BoxTexture);
+				//	Sprite.setOrigin(16.f, 16.f);
+				//	Sprite.setPosition(SCALE * BodyIterator->GetPosition().x, SCALE * BodyIterator->GetPosition().y);
+				//	Sprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
+				//	window->draw(Sprite);
+				//}
+			}
 
 			//window.draw(sprite_tank_hull);
 			//window.draw(sprite_tank_turret);
@@ -268,5 +328,21 @@ bool Game::is_exiting()
 		return false;
 }
 
+void Game::CreateBox(b2World& world, int MouseX, int MouseY)
+{
+	float SCALE = 30.f;
+    b2BodyDef BodyDef;
+    BodyDef.position = b2Vec2(MouseX/SCALE, MouseY/SCALE);
+    BodyDef.type = b2_dynamicBody;
+    b2Body* Body = world.CreateBody(&BodyDef);
+
+    b2PolygonShape Shape;
+    Shape.SetAsBox((20.f)/SCALE, (20.f)/SCALE);
+    b2FixtureDef FixtureDef;
+    FixtureDef.density = 1.f;
+    FixtureDef.friction = 0.7f;
+    FixtureDef.shape = &Shape;
+    Body->CreateFixture(&FixtureDef);
+}
 Game::game_state Game::_game_state = uninitialized;
 ObjectManager Game::o_manager;

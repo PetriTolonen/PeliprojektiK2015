@@ -11,7 +11,7 @@ public:
 	Ammo(std::string n,float s, int d, int p);
 	Ammo();
 	
-	~Ammo(void);
+	~Ammo();
 
 protected:
 	std::string texture_name;
