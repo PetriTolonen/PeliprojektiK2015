@@ -19,3 +19,7 @@ Ammo::Ammo() :Object()
 	damage = 15;
 	penetration = 35;
 }
+
+Ammo::~Ammo()
+{
+}
