@@ -4,12 +4,13 @@
 #include "Tank.h"
 #include "IncludeHelper.h"
 #include "Object.h"
+#include "Box2D\Box2D.h"
 #include "Ammo.h"
-
 
 class Player : public Object
 {
 public:
+	Player(b2Body* player_body,Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m);
 	Player(Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m, int mcd);
 	~Player(void);
 
@@ -34,15 +35,16 @@ public:
 	void set_rotation(float rot);
 	void set_weight(float weight_hull); // + float weight_turret); sitten kun turret implementoidaan
 
+	sf::Vector2f get_distance_traveled();
 	bool get_can_fire();
 	void set_cooldown();
 	void reduce_cooldown(int amount);
 
-	sf::Vector2f get_distance_traveled() { return distance_traveled; }
 private:
 	
 	int health;
 	//sf::Sprite player_sprite_hull;
+	b2Body* player_body;
 	Tank_turret* tt;
 	Tank_hull* t;
 	float x;

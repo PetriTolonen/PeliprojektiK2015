@@ -43,8 +43,29 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	BoxTexture.loadFromFile("box.png");
 	//--------------------------//
 
+	//---player_b2_body---//
+	float SCALE = 30.f;
+	b2BodyDef BodyDef;
+	//BodyDef.position = b2Vec2(2048.0f / SCALE, (screen_height / 2) / SCALE);
+	BodyDef.type = b2_dynamicBody;
+	b2Body* player_body = world.CreateBody(&BodyDef);
+
+	b2PolygonShape Shape;
+	Shape.SetAsBox((31.f) / SCALE, (66.f) / SCALE);
+	b2FixtureDef FixtureDef;
+	FixtureDef.density = 10.f;
+	FixtureDef.friction = 0.7f;
+	FixtureDef.shape = &Shape;
+	player_body->CreateFixture(&FixtureDef);
+	player_body->SetTransform(b2Vec2(2048.0 / SCALE, (screen_height / 2) / SCALE),0);
+	//Tank movement dampening
+	player_body->SetLinearDamping(5);
+	player_body->SetAngularDamping(10);
+	//---player_b2_body---//
+
 	Tank_hull hull("tank_hull", 0.4, 0.2, 1, 2, 1, 38000, 165);
 	Tank_turret turret("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.5, 25);
+	Player *player = new Player(player_body, &hull, &turret, 0, 0, 0, 0, 0,0,0);
 	Player *player = new Player(&hull, &turret, 0, 0, 0, 0, 0,0,0,0);
 	
 	player->set_position(2048.0f, 0 + (screen_height / 2));
@@ -86,21 +107,6 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	//----Animation test----//
 
 	//b2d
-	float SCALE = 30.f;
-	b2BodyDef BodyDef;
-	BodyDef.position = b2Vec2(player->get_position().x / SCALE, player->get_position().y / SCALE);
-	BodyDef.type = b2_staticBody;
-	b2Body* Body = world.CreateBody(&BodyDef);
-
-	b2PolygonShape Shape;
-	Shape.SetAsBox((33.f) / SCALE, (70.f) / SCALE);
-	b2FixtureDef FixtureDef;
-	FixtureDef.density = 1.f;
-	FixtureDef.friction = 0.7f;
-	FixtureDef.shape = &Shape;
-	Body->CreateFixture(&FixtureDef);
-
-	//b2d
 	//float SCALE = 30.f;
 	//b2BodyDef BodyDef2;
 	//BodyDef2.position = b2Vec2(player->get_position().x / SCALE, player->get_position().y + 20 / SCALE);
@@ -128,7 +134,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 		{
 		case Game::showing_menu:
 		{
-			show_menu(window, main_menu);
+			show_menu(window);
 			break;
 		}
 		case Game::showing_splash:
@@ -197,7 +203,6 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 			//----------------end of Main Gun------------------------------------------//
 
-			Body->SetTransform(b2Vec2(player->get_position().x / SCALE, player->get_position().y / SCALE), (player->get_rotation()/180)*b2_pi);
 			
 			//Box2d
 			world.Step(1 / 60.f, 8, 3);
@@ -222,7 +227,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				{
 					sf::Sprite Sprite;
 					Sprite.setTexture(BoxTexture);
-					Sprite.setOrigin(16.f, 16.f);
+					Sprite.setOrigin(20.f, 20.f);
 					Sprite.setPosition(SCALE * BodyIterator->GetPosition().x, SCALE * BodyIterator->GetPosition().y);
 					Sprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
 					window->draw(Sprite);
@@ -257,7 +262,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 			if (event.type == sf::Event::KeyPressed)
 			{
-				if (event.key.code == sf::Keyboard::Escape) show_menu(window, main_menu);
+				if (event.key.code == sf::Keyboard::Escape) show_menu(window);
 			}
 
 			//---------reduce gun cooldown-----------------//
@@ -364,10 +369,10 @@ void Game::show_splash_screen(sf::RenderWindow *window)
 	_game_state = Game::showing_menu;
 }
 
-void Game::show_menu(sf::RenderWindow *window, MainMenu *main_menu)
+void Game::show_menu(sf::RenderWindow *window)
 {
-
-	MainMenu::menu_result result = main_menu->show(window);
+	MainMenu main_menu;
+	MainMenu::menu_result result = main_menu.show(window);
 	switch (result)
 	{
 	case MainMenu::exit :

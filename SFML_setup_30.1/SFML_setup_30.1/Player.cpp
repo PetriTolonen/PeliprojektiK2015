@@ -1,7 +1,9 @@
 #include "Player.h"
 
+Player::Player(b2Body* player_body, Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m) : Object()
 Player::Player(Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m, int mcd) : Object()
 {
+	this->player_body = player_body;
 	this->t = t;
 	this->tt = tt;
 	turret_rotation_speed = tt->get_traverse_speed();
@@ -94,8 +96,8 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 				momentary_speed_forward = momentary_max_speed_forward;
 			}
 
-			set_position(x + (sin(t->get_rotation()*M_PI / 180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI / 180)*momentary_speed_forward));
-
+		player_body->SetLinearVelocity(b2Vec2(sin(player_body->GetAngle())*-momentary_speed_forward, cos(player_body->GetAngle())*momentary_speed_forward));
+		//set_position(x + (sin(t->get_rotation()*M_PI/180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI/180)*momentary_speed_forward));
 			is_moving_forward = true;
 		}
 
@@ -115,7 +117,7 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 			}
 		}
 		
-
+		
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
@@ -131,19 +133,47 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 			{
 				momentary_speed_backward = momentary_max_speed_backward;
 			}
+		player_body->SetLinearVelocity(b2Vec2(sin(player_body->GetAngle())*momentary_speed_backward, cos(player_body->GetAngle())*-momentary_speed_backward));
+		//set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_backward));
+		
+	}
 
-			set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_backward));
-
+	//---Setting_sprite_postion---//
+	set_position(player_body->GetPosition().x, player_body->GetPosition().y);
+	//----------------------------//
 			is_moving_backward = true;
 			backward_is_pressed = true;
 
+
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
+		player_body->SetAngularVelocity(hull_rotation_speed);
 		}
 
 		if (is_moving_forward == true)
 		{
-			std::cout << "is_moving_forward true while trying to get S" << std::endl;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
+		player_body->SetAngularVelocity(-hull_rotation_speed);
 		}
+	}
+	
+	//---Setting_sprite_rotation---//
+	t->get_sprite().setRotation((player_body->GetAngle() * (180.0f / M_PI)));
+	//-----------------------------//
 
+
+	//----------------------momentum to move tank forward after key is released------------------------------------//
+	//to move tank even if key is released to make it feel more like a tank.
+	
+	/*
+	if (momentary_speed_forward > 0)
+	{
+		momentum = 0.5 *  ;		//
+	}
+	*/
 
 		/*
 		if (is_moving_forward == true)
@@ -186,6 +216,7 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 			forward_is_pressed = false;
 			//debug
 			std::cout << __LINE__ << " - forward_is_pressed = false" << std::endl;
+			momentary_speed_forward = 0;
 		}
 				
 	}
@@ -244,8 +275,8 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 		}
 	}
 
-
-	if (forward_is_pressed == true)
+	//---Distance travelled.---//
+	if (player_body->GetPosition().y*30.0 > distance_traveled.y)
 	{
 		momentary_speed_forward += _elapsed * momentary_acceleration_forward;
 		momentary_speed_backward -= (0.10 + momentary_speed_forward);
@@ -292,15 +323,12 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 
 	if (t->get_position().y > distance_traveled.y)
 	{
-		distance_traveled.y = t->get_position().y;
+		distance_traveled.y = player_body->GetPosition().y*30.0;
 	}
-	if (t->get_position().x > 0 + (1920 / 2) && t->get_position().x < 4096.f - (1920 / 2))
+	if (player_body->GetPosition().x*30.0 > 0 + (1920 / 2) && player_body->GetPosition().x*30.0 < 4096.f - (1920 / 2))
 	{
-		distance_traveled.x = t->get_position().x;
+		distance_traveled.x = player_body->GetPosition().x*30.0;
 	}
-	
-	//debuggausta varten kirjoittaa consoleen pelaajan sijaintia.
-	//std::cout << tt->get_position().x << " " << tt->get_position().y << std::endl;
 
 
 
@@ -308,10 +336,10 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 
 void Player::set_position(float x, float y)
 {
-	this->x = x;
-	this->y = y;
+	this->x = x*30.0;
+	this->y = y*30.0;
 
-	t->set_position(this ->x, this->y);
+	t->set_position(this->x, this->y);
 	tt->set_position(this->x, this->y);
 	
 }
@@ -324,7 +352,8 @@ float Player::rotate(float rotation_speed)
 
 sf::Vector2f Player::get_position()
 {
-	return	t->get_position();
+	sf::Vector2f location(player_body->GetPosition().x*30.0, player_body->GetPosition().y*30.0);
+	return location;
 }
 
 void Player::on_draw(sf::RenderWindow* win)
@@ -340,7 +369,12 @@ void Player::set_rotation(float rot)
 
 float Player::get_rotation()
 {
-	return t->get_sprite().getRotation();
+	return player_body->GetAngle();
+}
+
+sf::Vector2f Player::get_distance_traveled()
+{ 
+	return distance_traveled;
 }
 
 int Player::get_cooldown()
