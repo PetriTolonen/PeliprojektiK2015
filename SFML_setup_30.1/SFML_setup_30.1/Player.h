@@ -10,8 +10,8 @@
 class Player : public Object
 {
 public:
-	Player(b2Body* player_body,Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m);
-	Player(Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m, int mcd);
+	//Player(b2Body* player_body,Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m);
+	Player(b2Body* player_body, Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m, int mcd);
 	~Player(void);
 
 	void on_update(sf::Event event, sf::RenderWindow* win);

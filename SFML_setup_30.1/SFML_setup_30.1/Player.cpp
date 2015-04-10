@@ -1,7 +1,7 @@
 #include "Player.h"
 
-Player::Player(b2Body* player_body, Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m) : Object()
-Player::Player(Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m, int mcd) : Object()
+//Player::Player( Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m) : Object()
+Player::Player(b2Body* player_body, Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m, int mcd) : Object()
 {
 	this->player_body = player_body;
 	this->t = t;
@@ -133,31 +133,31 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 			{
 				momentary_speed_backward = momentary_max_speed_backward;
 			}
-		player_body->SetLinearVelocity(b2Vec2(sin(player_body->GetAngle())*momentary_speed_backward, cos(player_body->GetAngle())*-momentary_speed_backward));
-		//set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_backward));
-		
+			player_body->SetLinearVelocity(b2Vec2(sin(player_body->GetAngle())*momentary_speed_backward, cos(player_body->GetAngle())*-momentary_speed_backward));
+			//set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_backward));
+		}
 	}
 
 	//---Setting_sprite_postion---//
 	set_position(player_body->GetPosition().x, player_body->GetPosition().y);
 	//----------------------------//
-			is_moving_backward = true;
-			backward_is_pressed = true;
+	/*		is_moving_backward = true;
+			backward_is_pressed = true;*/
 
 
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		player_body->SetAngularVelocity(hull_rotation_speed);
-		}
-
-		if (is_moving_forward == true)
-		{
 	}
+
+	/*	if (is_moving_forward == true)
+		{*/
+	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		player_body->SetAngularVelocity(-hull_rotation_speed);
-		}
+		
 	}
 	
 	//---Setting_sprite_rotation---//
@@ -165,115 +165,76 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	//-----------------------------//
 
 
-	//----------------------momentum to move tank forward after key is released------------------------------------//
-	//to move tank even if key is released to make it feel more like a tank.
 	
-	/*
-	if (momentary_speed_forward > 0)
-	{
-		momentum = 0.5 *  ;		//
-	}
-	*/
-
-		/*
-		if (is_moving_forward == true)
-		{
-
-			momentary_acceleration_backward = tank_hull.get_acceleration_backward();
-			momentary_max_speed_backward = tank_hull.get_max_speed_backward();
-			momentary_speed_backward += _elapsed * momentary_acceleration_backward;
-
-
-			momentary_speed_forward -= momentary_speed_backward;
-
-			if (momentary_speed_forward <= 0)
-			{
-				momentary_speed_forward = 0;
-			}
-		}
-		*/
-
-
-	}
-	
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
-			t->get_sprite().rotate(hull_rotation_speed);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
-		t->get_sprite().rotate(-hull_rotation_speed);
-	}
-		
 
 	//----------------------------------------------------Key realease events--------------------------------//
 	//The tank is required to accelerate everytime it stops
 	
-	if (event.type == sf::Event::KeyReleased)
-	{
-		if (event.key.code == sf::Keyboard::W)
-		{
-			forward_is_pressed = false;
-			//debug
-			std::cout << __LINE__ << " - forward_is_pressed = false" << std::endl;
-			momentary_speed_forward = 0;
-		}
-				
-	}
+	//if (event.type == sf::Event::KeyReleased)
+	//{
+	//	if (event.key.code == sf::Keyboard::W)
+	//	{
+	//		forward_is_pressed = false;
+	//		//debug
+	//		std::cout << __LINE__ << " - forward_is_pressed = false" << std::endl;
+	//		momentary_speed_forward = 0;
+	//	}
+	//			
+	//}
 
 
-	if (event.type == sf::Event::KeyReleased)
-	{
-		if (event.key.code == sf::Keyboard::S)
-		{
-			backward_is_pressed = false;
-			//debug
-			std::cout << __LINE__ << " - backward_is_pressed = false" << std::endl;
-		}
-	}
+	//if (event.type == sf::Event::KeyReleased)
+	//{
+	//	if (event.key.code == sf::Keyboard::S)
+	//	{
+	//		backward_is_pressed = false;
+	//		//debug
+	//		std::cout << __LINE__ << " - backward_is_pressed = false" << std::endl;
+	//	}
+	//}
 
-	//----------------------------slow down forward movement-------------------------------------------------------------//
-	
-	if (forward_is_pressed == false)
-	{
-		momentary_speed_forward -= 0.10;
-		if (momentary_speed_forward <= 0.05)
-		{
-			momentary_speed_forward = 0;
-			is_moving_forward = false;
-			//debug 
-			//std::cout << __LINE__ << " - is_moving_forward = false" << std::endl;
-		}
+	////----------------------------slow down forward movement-------------------------------------------------------------//
+	//
+	//if (forward_is_pressed == false)
+	//{
+	//	momentary_speed_forward -= 0.10;
+	//	if (momentary_speed_forward <= 0.05)
+	//	{
+	//		momentary_speed_forward = 0;
+	//		is_moving_forward = false;
+	//		//debug 
+	//		//std::cout << __LINE__ << " - is_moving_forward = false" << std::endl;
+	//	}
 
-	}
+	//}
 
-	if (backward_is_pressed == true)
-	{
-		momentary_speed_backward += _elapsed * momentary_acceleration_backward;
-		momentary_speed_forward -= (0.20 + momentary_speed_backward);
+	//if (backward_is_pressed == true)
+	//{
+	//	momentary_speed_backward += _elapsed * momentary_acceleration_backward;
+	//	momentary_speed_forward -= (0.20 + momentary_speed_backward);
 
-		if (momentary_speed_forward <= 0.05)
-		{
-			momentary_speed_forward = 0;
-			is_moving_forward = false;
-			//debug
-			//std::cout << __LINE__ << " - is_moving_forward = false" << std::endl;
-		}
+	//	if (momentary_speed_forward <= 0.05)
+	//	{
+	//		momentary_speed_forward = 0;
+	//		is_moving_forward = false;
+	//		//debug
+	//		//std::cout << __LINE__ << " - is_moving_forward = false" << std::endl;
+	//	}
 
-	}
+	//}
 
 
 	//-------------------slow down backward movement-----------------------------------------------------------------------------------------//
-	
-	if (backward_is_pressed == false)
-	{
-		momentary_speed_backward -= 0.10;
-		if (momentary_speed_backward <= 0.05)
-		{
-			momentary_speed_backward = 0;
-			is_moving_backward = false;
-		}
-	}
+	//
+	//if (backward_is_pressed == false)
+	//{
+	//	momentary_speed_backward -= 0.10;
+	//	if (momentary_speed_backward <= 0.05)
+	//	{
+	//		momentary_speed_backward = 0;
+	//		is_moving_backward = false;
+	//	}
+	//}
 
 	//---Distance travelled.---//
 	if (player_body->GetPosition().y*30.0 > distance_traveled.y)
@@ -289,7 +250,7 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	}
 	//-----------------for sliding-----------------------------------------------------------------------------------------------------------//
 
-	if (is_moving_forward == true && forward_is_pressed == false)
+	/*if (is_moving_forward == true && forward_is_pressed == false)
 	{
 		set_position(x + (sin(t->get_rotation()*M_PI / 180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI / 180)*momentary_speed_forward));
 	}
@@ -297,7 +258,7 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	if (is_moving_backward == true && backward_is_pressed == false)
 	{
 		set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_backward));
-	}
+	}*/
 
 
 	//----------------------momentum to move tank forward after key is released------------------------------------//
@@ -319,16 +280,20 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 
 	
 
-//----------Distance travelled--------------------------//
-
+	//Distance travelled.
 	if (t->get_position().y > distance_traveled.y)
-	{
+		//---Distance travelled.---//
+		if (player_body->GetPosition().y*30.0 > distance_traveled.y)
+		{
+		distance_traveled.y = t->get_position().y;
 		distance_traveled.y = player_body->GetPosition().y*30.0;
-	}
-	if (player_body->GetPosition().x*30.0 > 0 + (1920 / 2) && player_body->GetPosition().x*30.0 < 4096.f - (1920 / 2))
-	{
+		}
+	if (t->get_position().x > 0 + (1920 / 2) && t->get_position().x < 4096.f - (1920 / 2))
+		if (player_body->GetPosition().x*30.0 > 0 + (1920 / 2) && player_body->GetPosition().x*30.0 < 4096.f - (1920 / 2))
+		{
+		distance_traveled.x = t->get_position().x;
 		distance_traveled.x = player_body->GetPosition().x*30.0;
-	}
+		}
 
 
 

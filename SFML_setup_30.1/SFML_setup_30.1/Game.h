@@ -38,7 +38,7 @@ private:
 
 	static bool is_exiting();
 	static void show_splash_screen(sf::RenderWindow *window);
-	static void show_menu(sf::RenderWindow *window, MainMenu *main_menu);
+	static void show_menu(sf::RenderWindow *window); //, MainMenu *main_menu);
 	MainMenu main_menu;
 	enum game_state {
 		uninitialized,
