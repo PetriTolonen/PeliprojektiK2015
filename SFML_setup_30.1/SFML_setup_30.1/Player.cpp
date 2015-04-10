@@ -122,39 +122,6 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	t->get_sprite().setRotation((player_body->GetAngle() * (180.0f / M_PI)));
 	//-----------------------------//
 
-
-	//----------------------momentum to move tank forward after key is released------------------------------------//
-	//to move tank even if key is released to make it feel more like a tank.
-	
-	/*
-	if (momentary_speed_forward > 0)
-	{
-		momentum = 0.5 *  ;		//
-	}
-	*/
-
-
-
-
-	//----------------------------------------------------Key realease events--------------------------------//
-	//So the tank is required to accelerate everytime it stops
-	
-	if (event.type == sf::Event::KeyReleased)
-	{
-		if (event.key.code == sf::Keyboard::W)
-		{
-			momentary_speed_forward = 0;
-		}
-	}
-	
-	if (event.type == sf::Event::KeyReleased)
-	{
-		if (event.key.code == sf::Keyboard::S)
-		{
-			momentary_speed_backward = 0;
-		}
-	}
-
 	//---Distance travelled.---//
 	if (player_body->GetPosition().y*30.0 > distance_traveled.y)
 	{
