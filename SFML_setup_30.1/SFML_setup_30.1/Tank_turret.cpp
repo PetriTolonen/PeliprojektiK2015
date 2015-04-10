@@ -1,7 +1,7 @@
 #include "Tank_turret.h"
 
 
-Tank_turret::Tank_turret(std::string tank_turret_name, int af, int al, int ari, int are, float rot, int am, float acc, float aimt, float ts) : Object()
+Tank_turret::Tank_turret(std::string tank_turret_name, int af, int al, int ari, int are, float rot, int am, float acc, float aimt, float ts, int cd) : Object()
 {
 
 	texture_name = tank_turret_name + "_256.png";
@@ -17,6 +17,7 @@ Tank_turret::Tank_turret(std::string tank_turret_name, int af, int al, int ari, 
 	accuracy = acc;
 	aim_time = aimt;
 	traverse_speed = ts;
+	cooldown = cd;
 
 }
 
@@ -32,7 +33,8 @@ Tank_turret::Tank_turret() : Object()
 	rotation_speed = 1;
 	ammo_count = 100;
 	accuracy = 0.35;
-	aim_time = 1.7;
+	aim_time = 1.7; 
+	cooldown = 2;
 }
 
 Tank_turret::~Tank_turret(void)
@@ -62,4 +64,9 @@ void Tank_turret::on_update()
 float Tank_turret::get_traverse_speed()
 {
 	return traverse_speed;
+}
+
+int Tank_turret::get_cooldown()
+{
+	return cooldown;
 }

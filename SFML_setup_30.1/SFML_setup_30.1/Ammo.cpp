@@ -56,6 +56,11 @@ void Ammo::on_draw(sf::RenderWindow* win)
 	win->draw(sprite_name);
 }
 
+float Ammo::get_velocity()
+{
+	return velocity;
+}
+
 Ammo::~Ammo()
 {
 

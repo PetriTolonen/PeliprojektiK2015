@@ -22,7 +22,7 @@ public:
 	void level_creation();
 	void set_view(sf::View *view, Player *player);
 	
-	void CreateBox(b2World& world, int MouseX, int MouseY);
+	void CreateBox(b2World& world, int MouseX, int MouseY, Player *player); //, Ammo *ammo);
 
 private:
 	static const int screen_widht = 1920;

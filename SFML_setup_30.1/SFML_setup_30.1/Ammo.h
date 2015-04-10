@@ -4,6 +4,7 @@
 #include "IncludeHelper.h"
 #include "Object.h"
 #include <iostream>
+#include "Box2D\Box2D.h"
 
 class Ammo : public Object
 {
@@ -25,6 +26,7 @@ public:
 
 	float get_position(float x, float y);
 	void set_position(float x, float y);
+	float get_velocity();
 
 protected:
 	std::string texture_name;

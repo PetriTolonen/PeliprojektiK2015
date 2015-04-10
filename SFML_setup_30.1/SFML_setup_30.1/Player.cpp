@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m) : Object()
+Player::Player(Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m, int mcd) : Object()
 {
 	this->t = t;
 	this->tt = tt;
@@ -15,6 +15,7 @@ Player::Player(Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, f
 	momentary_max_speed_forward = mmsf;
 	momentary_max_speed_backward = mmsb;
 	momentum = m;
+	momentary_cooldown = mcd;
 }
 
 Player::~Player(void)
@@ -341,6 +342,79 @@ float Player::get_rotation()
 {
 	return t->get_sprite().getRotation();
 }
+
+int Player::get_cooldown()
+{
+	return momentary_cooldown;
+}
+
+bool Player::get_can_fire()
+{
+	if (momentary_cooldown <= 0)
+	{
+		can_fire = true;
+		//std::cout << __LINE__ << "Main gun was fired succesfully" << std::endl;
+		
+	}
+	else
+	{
+		can_fire = false;
+		//std::cout << __LINE__ << " failed to fire the main gun" << std::endl;
+	}
+
+	return can_fire;
+}
+
+void Player::set_cooldown()
+{
+	momentary_cooldown = tt->get_cooldown();
+}
+
+void Player::reduce_cooldown(int amount)
+{
+	momentary_cooldown -= amount;
+}
+
+
+float Player::get_rotation_turret()
+{
+	return tt->get_sprite().getRotation();
+}
+	
+	////----turret_to_mouse----//
+
+	//sf::Vector2i pixel_pos = sf::Mouse::getPosition(*win);
+	//sf::Vector2f coord_pos = win->mapPixelToCoords(pixel_pos);
+
+	//float dx = x - coord_pos.x;
+	//float dy = y - coord_pos.y;
+	//float rotation = (atan2(dy, dx)) * 180 / M_PI;
+
+	//float rotation2 = (rotation + 180) - tt->get_rotation();
+
+	//if (rotation2 < 0)
+	//{
+	//	rotation2 += 360;
+	//}
+
+	////If tank turret close to mouse rotation set exactly to mouse rotation
+	//if (rotation2 < 180 + 0.6 && rotation2 > 180 - 0.6)
+	//{
+	//	tt->get_sprite().setRotation(rotation);
+	//}
+	//else
+	//{
+	//	if (rotation2 >180)
+	//	{
+	//		tt->get_sprite().rotate(tt->get_traverse_speed() * 10 * _elapsed);
+
+	//	}
+	//	if (rotation2 <180)
+	//	{
+	//		tt->get_sprite().rotate(-tt->get_traverse_speed() * 10 * _elapsed);
+	//	}
+
+
 
 
 /*

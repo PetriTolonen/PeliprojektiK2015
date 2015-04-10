@@ -10,7 +10,7 @@
 class Player : public Object
 {
 public:
-	Player(Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m);
+	Player(Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m, int mcd);
 	~Player(void);
 
 	void on_update(sf::Event event, sf::RenderWindow* win);
@@ -21,17 +21,22 @@ public:
 	void set_health();
 
 	float get_rotation();
+	float get_rotation_turret();
+
+	int get_cooldown();
 
 	sf::Vector2f get_position();
 	void on_draw(sf::RenderWindow* win);
-	float get_position_x();
-	float get_position_y();
+	//float get_position_x();
+	//float get_position_y();
 	void set_position(float x, float y);
 	float rotate(float rotation_speed);
 	void set_rotation(float rot);
 	void set_weight(float weight_hull); // + float weight_turret); sitten kun turret implementoidaan
-	bool get_can_fire();
 
+	bool get_can_fire();
+	void set_cooldown();
+	void reduce_cooldown(int amount);
 
 	sf::Vector2f get_distance_traveled() { return distance_traveled; }
 private:
@@ -48,7 +53,9 @@ private:
 	sf::Time t1 = sf::seconds(0.1f);
 	float _elapsed = t1.asSeconds();
 	//-----------Main Gun---------------------//
+	int momentary_cooldown = 0;
 	bool can_fire = true;
+	
 
 	//---------Tank_hull_statistics------//
 	Tank_hull tank_hull;
