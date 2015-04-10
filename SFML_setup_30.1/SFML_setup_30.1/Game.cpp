@@ -37,9 +37,29 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 	BoxTexture.loadFromFile("box.png");
 	//--------------------------//
 
+	//---player_b2_body---//
+	float SCALE = 30.f;
+	b2BodyDef BodyDef;
+	//BodyDef.position = b2Vec2(2048.0f / SCALE, (screen_height / 2) / SCALE);
+	BodyDef.type = b2_dynamicBody;
+	b2Body* player_body = world.CreateBody(&BodyDef);
+
+	b2PolygonShape Shape;
+	Shape.SetAsBox((31.f) / SCALE, (66.f) / SCALE);
+	b2FixtureDef FixtureDef;
+	FixtureDef.density = 10.f;
+	FixtureDef.friction = 0.7f;
+	FixtureDef.shape = &Shape;
+	player_body->CreateFixture(&FixtureDef);
+	player_body->SetTransform(b2Vec2(2048.0 / SCALE, (screen_height / 2) / SCALE),0);
+	//Tank movement dampening
+	player_body->SetLinearDamping(5);
+	player_body->SetAngularDamping(10);
+	//---player_b2_body---//
+
 	Tank_hull hull("tank_hull", 0.4, 0.2, 1, 2, 1, 38000, 165);
 	Tank_turret turret("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.5);
-	Player *player = new Player(&hull, &turret, 0, 0, 0, 0, 0,0,0);
+	Player *player = new Player(player_body, &hull, &turret, 0, 0, 0, 0, 0,0,0);
 	
 	player->set_position(2048.0f, 0 + (screen_height / 2));
 	o_manager.add_object(player);
@@ -79,21 +99,6 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 	AnimatedSprite animatedSprite2(sf::seconds(0.05f), true, false);
 	//----Animation test----//
 
-	//b2d
-	float SCALE = 30.f;
-	b2BodyDef BodyDef;
-	BodyDef.position = b2Vec2(player->get_position().x / SCALE, player->get_position().y / SCALE);
-	BodyDef.type = b2_staticBody;
-	b2Body* Body = world.CreateBody(&BodyDef);
-
-	b2PolygonShape Shape;
-	Shape.SetAsBox((33.f) / SCALE, (70.f) / SCALE);
-	b2FixtureDef FixtureDef;
-	FixtureDef.density = 1.f;
-	FixtureDef.friction = 0.7f;
-	FixtureDef.shape = &Shape;
-	Body->CreateFixture(&FixtureDef);
-	
 	//view->setCenter(player.get_position());
 	
 	sf::Clock clock;
@@ -150,7 +155,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 				CreateBox(world, coord_pos.x, coord_pos.y);
 			}
 
-			Body->SetTransform(b2Vec2(player->get_position().x / SCALE, player->get_position().y / SCALE), (player->get_rotation()/180)*b2_pi);
+			//Body->SetTransform(b2Vec2(player->get_position().x / SCALE, player->get_position().y / SCALE), (player->get_rotation()/180)*b2_pi);
 			
 			//Box2d
 			world.Step(1 / 60.f, 8, 3);
@@ -172,7 +177,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view)
 				{
 					sf::Sprite Sprite;
 					Sprite.setTexture(BoxTexture);
-					Sprite.setOrigin(16.f, 16.f);
+					Sprite.setOrigin(20.f, 20.f);
 					Sprite.setPosition(SCALE * BodyIterator->GetPosition().x, SCALE * BodyIterator->GetPosition().y);
 					Sprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
 					window->draw(Sprite);
@@ -343,6 +348,8 @@ void Game::CreateBox(b2World& world, int MouseX, int MouseY)
     FixtureDef.friction = 0.7f;
     FixtureDef.shape = &Shape;
     Body->CreateFixture(&FixtureDef);
+	Body->SetLinearDamping(3);
+	Body->SetAngularDamping(3);
 }
 Game::game_state Game::_game_state = uninitialized;
 ObjectManager Game::o_manager;
