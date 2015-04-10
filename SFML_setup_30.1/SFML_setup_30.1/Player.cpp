@@ -135,7 +135,15 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	t->get_sprite().setRotation((player_body->GetAngle() * (180.0f / M_PI)));
 	//-----------------------------//
 
-
+	//---Distance travelled.---//
+	if (player_body->GetPosition().y*30.0 > distance_traveled.y)
+	{
+		distance_traveled.y = player_body->GetPosition().y*30.0;
+	}
+	if (player_body->GetPosition().x*30.0 > 0 + (1920 / 2) && player_body->GetPosition().x*30.0 < 4096.f - (1920 / 2))
+	{
+		distance_traveled.x = player_body->GetPosition().x*30.0;
+	}
 	
 
 	//----------------------------------------------------Key realease events--------------------------------//
@@ -207,18 +215,6 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	//	}
 	//}
 
-	//---Distance travelled.---//
-	if (player_body->GetPosition().y*30.0 > distance_traveled.y)
-	{
-		momentary_speed_forward += _elapsed * momentary_acceleration_forward;
-		momentary_speed_backward -= (0.10 + momentary_speed_forward);
-
-		if (momentary_speed_backward <= 0.05)
-		{
-			momentary_speed_backward = 0;
-			is_moving_backward = false;
-		}
-	}
 	//-----------------for sliding-----------------------------------------------------------------------------------------------------------//
 
 	/*if (is_moving_forward == true && forward_is_pressed == false)
@@ -248,26 +244,6 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	//}
 	//
 	//
-
-	
-
-	//Distance travelled.
-	if (t->get_position().y > distance_traveled.y)
-		//---Distance travelled.---//
-		if (player_body->GetPosition().y*30.0 > distance_traveled.y)
-		{
-		distance_traveled.y = t->get_position().y;
-		distance_traveled.y = player_body->GetPosition().y*30.0;
-		}
-	if (t->get_position().x > 0 + (1920 / 2) && t->get_position().x < 4096.f - (1920 / 2))
-		if (player_body->GetPosition().x*30.0 > 0 + (1920 / 2) && player_body->GetPosition().x*30.0 < 4096.f - (1920 / 2))
-		{
-		distance_traveled.x = t->get_position().x;
-		distance_traveled.x = player_body->GetPosition().x*30.0;
-		}
-
-
-
 }
 
 void Player::set_position(float x, float y)
