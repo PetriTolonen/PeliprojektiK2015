@@ -43,6 +43,11 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	BoxTexture.loadFromFile("box.png");
 	//--------------------------//
 
+	//---------Contact Listener-----------------//
+	MyContactListener *ContactListener;
+	ContactListener = new MyContactListener;
+	world.SetContactListener(ContactListener);
+
 	//---player_b2_body---//
 	float SCALE = 30.f;
 	b2BodyDef BodyDef;
@@ -63,15 +68,65 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	player_body->SetAngularDamping(10);
 	//---player_b2_body---//
 
+	//------ammo_b2_body----------//
+	
+	//----------------//
+	
+	
+
+
 	Tank_hull hull("tank_hull", 0.4, 0.2, 1, 2, 1, 38000, 165);
 	Tank_turret turret("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.5, 25);
-	//Player *player = new Player(, &hull, &turret, 0, 0, 0, 0, 0,0,0);
 	Player *player = new Player(player_body, &hull, &turret, 0, 0, 0, 0, 0, 0, 0, 0);
 	
 	player->set_position(2048.0f, 0 + (screen_height / 2));
 	o_manager.add_object(player);
 
 	
+	
+
+	//-----------------Firing Main Gun--------------------------------------//
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+
+
+		if (player->get_can_fire() == true)
+		{
+			
+
+			Ammo *round = new Ammo("ammo", 15, 1, 3, player->get_position().x, player->get_position().y, SCALE, world);
+			ammo_vector.push_back(round);
+			
+			sf::Vector2i pixel_pos = sf::Mouse::getPosition(*window);
+			sf::Vector2f coord_pos = window->mapPixelToCoords(pixel_pos);
+			//fire_main_gun(world, coord_pos.x, coord_pos.y, player, round);
+
+			float x = 0;
+			float y = 0;
+			x = sin(player->get_rotation_turret());
+			y = cos(player->get_rotation_turret());
+			round->get_body().SetLinearVelocity(b2Vec2(-x, y));
+
+			//std::cout << __LINE__  << "Fired main gun!"<< std::endl;
+			//float ammo_location_x = (player->get_position().x);
+			//float ammo_location_y = (player->get_position().y);
+			//
+			//
+			//
+			//Ammo *round = new Ammo(BodyDef2);
+			//o_manager.add_object(round);
+			//round->set_position(ammo_location_x, ammo_location_y + 10);
+
+			player->set_cooldown();
+		}
+
+
+	}
+
+	//----------------end of Main Gun------------------------------------------//
+
+
 	//----Animation test----//
 	sf::Texture animtexture;
 	animtexture.loadFromFile("hit_explosion_animation.png");
@@ -172,37 +227,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 			//Box2d
 			
-			//-----------------Firing Main Gun--------------------------------------//
-
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			{
-
-
-				if (player->get_can_fire() == true)
-				{
-
-					sf::Vector2i pixel_pos = sf::Mouse::getPosition(*window);
-					sf::Vector2f coord_pos = window->mapPixelToCoords(pixel_pos);
-					CreateBox(world, coord_pos.x, coord_pos.y, player);
-
-					//std::cout << __LINE__  << "Fired main gun!"<< std::endl;
-					//float ammo_location_x = (player->get_position().x);
-					//float ammo_location_y = (player->get_position().y);
-					//
-					//
-					//
-					//Ammo *round = new Ammo(BodyDef2);
-					//o_manager.add_object(round);
-					//round->set_position(ammo_location_x, ammo_location_y + 10);
-
-					player->set_cooldown();
-				}
-
-
-			}
-
-			//----------------end of Main Gun------------------------------------------//
-
+			
 			
 			//Box2d
 			world.Step(1 / 60.f, 8, 3);
@@ -268,6 +293,22 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			//---------reduce gun cooldown-----------------//
 			player->reduce_cooldown(1);
 
+			//-------------------check contacts------------------------------------//
+			std::vector<ContactCheck>::iterator pos;
+			for (pos = ContactListener->_contacts.begin();
+				pos != ContactListener->_contacts.end(); ++pos) {
+				ContactCheck contact = *pos;
+
+
+				
+				//if (contact.fixtureA == player_body->GetFixtureList()) //&&
+				//	contact.fixtureB == ->GetFixtureList())
+				//{
+				//	std::cout << "Player hit the ammo!" << std::endl;
+				//}
+			}
+			//--------------------------------------------------------------------------//
+
 			break;
 		}
 	}
@@ -275,11 +316,12 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 	
 	}
+	delete ContactListener;
 	window->close();
 	
 	
 	
-
+	
 }
 
 void Game::level_creation()
@@ -395,50 +437,22 @@ bool Game::is_exiting()
 		return false;
 }
 
-void Game::CreateBox(b2World& world, int MouseX, int MouseY, Player *player) //, Ammo *ammo)
+void Game::fire_main_gun(b2World& world, int MouseX, int MouseY, Player *player, Ammo *ammo) //, Ammo *ammo)
 {
-	
-
-	float SCALE = 30.f;
-    b2BodyDef ammoBodyDef;
-	ammoBodyDef.position = b2Vec2(player->get_position().x / SCALE, (player->get_position().y) / SCALE);
-    ammoBodyDef.type = b2_kinematicBody;
-	ammoBodyDef.bullet = true;
-	
-    b2Body* ammo_body = world.CreateBody(&ammoBodyDef);
-	
-
-
-
-    b2PolygonShape Shape;
-    Shape.SetAsBox((20.f)/SCALE, (20.f)/SCALE);
-    b2FixtureDef AmmoFixtureDef;
-   AmmoFixtureDef.density = 1.f;
-   AmmoFixtureDef.friction = 0.7f;
-   AmmoFixtureDef.shape = &Shape;
-   ammo_body->CreateFixture(&AmmoFixtureDef);
-
-
    //float angle = player->get_rotation_turret();
    //float velocity = 100;
-
-
-
    //for (int i = 0; i < 1000000000; i++) {
 	  //// sleep(1);    // look in unistd.h
 	  // x += velocity*cos(angle);  // include math.h
 	  // y += velocity*sin(angle);  // angle in radian, of course
 	  // // draw your sprite here, at (x, y)
-
    //}
    //std::cout << player->get_rotation_turret() << std::endl;
-   float x = 0;
-   float y = 0;
-  x = sin(player->get_rotation_turret());
-  y = cos(player->get_rotation_turret());
 
   //std::cout << x << "     " << y << std::endl;
-   ammo_body->SetLinearVelocity(b2Vec2(-x, y));
+
+
+  
 }
 
 

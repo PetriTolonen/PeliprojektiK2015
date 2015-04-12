@@ -1,15 +1,36 @@
 #include "Ammo.h"
 
-Ammo::Ammo(std::string n, float s, int d, int p) :Object()
+Ammo::Ammo(std::string n, float velo, int dmg, int pen, float x, float y, float scale, b2World world) :Object()
 {
 	std::cout << "luo ammuksen" << std::endl;
 	texture_name = n +".png";
 	set_texture(texture_name);
 	object_texture.setSmooth(true);
 
-	velocity = s;
-	damage = d;
-	penetration = p;
+	//--ammo_b2_body-----//
+	
+	b2BodyDef ammoBodyDef;
+	ammoBodyDef.position = b2Vec2(x / scale, y / scale);
+	ammoBodyDef.type = b2_kinematicBody;
+	ammoBodyDef.bullet = true;
+
+	body = world.CreateBody(&ammoBodyDef);
+
+	b2PolygonShape shape_ammo;
+	shape_ammo.SetAsBox((20.f) / scale, (20.f) / scale);
+	b2FixtureDef AmmoFixtureDef;
+	AmmoFixtureDef.density = 1.f;
+	AmmoFixtureDef.friction = 0.7f;
+	AmmoFixtureDef.shape = &shape_ammo;
+	body->CreateFixture(&AmmoFixtureDef);
+
+	body->SetUserData(this);
+	//------------------------//
+
+	velocity = velo;
+	damage = dmg;
+	penetration = pen;
+	
 
 }
 
@@ -64,4 +85,19 @@ float Ammo::get_velocity()
 Ammo::~Ammo()
 {
 
+}
+
+b2Body Ammo::get_body()
+{
+	return *body;
+}
+
+void Ammo::start_contact()
+{
+	is_hit = true;
+}
+
+void Ammo::end_contact()
+{
+	is_hit = false;
 }

@@ -7,11 +7,13 @@
 #include "Object.h"
 #include "Player.h"
 #include "ObjectManager.h"
+#include "Ammo.h"
 //#include "Tank_hull.h"
 #include "SplashScreen.h"
 #include "MainMenu.h"
 
 #include "Box2D\Box2D.h"
+#include "ContactChecker.h"
 
 class Game
 {
@@ -22,7 +24,7 @@ public:
 	void level_creation();
 	void set_view(sf::View *view, Player *player);
 	
-	void CreateBox(b2World& world, int MouseX, int MouseY, Player *player); //, Ammo *ammo);
+	void fire_main_gun(b2World& world, int MouseX, int MouseY, Player *player, Ammo *ammo); //, Ammo *ammo);
 
 private:
 	static const int screen_widht = 1920;
@@ -48,5 +50,7 @@ private:
 		playing,exiting
 	};
 	static game_state _game_state;
+	Ammo ammo();
+	std::vector<Ammo*> ammo_vector;
 };
 #endif
