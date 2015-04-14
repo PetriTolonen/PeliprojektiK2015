@@ -434,8 +434,8 @@ void Game::CreateBox(b2World& world, int MouseX, int MouseY, Player *player) //,
    //std::cout << player->get_rotation_turret() << std::endl;
    float x = 0;
    float y = 0;
-  x = sin(player->get_rotation_turret()/(180.0f/b2_pi));
-  y = cos(player->get_rotation_turret()/(180.0f / b2_pi));
+  x = cos(player->get_rotation_turret()/(180.0f/b2_pi));
+  y = -sin(player->get_rotation_turret()/(180.0f / b2_pi));
 
   //std::cout << x << "     " << y << std::endl;
    ammo_body->SetLinearVelocity(b2Vec2(-x, y));
