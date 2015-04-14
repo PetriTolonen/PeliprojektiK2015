@@ -10,7 +10,7 @@ class Ammo : public Object
 {
 public:
 
-	Ammo(std::string n, float velo, int dmg, int pen, float x, float y, float scale, b2World world);
+	Ammo(std::string n, float velo, int dmg, int pen, float x, float y);
 	Ammo();
 	~Ammo();
 
@@ -30,7 +30,8 @@ public:
 
 	void start_contact();
 	void end_contact();
-	b2Body get_body();
+	void set_velocity(float x, float y, b2Body *ammo_body);
+	void set_coord(float _x, float _y);
 
 protected:
 	std::string texture_name;
@@ -41,7 +42,8 @@ protected:
 	float y;
 	float radians;
 	bool is_hit = false;
-	b2Body* body;
+
+	
 
 	
 };
