@@ -211,8 +211,8 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 					b2PolygonShape shape_ammo;
 					shape_ammo.SetAsBox((10.f) / SCALE, (10.f) / SCALE);
 					b2FixtureDef AmmoFixtureDef;
-					AmmoFixtureDef.density = 0.02f;
-					AmmoFixtureDef.friction = 4.7f;
+					/*AmmoFixtureDef.density = 0.02f;
+					AmmoFixtureDef.friction = 4.7f;*/
 					
 					AmmoFixtureDef.shape = &shape_ammo;
 					
@@ -222,8 +222,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 					//------------------------//
 
-				Ammo *round = new Ammo("box", ammo_body, 1.0, 1.0, 3.0, player->get_position().x, player->get_position().y);
-				o_manager.add_ammo(round);
+				Ammo *round = new Ammo("box", ammo_body, 12.0f, 1.0, 3.0, player->get_position().x, player->get_position().y);
 
 				float x = 0;
 				float y = 0;
@@ -247,6 +246,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				//round->set_position(ammo_location_x, ammo_location_y + 10);
 
 				player->set_cooldown();
+				ammo_vector.push_back(round);
 				
 				}
 
@@ -260,7 +260,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			window->draw(map);
 			//player->update(event, window);
 			//player->on_draw(window);*/
-			o_manager.update(event, window, player);
+			o_manager.update(event, window);
 			o_manager.draw(window);
 			//----Animation test----//
 			window->draw(animatedSprite);
@@ -299,14 +299,11 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				//}
 			}
 
-			if (event.type == sf::Event::KeyPressed)
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
-				if (event.key.code == sf::Keyboard::X)
-				{
-					
-				//	world.DestroyBody();
-					
-				}
+				sf::Vector2i pixel_pos = sf::Mouse::getPosition(*window);
+				sf::Vector2f coord_pos = window->mapPixelToCoords(pixel_pos);
+				CreateBox(world, coord_pos.x, coord_pos.y);
 			}
 
 
@@ -341,7 +338,22 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 			//-----------------------Go through ammo and delete-----------------------------------------------//
 			
-			
+			std::vector<Ammo*>::iterator it = ammo_vector.begin();
+				while ( it != ammo_vector.end())
+				{
+					if (((*it)->get_position().x * 30)> player->get_position().x + (500) || ((*it)->get_position().x * 30)< player->get_position().x - (500) ||
+						((*it)->get_position().y * 30)> player->get_position().y + (200) || ((*it)->get_position().y * 30)< player->get_position().y - (200)
+						)
+					{
+
+
+						//(*it)->destroy();	
+						world.DestroyBody((*it)->get_ammo_body());
+						it = ammo_vector.erase(it);
+					}
+					else
+						it++;
+				}
 
 			//-----------------------------------------------------------------------//
 
@@ -491,6 +503,25 @@ void Game::fire_main_gun(b2World& world, int MouseX, int MouseY, Player *player,
 
 
   
+}
+
+void Game::CreateBox(b2World& world, int MouseX, int MouseY)
+{
+	float SCALE = 30.f;
+	b2BodyDef BodyDef;
+	BodyDef.position = b2Vec2(MouseX / SCALE, MouseY / SCALE);
+	BodyDef.type = b2_dynamicBody;
+	b2Body* Body = world.CreateBody(&BodyDef);
+
+	b2PolygonShape Shape;
+	Shape.SetAsBox((20.f) / SCALE, (20.f) / SCALE);
+	b2FixtureDef FixtureDef;
+	FixtureDef.density = 1.f;
+	FixtureDef.friction = 0.7f;
+	FixtureDef.shape = &Shape;
+	Body->CreateFixture(&FixtureDef);
+	Body->SetLinearDamping(3);
+	Body->SetAngularDamping(3);
 }
 
 

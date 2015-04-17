@@ -88,3 +88,12 @@ void Ammo::set_coord(float _x, float _y)
 	x = _x;
 	y = _y;
 }
+
+b2Vec2 Ammo::get_position()
+{
+	return ammo_body->GetPosition();
+}
+b2Body* Ammo::get_ammo_body()
+{
+	return ammo_body;
+}

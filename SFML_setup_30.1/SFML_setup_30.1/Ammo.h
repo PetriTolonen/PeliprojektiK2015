@@ -20,14 +20,14 @@ public:
 	int get_damage();
 	int get_penetration();
 
-	sf::Vector2f get_position();
+	//sf::Vector2f get_position();
 
 	void on_draw(sf::RenderWindow* win);
 
-	float get_position(float x, float y);
+	b2Vec2 get_position();
 	void set_position(float x, float y);
 	float get_velocity();
-
+	b2Body* get_ammo_body();
 	void start_contact();
 	void end_contact();
 	void set_velocity(float x, float y, b2Body *ammo_body);
