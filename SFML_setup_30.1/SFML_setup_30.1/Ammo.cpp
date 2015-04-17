@@ -1,7 +1,8 @@
 #include "Ammo.h"
 
-Ammo::Ammo(std::string n, float velo, int dmg, int pen, float x, float y) :Object()
+Ammo::Ammo(std::string n, b2Body* ammo_body, float velo, int dmg, int pen, float x, float y) :Object()
 {
+	this->ammo_body = ammo_body;
 	std::cout << "luo ammuksen" << std::endl;
 	texture_name = n +".png";
 	set_texture(texture_name);

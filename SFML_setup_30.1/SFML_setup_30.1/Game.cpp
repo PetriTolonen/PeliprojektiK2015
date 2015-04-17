@@ -38,6 +38,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 	// Construct a world object, which will hold and simulate the rigid bodies.
 	b2World world(gravity);
+	//world.Step(1.0f / 60.0f, 8, 4);
 
 	sf::Texture BoxTexture;
 	BoxTexture.loadFromFile("box.png");
@@ -121,7 +122,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 	AnimatedSprite animatedSprite2(sf::seconds(0.05f), true, false);
 	//----Animation test----//
-
+	//
 	//b2d
 	//float SCALE = 30.f;
 	//b2BodyDef BodyDef2;
@@ -137,7 +138,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	//FixtureDef.friction = 0.7f;
 	//FixtureDef.shape = &Shape;
 	//Body->CreateFixture(&FixtureDef2);
-
+	//
 	//view->setCenter(player.get_position());
 	
 	sf::Clock clock;
@@ -165,33 +166,27 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			sf::Time elapsed = clock.restart();
 
 			set_view(view, player);
-			//std::cout << player->get_rotation_turret() << std::endl;
+
+			world.Step(1.0f / 60.0f, 8, 4);
+			
 			//----Animation test----//
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
 				animatedSprite.play(*currentAnimation);
-				//animatedSprite.setPosition(player->get_position().x - 128 + sin(player->get_rotation()*3.14159265358979323846 / 180) * -400, player->get_position().y - 128 + cos(player->get_rotation()*3.14159265358979323846 / 180) * 400);
 				sf::Vector2i pixel_pos = sf::Mouse::getPosition(*window);
 				sf::Vector2f coord_pos = window->mapPixelToCoords(pixel_pos);
 				animatedSprite.setPosition(coord_pos.x - 100, coord_pos.y - 100);
 			}
 			animatedSprite.update(elapsed);
-			//----Animation test----//
-			//----Animation test----//
+
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
 				animatedSprite2.play(*currentAnimation2);
 				animatedSprite2.setPosition(player->get_position().x - 258, player->get_position().y - 258);
 			}
 			animatedSprite2.update(elapsed);
-			//----Animation test----//
 
-			//Box2d
 			
-			
-			
-			//Box2d
-			world.Step(1 / 60.f, 8, 3);
 
 		//-----------------Firing Main Gun--------------------------------------//
 
@@ -207,9 +202,9 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 					b2Body* ammo_body;
 
 					b2BodyDef ammoBodyDef;
-					ammoBodyDef.position = b2Vec2((player->get_position().x) / SCALE, (player->get_position().y + 90) / SCALE);
+					ammoBodyDef.position = b2Vec2((((player->get_position().x) + (-cos(player->get_rotation_turret() / (180.0f / b2_pi))) * 90) / SCALE), ((player->get_position().y) + (-sin(player->get_rotation_turret() / (180.0f / b2_pi))) * 90) / SCALE);
 					ammoBodyDef.type = b2_kinematicBody;
-					ammoBodyDef.bullet = true;
+					//ammoBodyDef.bullet = true;
 
 					ammo_body = world.CreateBody(&ammoBodyDef);
 
@@ -222,22 +217,24 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 					AmmoFixtureDef.shape = &shape_ammo;
 					
 					ammo_body->CreateFixture(&AmmoFixtureDef);
-					ammo_body->SetUserData(this);
+					//ammo_body->SetUserData(this);
+					
 
 					//------------------------//
 
-				Ammo *round = new Ammo("box", 0.2, 1.0, 3.0, player->get_position().x, player->get_position().y);
-				o_manager.add_object(round);
+				Ammo *round = new Ammo("box", ammo_body, 1.0, 1.0, 3.0, player->get_position().x, player->get_position().y);
+				o_manager.add_ammo(round);
 
 				float x = 0;
 				float y = 0;
-
+				
 				
 				//x = (player->get_rotation_turret());
 				//y = (player->get_rotation_turret());
 				
-				x += 5;
-				y += 5;
+				
+				x = round->get_velocity() * (-cos(player->get_rotation_turret() / (180.0f/b2_pi)));
+				y = round->get_velocity() * (-sin(player->get_rotation_turret() / (180.0f / b2_pi)));
 				round->set_velocity(x, y, ammo_body);
 				//std::cout << __LINE__  << "Fired main gun!"<< std::endl;
 				//float ammo_location_x = (player->get_position().x);
@@ -250,6 +247,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				//round->set_position(ammo_location_x, ammo_location_y + 10);
 
 				player->set_cooldown();
+				
 				}
 
 
@@ -262,7 +260,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			window->draw(map);
 			//player->update(event, window);
 			//player->on_draw(window);*/
-			o_manager.update(event, window);
+			o_manager.update(event, window, player);
 			o_manager.draw(window);
 			//----Animation test----//
 			window->draw(animatedSprite);
@@ -301,7 +299,15 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				//}
 			}
 
-			
+			if (event.type == sf::Event::KeyPressed)
+			{
+				if (event.key.code == sf::Keyboard::X)
+				{
+					
+				//	world.DestroyBody();
+					
+				}
+			}
 
 
 			//window.draw(sprite_tank_hull);
@@ -324,8 +330,6 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			for (pos = ContactListener->_contacts.begin();
 				pos != ContactListener->_contacts.end(); ++pos) {
 				ContactCheck contact = *pos;
-
-
 				
 				//if (contact.fixtureA == player_body->GetFixtureList()) //&&
 				//	contact.fixtureB == ->GetFixtureList())
@@ -334,6 +338,12 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				//}
 			}
 			//--------------------------------------------------------------------------//
+
+			//-----------------------Go through ammo and delete-----------------------------------------------//
+			
+			
+
+			//-----------------------------------------------------------------------//
 
 			
 

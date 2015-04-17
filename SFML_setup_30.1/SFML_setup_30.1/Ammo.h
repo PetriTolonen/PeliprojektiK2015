@@ -10,7 +10,7 @@ class Ammo : public Object
 {
 public:
 
-	Ammo(std::string n, float velo, int dmg, int pen, float x, float y);
+	Ammo(std::string n, b2Body* ammo_body, float velo, int dmg, int pen, float x, float y);
 	Ammo();
 	~Ammo();
 
@@ -34,6 +34,7 @@ public:
 	void set_coord(float _x, float _y);
 
 protected:
+	b2Body* ammo_body;
 	std::string texture_name;
 	float velocity;
 	int damage;
