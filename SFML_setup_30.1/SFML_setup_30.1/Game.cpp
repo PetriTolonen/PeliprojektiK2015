@@ -68,9 +68,23 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	player_body->SetLinearDamping(5);
 	player_body->SetAngularDamping(10);
 	//---player_b2_body---//
-
-	//------ammo_b2_body----------//
 	
+	//---enemy_b2_body---//
+	
+	b2Body* enemy_body = world.CreateBody(&BodyDef);
+	FixtureDef.density = 10.f;
+	FixtureDef.friction = 0.7f;
+
+
+	Shape.SetAsBox((31.f) / SCALE, (66.f) / SCALE);
+	enemy_body->CreateFixture(&FixtureDef);
+	enemy_body->SetTransform(b2Vec2(2048.0 / SCALE, (screen_height / 2) / SCALE), 0);
+	//Tank movement dampening
+	enemy_body->SetLinearDamping(5);
+	enemy_body->SetAngularDamping(10);
+	//---enemy_b2_body---//
+	
+	//------ammo_b2_body----------//
 	//----------------//
 	
 	
@@ -78,10 +92,14 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 	Tank_hull hull("tank_hull", 0.4, 0.2, 1, 2, 1, 38000, 165);
 	Tank_turret turret("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.5, 25);
+	Tank_hull hull2("tank_hull", 0.4, 0.2, 1, 2, 1, 38000, 165);
+	Tank_turret turret2("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.5, 25);
 	Player *player = new Player(player_body, &hull, &turret, 0, 0, 0, 0, 0, 0, 0, 0);
-	
+	Enemy *enemy = new Enemy(enemy_body, &hull2, &turret2, 0, 0, 0, 0, 0, 0, 0, 0);
 	player->set_position(2048.0f, 0 + (screen_height / 2));
+	enemy->set_position(2048.0f + 250, 0 + (screen_height / 2) + 250);
 	o_manager.add_object(player);
+	o_manager.add_object(enemy);
 
 	
 	
@@ -485,24 +503,6 @@ bool Game::is_exiting()
 		return true;
 	else
 		return false;
-}
-
-void Game::fire_main_gun(b2World& world, int MouseX, int MouseY, Player *player, Ammo *ammo) //, Ammo *ammo)
-{
-   //float angle = player->get_rotation_turret();
-   //float velocity = 100;
-   //for (int i = 0; i < 1000000000; i++) {
-	  //// sleep(1);    // look in unistd.h
-	  // x += velocity*cos(angle);  // include math.h
-	  // y += velocity*sin(angle);  // angle in radian, of course
-	  // // draw your sprite here, at (x, y)
-   //}
-   //std::cout << player->get_rotation_turret() << std::endl;
-
-  //std::cout << x << "     " << y << std::endl;
-
-
-  
 }
 
 void Game::CreateBox(b2World& world, int MouseX, int MouseY)

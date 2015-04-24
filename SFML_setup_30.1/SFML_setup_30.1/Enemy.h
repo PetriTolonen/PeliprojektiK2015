@@ -1,5 +1,5 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef ENEMY_H
+#define ENEMY_H
 
 #include "Tank.h"
 #include "IncludeHelper.h"
@@ -7,46 +7,37 @@
 #include "Box2D\Box2D.h"
 #include "Ammo.h"
 
-class Player : public Object
+
+
+class Enemy : public Object
 {
 public:
-	Player(b2Body* player_body, Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m, int mcd);
-	~Player(void);
-
+	Enemy(b2Body* enemy_body, Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m, int mcd);
+	~Enemy(void);
 	void on_update(sf::Event event, sf::RenderWindow* win);
 	void update(sf::Event event, sf::RenderWindow* win);
-	
+	void on_draw(sf::RenderWindow* win);
 	void reduce_health(int amount);
-	void increase_health(int amount);
-	void set_health();
+
+	void set_position(float x, float y);
+	
 
 	float get_rotation();
 	float get_rotation_turret();
-
 	int get_cooldown();
 
 	sf::Vector2f get_position();
-	void on_draw(sf::RenderWindow* win);
-	//float get_position_x();
-	//float get_position_y();
-	void set_position(float x, float y);
-	float rotate(float rotation_speed);
-	void set_rotation(float rot);
-	void set_weight(float weight_hull); // + float weight_turret); sitten kun turret implementoidaan
-	
-
-	sf::Vector2f get_distance_traveled();
 	bool get_can_fire();
 	void set_cooldown();
 	void reduce_cooldown(int amount);
 
 private:
-	
+
 	int health;
 	//sf::Sprite player_sprite_hull;
-	b2Body* player_body;
-	Tank_turret* tt;
-	Tank_hull* t;
+	b2Body* enemy_body;
+	Tank_turret* t_turret;
+	Tank_hull* t_hull;
 	float x;
 	float y;
 	float turret_rotation_speed; //= 0;
@@ -57,7 +48,7 @@ private:
 	//-----------Main Gun---------------------//
 	int momentary_cooldown = 0;
 	bool can_fire = true;
-	
+
 
 	//---------Tank_hull_statistics------//
 	Tank_hull tank_hull;
@@ -73,22 +64,6 @@ private:
 	float weight = 0;
 
 	//------------------------------------//
-	bool is_moving_forward = false;
-	bool is_moving_backward = false;
-
-	bool forward_is_pressed = false;
-	bool backward_is_pressed = false;
-	//std::string tank_name;
-
-	/*
-	float momentary_acceleration_forward = tank_hull.get_acceleration_forward();
-	float momentary_max_speed_forward = tank_hull.get_max_speed_forward();
-	*/
-
 	sf::Vector2f distance_traveled;
 };
-
-
-
-
 #endif;

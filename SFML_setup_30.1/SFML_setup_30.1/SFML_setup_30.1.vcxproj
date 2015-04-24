@@ -140,6 +140,7 @@
     <ClCompile Include="AnimatedSprite.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="ContactChecker.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="IncludeHelper.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -204,10 +205,12 @@
     <ClInclude Include="..\..\Box2D\Dynamics\Joints\b2WeldJoint.h" />
     <ClInclude Include="..\..\Box2D\Dynamics\Joints\b2WheelJoint.h" />
     <ClInclude Include="..\..\Box2D\Rope\b2Rope.h" />
+    <ClInclude Include="AiManager.h" />
     <ClInclude Include="Ammo.h" />
     <ClInclude Include="AnimatedSprite.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="ContactChecker.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="IncludeHelper.h" />
     <ClInclude Include="MainMenu.h" />
