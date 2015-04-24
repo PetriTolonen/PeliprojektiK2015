@@ -53,7 +53,8 @@ void ObjectManager::update(sf::Event event, sf::RenderWindow* win)
 			return;
 		}
 		e->update(event, win);
-	});
+	}); 
+
 }
 
 void ObjectManager::draw(sf::RenderWindow* win)

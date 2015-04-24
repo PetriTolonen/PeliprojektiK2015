@@ -8,7 +8,7 @@ Player::Player(b2Body* player_body, Tank_hull* t, Tank_turret* tt, float msf, fl
 	this->tt = tt;
 	turret_rotation_speed = tt->get_traverse_speed();
 	hull_rotation_speed = t->get_traverse_speed();
-	
+	player_body->SetUserData(this);
 
 	momentary_speed_forward = msf;
 	momentary_max_speed_backward = msb;
@@ -134,8 +134,6 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 	//---Setting_sprite_rotation---//
 	t->get_sprite().setRotation((player_body->GetAngle() * (180.0f / M_PI)));
 	//-----------------------------//
-
-
 
 	//---Distance travelled.---//
 	if (player_body->GetPosition().y*30.0 > distance_traveled.y)

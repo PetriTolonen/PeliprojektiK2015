@@ -10,7 +10,7 @@ class Ammo : public Object
 {
 public:
 
-	Ammo(std::string n,float s, int d, int p);
+	Ammo(std::string n, b2Body* ammo_body, float velo, int dmg, int pen, float x, float y);
 	Ammo();
 	~Ammo();
 
@@ -20,22 +20,32 @@ public:
 	int get_damage();
 	int get_penetration();
 
-	sf::Vector2f get_position();
+	//sf::Vector2f get_position();
 
 	void on_draw(sf::RenderWindow* win);
 
-	float get_position(float x, float y);
+	b2Vec2 get_position();
 	void set_position(float x, float y);
 	float get_velocity();
+	b2Body* get_ammo_body();
+	void start_contact();
+	void end_contact();
+	void set_velocity(float x, float y, b2Body *ammo_body);
+	void set_coord(float _x, float _y);
 
 protected:
+	b2Body* ammo_body;
 	std::string texture_name;
 	float velocity;
 	int damage;
 	int penetration;
 	float x;
 	float y;
+	float radians;
 	bool is_hit = false;
+
+	
+
 	
 };
 #endif

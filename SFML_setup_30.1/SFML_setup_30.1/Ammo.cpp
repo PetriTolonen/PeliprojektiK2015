@@ -1,15 +1,18 @@
 #include "Ammo.h"
 
-Ammo::Ammo(std::string n, float s, int d, int p) :Object()
+Ammo::Ammo(std::string n, b2Body* ammo_body, float velo, int dmg, int pen, float x, float y) :Object()
 {
+	this->ammo_body = ammo_body;
 	std::cout << "luo ammuksen" << std::endl;
 	texture_name = n +".png";
 	set_texture(texture_name);
 	object_texture.setSmooth(true);
 
-	velocity = s;
-	damage = d;
-	penetration = p;
+
+	velocity = velo;
+	damage = dmg;
+	penetration = pen;
+	
 
 }
 
@@ -64,4 +67,33 @@ float Ammo::get_velocity()
 Ammo::~Ammo()
 {
 
+}
+
+void Ammo::set_velocity(float x, float y, b2Body *ammo_body)
+{
+	ammo_body->SetLinearVelocity(b2Vec2(x, y));
+}
+
+void Ammo::start_contact()
+{
+	is_hit = true;
+}
+
+void Ammo::end_contact()
+{
+	is_hit = false;
+}
+void Ammo::set_coord(float _x, float _y)
+{
+	x = _x;
+	y = _y;
+}
+
+b2Vec2 Ammo::get_position()
+{
+	return ammo_body->GetPosition();
+}
+b2Body* Ammo::get_ammo_body()
+{
+	return ammo_body;
 }

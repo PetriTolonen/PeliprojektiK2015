@@ -20,6 +20,9 @@ private:
 	std::vector<Object* const> find_results;
 	std::list<Object* const> destroyed_objects;
 
+	
+
 	void free_objects();
+
 };
 #endif
