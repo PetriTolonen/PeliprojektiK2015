@@ -14,8 +14,7 @@ public:
 	Ammo();
 	~Ammo();
 
-	void on_update(sf::Event event, sf::RenderWindow* win);
-	void update(sf::Event event, sf::RenderWindow* win);
+	void on_update(sf::RenderWindow* win);
 
 	int get_damage();
 	int get_penetration();
@@ -32,6 +31,7 @@ public:
 	void end_contact();
 	void set_velocity(float x, float y, b2Body *ammo_body);
 	void set_coord(float _x, float _y);
+	void set_rotation(float rot);
 
 protected:
 	b2Body* ammo_body;
@@ -42,7 +42,7 @@ protected:
 	float x;
 	float y;
 	float radians;
-	bool is_hit = false;
+	bool is_hit;
 
 	
 

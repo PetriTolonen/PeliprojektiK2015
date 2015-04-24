@@ -54,5 +54,10 @@ private:
 	static game_state _game_state;
 	Ammo ammo();
 	std::vector<Ammo*> ammo_vector;
+
+	b2Fixture *ammo_fixture;
+	b2Fixture *box_fixture;
+
+	MyContactListener *ContactListener;
 };
 #endif

@@ -45,8 +45,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	//--------------------------//
 
 	//---------Contact Listener-----------------//
-	MyContactListener *ContactListener;
-	ContactListener = new MyContactListener;
+	ContactListener = new MyContactListener();
 	world.SetContactListener(ContactListener);
 
 	//---player_b2_body---//
@@ -216,13 +215,13 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 					
 					AmmoFixtureDef.shape = &shape_ammo;
 					
-					ammo_body->CreateFixture(&AmmoFixtureDef);
+					ammo_fixture = ammo_body->CreateFixture(&AmmoFixtureDef);
 					//ammo_body->SetUserData(this);
 					
 
 					//------------------------//
 
-				Ammo *round = new Ammo("box", ammo_body, 12.0f, 1.0, 3.0, player->get_position().x, player->get_position().y);
+				Ammo *round = new Ammo("ammo", ammo_body, 12.0f, 1.0, 3.0, player->get_position().x, player->get_position().y);
 
 				float x = 0;
 				float y = 0;
@@ -234,7 +233,10 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				
 				x = round->get_velocity() * (-cos(player->get_rotation_turret() / (180.0f/b2_pi)));
 				y = round->get_velocity() * (-sin(player->get_rotation_turret() / (180.0f / b2_pi)));
+				
 				round->set_velocity(x, y, ammo_body);
+				round->set_rotation(player->get_rotation_turret() / (180.0f / b2_pi));
+				
 				//std::cout << __LINE__  << "Fired main gun!"<< std::endl;
 				//float ammo_location_x = (player->get_position().x);
 				//float ammo_location_y = (player->get_position().y);
@@ -267,6 +269,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			window->draw(animatedSprite2);
 			//----Animation test----//
 
+						
 			for (b2Body* BodyIterator = world.GetBodyList(); BodyIterator != 0; BodyIterator = BodyIterator->GetNext())
 			{
 				if (BodyIterator->GetType() == b2_dynamicBody)
@@ -279,7 +282,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 					window->draw(Sprite);
 				}
 
-				if (BodyIterator->GetType() == b2_kinematicBody)
+				/*if (BodyIterator->GetType() == b2_kinematicBody)
 				{
 					sf::Sprite Sprite;
 					Sprite.setTexture(BoxTexture);
@@ -287,7 +290,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 					Sprite.setPosition(SCALE * BodyIterator->GetPosition().x, SCALE * BodyIterator->GetPosition().y);
 					Sprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
 					window->draw(Sprite);
-				}
+				}*/
 				//if (BodyIterator->GetType() == b2_staticBody)
 				//{
 				//	sf::Sprite Sprite;
@@ -298,6 +301,14 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				//	window->draw(Sprite);
 				//}
 			}
+
+			//---DrawAmmo---//
+			for (std::vector<Ammo*>::const_iterator iterator = ammo_vector.begin(), end = ammo_vector.end(); iterator != end; ++iterator)
+			{
+				(*iterator)->on_update(window);
+				(*iterator)->on_draw(window);
+			}
+			//--------------//
 
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
@@ -328,11 +339,12 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				pos != ContactListener->_contacts.end(); ++pos) {
 				ContactCheck contact = *pos;
 				
-				//if (contact.fixtureA == player_body->GetFixtureList()) //&&
-				//	contact.fixtureB == ->GetFixtureList())
-				//{
-				//	std::cout << "Player hit the ammo!" << std::endl;
-				//}
+				if ((contact.fixtureA == ammo_fixture && contact.fixtureB == box_fixture)||
+					(contact.fixtureA == box_fixture && contact.fixtureB == ammo_fixture))
+				{
+					std::cout << "hittiahittia" << std::endl;
+				}
+				
 			}
 			//--------------------------------------------------------------------------//
 
@@ -521,9 +533,11 @@ void Game::CreateBox(b2World& world, int MouseX, int MouseY)
 	FixtureDef.density = 1.f;
 	FixtureDef.friction = 0.7f;
 	FixtureDef.shape = &Shape;
-	Body->CreateFixture(&FixtureDef);
+	//Body->CreateFixture(&FixtureDef);
 	Body->SetLinearDamping(3);
 	Body->SetAngularDamping(3);
+
+	box_fixture = Body->CreateFixture(&FixtureDef);
 }
 
 

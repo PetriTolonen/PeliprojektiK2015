@@ -8,17 +8,16 @@ Ammo::Ammo(std::string n, b2Body* ammo_body, float velo, int dmg, int pen, float
 	set_texture(texture_name);
 	object_texture.setSmooth(true);
 
-
 	velocity = velo;
 	damage = dmg;
 	penetration = pen;
 	
-
+	is_hit = false;
 }
 
 Ammo::Ammo() :Object()
 {
-	texture_name = "Ammo.png";
+	texture_name = "ammo.png";
 	set_texture(texture_name);
 	object_texture.setSmooth(true);
 
@@ -27,15 +26,12 @@ Ammo::Ammo() :Object()
 	penetration = 35;
 }
 
-void on_update(sf::Event event, sf::RenderWindow* win)
+void Ammo::on_update(sf::RenderWindow* win)
 {
-
-}
-
-
-void Ammo::on_update(sf::Event event, sf::RenderWindow* win)
-{
-
+	x = get_position().x*30.0f;
+	y = get_position().y*30.0f;
+	sprite_name.setRotation(ammo_body->GetAngle()*180.0f/b2_pi);
+	sprite_name.setPosition(x, y);
 }
 
 int Ammo::get_damage()
@@ -56,6 +52,10 @@ void Ammo::set_position(float x, float y)
 
 void Ammo::on_draw(sf::RenderWindow* win)
 {
+	if (is_hit)
+		sprite_name.setColor(sf::Color(0, 0, 0));
+	else
+		sprite_name.setColor(sf::Color(255,255,255));
 	win->draw(sprite_name);
 }
 
@@ -96,4 +96,9 @@ b2Vec2 Ammo::get_position()
 b2Body* Ammo::get_ammo_body()
 {
 	return ammo_body;
+}
+
+void Ammo::set_rotation(float rot)
+{
+	ammo_body->SetTransform(b2Vec2(get_position().x, get_position().y), rot);
 }

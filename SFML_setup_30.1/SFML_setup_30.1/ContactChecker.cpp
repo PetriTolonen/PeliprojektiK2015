@@ -33,31 +33,31 @@ void MyContactListener::PostSolve(b2Contact* contact,
 	const b2ContactImpulse* impulse) {
 }
 
-void begin_contact(b2Contact* contact)
-{      //check if fixture A was a ball
-	void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-	if (bodyUserData)
-		static_cast<Ammo*>(bodyUserData)->start_contact();
-
-	//check if fixture B was a ball
-	bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-	if (bodyUserData)
-		static_cast<Ammo*>(bodyUserData)->start_contact();
-
-
-
-}
-
-void EndContact(b2Contact* contact) {
-
-	//check if fixture A was a ball
-	void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-	if (bodyUserData)
-		static_cast<Ammo*>(bodyUserData)->end_contact();
-
-	//check if fixture B was a ball
-	bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-	if (bodyUserData)
-		static_cast<Ammo*>(bodyUserData)->end_contact();
-
-}
+//void begin_contact(b2Contact* contact)
+//{      //check if fixture A was a ball
+//	void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+//	if (bodyUserData)
+//		static_cast<Ammo*>(bodyUserData)->start_contact();
+//
+//	//check if fixture B was a ball
+//	bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+//	if (bodyUserData)
+//		static_cast<Ammo*>(bodyUserData)->start_contact();
+//
+//
+//
+//}
+//
+//void EndContact(b2Contact* contact) {
+//
+//	//check if fixture A was a ball
+//	void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+//	if (bodyUserData)
+//		static_cast<Ammo*>(bodyUserData)->end_contact();
+//
+//	//check if fixture B was a ball
+//	bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+//	if (bodyUserData)
+//		static_cast<Ammo*>(bodyUserData)->end_contact();
+//
+//}
