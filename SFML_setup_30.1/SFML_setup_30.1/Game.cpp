@@ -169,14 +169,14 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			world.Step(1.0f / 60.0f, 8, 4);
 			
 			//----Animation test----//
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		/*	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
 				animatedSprite.play(*currentAnimation);
 				sf::Vector2i pixel_pos = sf::Mouse::getPosition(*window);
 				sf::Vector2f coord_pos = window->mapPixelToCoords(pixel_pos);
 				animatedSprite.setPosition(coord_pos.x - 100, coord_pos.y - 100);
 			}
-			animatedSprite.update(elapsed);
+			animatedSprite.update(elapsed);*/
 
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
@@ -214,9 +214,9 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 					AmmoFixtureDef.friction = 4.7f;*/
 					
 					AmmoFixtureDef.shape = &shape_ammo;
+					ammo_body->SetUserData("ammo");
+					ammo_body->CreateFixture(&AmmoFixtureDef);
 					
-					ammo_fixture = ammo_body->CreateFixture(&AmmoFixtureDef);
-					//ammo_body->SetUserData(this);
 					
 
 					//------------------------//
@@ -339,10 +339,16 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				pos != ContactListener->_contacts.end(); ++pos) {
 				ContactCheck contact = *pos;
 				
-				if ((contact.fixtureA == ammo_fixture && contact.fixtureB == box_fixture)||
-					(contact.fixtureA == box_fixture && contact.fixtureB == ammo_fixture))
+				if ((contact.fixtureA->GetBody()->GetUserData() == "ammo" && contact.fixtureB->GetBody()->GetUserData() == "box") ||
+					(contact.fixtureA->GetBody()->GetUserData() == "box" && contact.fixtureB->GetBody()->GetUserData() == "ammo"))
 				{
-					std::cout << "hittiahittia" << std::endl;
+					//----Animation test----//
+					animatedSprite.play(*currentAnimation);
+					animatedSprite.setPosition(player->get_position().x, player->get_position().y);
+					
+					animatedSprite.update(elapsed);
+					
+					//std::cout << "hittiahittia" << std::endl;
 				}
 				
 			}
@@ -536,8 +542,8 @@ void Game::CreateBox(b2World& world, int MouseX, int MouseY)
 	//Body->CreateFixture(&FixtureDef);
 	Body->SetLinearDamping(3);
 	Body->SetAngularDamping(3);
-
-	box_fixture = Body->CreateFixture(&FixtureDef);
+	Body->SetUserData("box");
+	Body->CreateFixture(&FixtureDef);
 }
 
 
