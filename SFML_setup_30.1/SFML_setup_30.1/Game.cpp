@@ -169,21 +169,21 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			world.Step(1.0f / 60.0f, 8, 4);
 			
 			//----Animation test----//
-		/*	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
 				animatedSprite.play(*currentAnimation);
 				sf::Vector2i pixel_pos = sf::Mouse::getPosition(*window);
 				sf::Vector2f coord_pos = window->mapPixelToCoords(pixel_pos);
 				animatedSprite.setPosition(coord_pos.x - 100, coord_pos.y - 100);
 			}
-			animatedSprite.update(elapsed);*/
+			
 
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
 				animatedSprite2.play(*currentAnimation2);
 				animatedSprite2.setPosition(player->get_position().x - 258, player->get_position().y - 258);
 			}
-			animatedSprite2.update(elapsed);
+			
 
 			
 
@@ -265,6 +265,8 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			o_manager.update(event, window);
 			o_manager.draw(window);
 			//----Animation test----//
+			animatedSprite.update(elapsed);
+			animatedSprite2.update(elapsed);
 			window->draw(animatedSprite);
 			window->draw(animatedSprite2);
 			//----Animation test----//
@@ -341,14 +343,8 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				
 				if ((contact.fixtureA->GetBody()->GetUserData() == "ammo" && contact.fixtureB->GetBody()->GetUserData() == "box") ||
 					(contact.fixtureA->GetBody()->GetUserData() == "box" && contact.fixtureB->GetBody()->GetUserData() == "ammo"))
-				{
-					//----Animation test----//
-					animatedSprite.play(*currentAnimation);
-					animatedSprite.setPosition(player->get_position().x, player->get_position().y);
-					
-					animatedSprite.update(elapsed);
-					
-					//std::cout << "hittiahittia" << std::endl;
+				{													
+					std::cout << "hittiahittia" << std::endl;
 				}
 				
 			}
@@ -359,8 +355,8 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			std::vector<Ammo*>::iterator it = ammo_vector.begin();
 				while ( it != ammo_vector.end())
 				{
-					if (((*it)->get_position().x * 30)> player->get_position().x + (500) || ((*it)->get_position().x * 30)< player->get_position().x - (500) ||
-						((*it)->get_position().y * 30)> player->get_position().y + (200) || ((*it)->get_position().y * 30)< player->get_position().y - (200)
+					if (((*it)->get_position().x * SCALE)> player->get_position().x + (500) || ((*it)->get_position().x * SCALE)< player->get_position().x - (500) ||
+						((*it)->get_position().y * SCALE)> player->get_position().y + (300) || ((*it)->get_position().y * SCALE)< player->get_position().y - (300)
 						)
 					{
 
