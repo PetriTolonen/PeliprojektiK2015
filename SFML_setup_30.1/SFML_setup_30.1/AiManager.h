@@ -10,12 +10,12 @@ class AiManager
 public:
 	AiManager();
 	~AiManager(void);
-	float get_player_position(Player* player);
+	sf::Vector2f get_player_position(Player* player);
 
 	void update();
 
 private:
-
+	bool at_destination;
 
 };
 #endif;
