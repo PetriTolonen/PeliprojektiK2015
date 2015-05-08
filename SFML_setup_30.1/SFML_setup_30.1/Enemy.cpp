@@ -20,6 +20,8 @@ Enemy::Enemy(b2Body* enemy_body, Tank_hull* t, Tank_turret* tt, float msf, float
 	momentary_max_speed_backward = mmsb;
 	momentum = m;
 	momentary_cooldown = mcd;
+
+	health = 10;
 }
 
 Enemy::~Enemy(void)
@@ -29,41 +31,45 @@ Enemy::~Enemy(void)
 
 void Enemy::on_update(sf::Event, sf::RenderWindow* win)
 {
-	//-------------------------------rotate-----------------------------------------------//
-	float x_player = t_turret->get_position().x;
-	float y_player = t_turret->get_position().y;
-
-	float rotation = (atan2(y_player, x_player)) * 180 / M_PI;
-	float rotation2 = (rotation + 180) - t_turret->get_rotation();
-
-	if (rotation2 < 0)
+	if (health>0)
 	{
-		rotation2 += 360;
-	}
+		//-------------------------------rotate-----------------------------------------------//
+		float x_player = t_turret->get_position().x;
+		float y_player = t_turret->get_position().y;
 
+		float rotation = (atan2(y_player, x_player)) * 180 / M_PI;
+		float rotation2 = (rotation + 180) - t_turret->get_rotation();
 
-	if (rotation2 < 180 + 0.6 && rotation2 > 180 - 0.6)
-	{
-		t_turret->get_sprite().setRotation(rotation);
-	}
-	else
-	{
-		if (rotation2 >180)
+		if (rotation2 < 0)
 		{
-			t_turret->get_sprite().rotate(t_turret->get_traverse_speed() * 10 * _elapsed);
-
-		}
-		if (rotation2 <180)
-		{
-			t_turret->get_sprite().rotate(-t_turret->get_traverse_speed() * 10 * _elapsed);
+			rotation2 += 360;
 		}
 
 
+		if (rotation2 < 180 + 0.6 && rotation2 > 180 - 0.6)
+		{
+			t_turret->get_sprite().setRotation(rotation);
+		}
+		else
+		{
+			if (rotation2 > 180)
+			{
+				t_turret->get_sprite().rotate(t_turret->get_traverse_speed() * 10 * _elapsed);
+
+			}
+			if (rotation2 < 180)
+			{
+				t_turret->get_sprite().rotate(-t_turret->get_traverse_speed() * 10 * _elapsed);
+			}
+
+
+		}
+		//---------------------------end rotation------------------------------------------//
+		
+
+		t_hull->get_sprite().setRotation((enemy_body->GetAngle() * (180.0f / M_PI)));
 	}
-	//---------------------------end rotation------------------------------------------//
 	set_position(enemy_body->GetPosition().x, enemy_body->GetPosition().y);
-
-	t_hull->get_sprite().setRotation((enemy_body->GetAngle() * (180.0f / M_PI)));
 }
 
 void Enemy::update(sf::Event event, sf::RenderWindow* win)
@@ -73,8 +79,16 @@ void Enemy::update(sf::Event event, sf::RenderWindow* win)
 
 void Enemy::on_draw(sf::RenderWindow* win)
 {
-	t_hull->get_sprite().setColor(sf::Color(200, 0, 0));
-	t_turret->get_sprite().setColor(sf::Color(255, 0, 0));
+	if (health > 0)
+	{
+		t_hull->get_sprite().setColor(sf::Color(200, 0, 0));
+		t_turret->get_sprite().setColor(sf::Color(255, 0, 0));
+	}
+	if (health < 0)
+	{
+		t_hull->get_sprite().setColor(sf::Color(0, 0, 0));
+		t_turret->get_sprite().setColor(sf::Color(0, 0, 0));
+	}
 	t_hull->on_draw(win);
 	t_turret->on_draw(win);
 }
@@ -83,10 +97,7 @@ void Enemy::reduce_health(int amount)
 {
 	health -= amount;
 
-	if (health == 0)
-	{
-
-	}
+	
 }
 
 void Enemy::set_position(float x, float y)

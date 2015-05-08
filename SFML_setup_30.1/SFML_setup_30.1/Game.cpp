@@ -81,9 +81,9 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	FixtureDef2.density = 10.f;
 	FixtureDef2.friction = 0.7f;
 	FixtureDef2.shape = &Shape2;
-	enemy_body->SetUserData("box");
+	enemy_body->SetUserData("enemy1");
 	enemy_body->CreateFixture(&FixtureDef2);
-	enemy_body->SetTransform(b2Vec2(2048.0 / SCALE, (screen_height / 2) / SCALE), 0);
+	enemy_body->SetTransform(b2Vec2(2048.0 / SCALE, ((screen_height / 2)+500) / SCALE), 0);
 	//Tank movement dampening
 	enemy_body->SetLinearDamping(5);
 	enemy_body->SetAngularDamping(10);
@@ -100,11 +100,11 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	Tank_hull hull2("tank_hull", 0.4, 0.2, 1, 2, 1, 38000, 165);
 	Tank_turret turret2("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.5, 25);
 	Player *player = new Player(player_body, &hull, &turret, 0, 0, 0, 0, 0, 0, 0, 0);
-	Enemy *enemy = new Enemy(enemy_body, &hull2, &turret2, 0, 0, 0, 0, 0, 0, 0, 0);
-	player->set_position(2048.0f, 0 + (screen_height / 2));
-	enemy->set_position(2048.0f + 250, 0 + (screen_height / 2) + 250);
+	Enemy *enemy1 = new Enemy(enemy_body, &hull2, &turret2, 0, 0, 0, 0, 0, 0, 0, 0);
+	//player->set_position(2048.0f, 0 + (screen_height / 2));
+	//enemy1->set_position(2048.0f, 0 + (screen_height / 2));
 	o_manager.add_object(player);
-	o_manager.add_object(enemy);
+	o_manager.add_object(enemy1);
 
 	
 	
@@ -368,7 +368,14 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				if ((contact.fixtureA->GetBody()->GetUserData() == "ammo" && contact.fixtureB->GetBody()->GetUserData() == "box") ||
 					(contact.fixtureA->GetBody()->GetUserData() == "box" && contact.fixtureB->GetBody()->GetUserData() == "ammo"))
 				{													
-					std::cout << "hittiahittia" << std::endl;
+					std::cout << "Osuit laatikkoon" << std::endl;
+				}
+
+				if ((contact.fixtureA->GetBody()->GetUserData() == "ammo" && contact.fixtureB->GetBody()->GetUserData() == "enemy1") ||
+					(contact.fixtureA->GetBody()->GetUserData() == "enemy1" && contact.fixtureB->GetBody()->GetUserData() == "ammo"))
+				{
+					std::cout << "Osuit enemy1" << std::endl;
+					enemy1->reduce_health(1);
 				}
 				
 			}

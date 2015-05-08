@@ -8,10 +8,11 @@ MyContactListener::~MyContactListener() {
 }
 
 void MyContactListener::BeginContact(b2Contact* contact) {
-	// We need to copy out the data because the b2Contact passed in
-	// is reused.
+	 /*We need to copy out the data because the b2Contact passed in
+	 is reused.*/
 	ContactCheck myContact = { contact->GetFixtureA(), contact->GetFixtureB() };
 	_contacts.push_back(myContact);
+
 }
 
 void MyContactListener::EndContact(b2Contact* contact) {
@@ -23,6 +24,7 @@ void MyContactListener::EndContact(b2Contact* contact) {
 	{
 		_contacts.erase(pos);
 	}
+
 }
 
 void MyContactListener::PreSolve(b2Contact* contact,
@@ -47,7 +49,7 @@ void MyContactListener::PostSolve(b2Contact* contact,
 //
 //
 //}
-//
+
 //void EndContact(b2Contact* contact) {
 //
 //	//check if fixture A was a ball
