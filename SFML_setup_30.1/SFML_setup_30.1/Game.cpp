@@ -44,6 +44,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	BoxTexture.loadFromFile("box.png");
 	//--------------------------//
 
+
 	//---------Contact Listener-----------------//
 	ContactListener = new MyContactListener();
 	world.SetContactListener(ContactListener);
@@ -69,14 +70,19 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	//---player_b2_body---//
 
 	//---enemy_b2_body---//
-	
-	b2Body* enemy_body = world.CreateBody(&BodyDef);
-	FixtureDef.density = 10.f;
-	FixtureDef.friction = 0.7f;
+	b2BodyDef BodyDef2;
+	BodyDef2.type = b2_dynamicBody;
 
+	b2PolygonShape Shape2;
+	Shape2.SetAsBox((31.f) / SCALE, (66.f) / SCALE);
 
-	Shape.SetAsBox((31.f) / SCALE, (66.f) / SCALE);
-	enemy_body->CreateFixture(&FixtureDef);
+	b2FixtureDef FixtureDef2;
+	b2Body* enemy_body = world.CreateBody(&BodyDef2);
+	FixtureDef2.density = 10.f;
+	FixtureDef2.friction = 0.7f;
+	FixtureDef2.shape = &Shape2;
+	enemy_body->SetUserData("box");
+	enemy_body->CreateFixture(&FixtureDef2);
 	enemy_body->SetTransform(b2Vec2(2048.0 / SCALE, (screen_height / 2) / SCALE), 0);
 	//Tank movement dampening
 	enemy_body->SetLinearDamping(5);

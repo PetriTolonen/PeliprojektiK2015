@@ -10,7 +10,7 @@ Enemy::Enemy(b2Body* enemy_body, Tank_hull* t, Tank_turret* tt, float msf, float
 
 	turret_rotation_speed = tt->get_traverse_speed();
 	hull_rotation_speed = t->get_traverse_speed();
-	enemy_body->SetUserData(this);
+	//enemy_body->SetUserData(this);
 
 	momentary_speed_forward = msf;
 	momentary_max_speed_backward = msb;
