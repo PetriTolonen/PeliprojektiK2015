@@ -1,6 +1,5 @@
 #include "Player.h"
 
-//Player::Player( Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m) : Object()
 Player::Player(b2Body* player_body, Tank_hull* t, Tank_turret* tt, float msf, float msb, float maf, float mab, float mmsf, float mmsb, float m, int mcd) : Object()
 {
 	this->player_body = player_body;
@@ -64,7 +63,7 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 		if (rotation2 <180)
 		{
 			tt->get_sprite().rotate(-tt->get_traverse_speed()*10 * _elapsed);
-	}
+		}
 	
 		
 	}
