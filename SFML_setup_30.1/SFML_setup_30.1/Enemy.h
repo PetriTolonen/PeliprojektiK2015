@@ -21,18 +21,22 @@ public:
 
 	void set_position(float x, float y);
 	
+	
 
 	float get_rotation();
 	float get_rotation_turret();
 	int get_cooldown();
-
+	
 	sf::Vector2f get_position();
 	bool get_can_fire();
 	void set_cooldown();
 	void reduce_cooldown(int amount);
+	b2Body* get_body();
+	void move_to(sf::Vector2f player_position, float player_rotation);
+
 
 private:
-
+	bool at_destination;
 	int health;
 	//sf::Sprite player_sprite_hull;
 	b2Body* enemy_body;
@@ -65,5 +69,7 @@ private:
 
 	//------------------------------------//
 	sf::Vector2f distance_traveled;
+
+	float temp = 10;
 };
 #endif;

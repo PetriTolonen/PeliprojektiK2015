@@ -250,7 +250,7 @@ void Player::set_position(float x, float y)
 {
 	this->x = x*30.0;
 	this->y = y*30.0;
-
+	
 	t->set_position(this->x, this->y);
 	tt->set_position(this->x, this->y);
 	
@@ -326,6 +326,22 @@ float Player::get_rotation_turret()
 {
 	return tt->get_sprite().getRotation();
 }
+
+
+b2Body* Player::get_body()
+{
+	return player_body;
+}
+
+void Player::set_body_position(float x, float y)
+{
+	/*this->x = x/30.0;
+	this->y = y/30.0;
+
+	player_body->SetTransform(b2Vec2(x, y), 0);*/
+
+}
+
 	
 	////----turret_to_mouse----//
 

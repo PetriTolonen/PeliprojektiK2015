@@ -83,7 +83,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	FixtureDef2.shape = &Shape2;
 	enemy_body->SetUserData("box");
 	enemy_body->CreateFixture(&FixtureDef2);
-	enemy_body->SetTransform(b2Vec2(2048.0 / SCALE, (screen_height / 2) / SCALE), 0);
+	enemy_body->SetTransform(b2Vec2(2048.0/ SCALE, ((screen_height / 2) +500)/ SCALE), 0);
 	//Tank movement dampening
 	enemy_body->SetLinearDamping(5);
 	enemy_body->SetAngularDamping(10);
@@ -93,20 +93,20 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	//----------------//
 	
 	
-
-
+	
 	Tank_hull hull("tank_hull", 0.4, 0.2, 1, 2, 1, 38000, 165);
 	Tank_turret turret("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.5, 25);
 	Tank_hull hull2("tank_hull", 0.4, 0.2, 1, 2, 1, 38000, 165);
 	Tank_turret turret2("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.5, 25);
 	Player *player = new Player(player_body, &hull, &turret, 0, 0, 0, 0, 0, 0, 0, 0);
 	Enemy *enemy = new Enemy(enemy_body, &hull2, &turret2, 0, 0, 0, 0, 0, 0, 0, 0);
-	player->set_position(2048.0f, 0 + (screen_height / 2));
-	enemy->set_position(2048.0f + 250, 0 + (screen_height / 2) + 250);
+	//player->set_body_position(500, 0);
+	//enemy->set_position(2048.0f + 250, 0 + (screen_height / 2) + 250);
 	o_manager.add_object(player);
 	o_manager.add_object(enemy);
 
-	
+	AiManager *ai_manager = new AiManager();
+
 	
 
 	
@@ -394,8 +394,12 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				}
 
 			//-----------------------------------------------------------------------//
-
 			
+
+			//------------------------Handling_AI----------------------------------//
+				ai_manager->update(player, enemy);
+
+			//-------------------------End_of_Handling_AI--------------------------//
 
 			break;
 		}

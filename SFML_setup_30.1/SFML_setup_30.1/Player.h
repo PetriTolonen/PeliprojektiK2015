@@ -20,6 +20,7 @@ public:
 	void increase_health(int amount);
 	void set_health();
 
+	b2Body* get_body();
 	float get_rotation();
 	float get_rotation_turret();
 
@@ -29,6 +30,7 @@ public:
 	void on_draw(sf::RenderWindow* win);
 	//float get_position_x();
 	//float get_position_y();
+	void set_body_position(float x, float y);
 	void set_position(float x, float y);
 	float rotate(float rotation_speed);
 	void set_rotation(float rot);
