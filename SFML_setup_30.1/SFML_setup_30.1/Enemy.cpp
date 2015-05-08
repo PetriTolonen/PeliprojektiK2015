@@ -82,12 +82,12 @@ void Enemy::on_draw(sf::RenderWindow* win)
 	if (health > 0)
 	{
 		t_hull->get_sprite().setColor(sf::Color(200, 0, 0));
-		t_turret->get_sprite().setColor(sf::Color(255, 0, 0));
+		t_turret->get_sprite().setColor(sf::Color(200, 0, 0));
 	}
 	if (health < 0)
 	{
-		t_hull->get_sprite().setColor(sf::Color(0, 0, 0));
-		t_turret->get_sprite().setColor(sf::Color(0, 0, 0));
+		t_hull->get_sprite().setColor(sf::Color(50, 0, 0));
+		t_turret->get_sprite().setColor(sf::Color(50, 0, 0));
 	}
 	t_hull->on_draw(win);
 	t_turret->on_draw(win);
