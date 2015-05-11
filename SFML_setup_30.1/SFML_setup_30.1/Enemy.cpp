@@ -107,11 +107,12 @@ b2Body* Enemy::get_body()
 void Enemy::move_to(sf::Vector2f player_position, float player_rotation)
 {
 	//----------------------turret_rotation_towards_player--------------------------------//
-	if (at_destination == true)
-	{
-		float random_x = rand() % 500 + 150;
-		float random_y = rand() % 500 + 150;
-	}
+
+	//if (at_destination == true)
+	//{
+	//	float random_x = rand() % 500 + 150;
+	//	float random_y = rand() % 500 + 150;
+	//}
 	
 	sf::Vector2f coord_pos = player_position;
 
@@ -126,59 +127,78 @@ void Enemy::move_to(sf::Vector2f player_position, float player_rotation)
 		rotation2 += 360;
 	}
 
-	//If tank turret close to mouse rotation set exactly to mouse rotation
+	//If tank turret close to mouse rotation set exactly to player rotation
 	if (rotation2 < 180 + 0.6 && rotation2 > 180 - 0.6)
 	{
 		t_turret->get_sprite().setRotation(rotation);
+		t_hull->get_sprite().setRotation(rotation);
 	}
 	else
 	{
 		if (rotation2 >180)
 		{
 			t_turret->get_sprite().rotate(t_turret->get_traverse_speed() * 10 * _elapsed);
+			t_hull->get_sprite().rotate(t_hull->get_traverse_speed() * 10 * _elapsed);
 
 		}
 		if (rotation2 <180)
 		{
 			t_turret->get_sprite().rotate(-t_turret->get_traverse_speed() * 10 * _elapsed);
+			t_hull->get_sprite().rotate(t_hull->get_traverse_speed() * 10 * _elapsed);
 		}
 
 
 	}
 	//----------------------end_of_turret_rotation_towards_player--------------------------------//
 
-	/*if (at_destination == false)
-	{
-		temp--;
-		if (temp == 0)
-		{
-			at_destination == true;
-			temp = 1000;
-		}
-	}*/
 
 
-		std::cout << enemy_body->GetPosition().x << "  " << player_position.x / 30 << std::endl;
-		if (enemy_body->GetPosition().x < (player_position.x / 30))
-		{
-			enemy_body->SetAngularVelocity(hull_rotation_speed);
 
-			if (enemy_body->GetPosition().x == player_position.x)
-			{
-				at_destination = false;
-			}			
-		}
+	//if (at_destination == false)
+	//{
+	//	temp--;
+	//	if (temp <= 0)
+	//	{
+	//		at_destination == true;
+	//		temp = 1000;
+	//	}
+	//}
 
-		if (enemy_body->GetPosition().x > (player_position.x / 30))
-		{
-			enemy_body->SetAngularVelocity(hull_rotation_speed);
 
-			if (enemy_body->GetPosition().x == player_position.x)
-			{
-				at_destination = false;
-			}
-		}
-		
+
+	//if (enemy_body->GetPosition().x < (player_position.x / 30) && enemy_body->GetPosition().x - (player_position.x / 30) < 10)
+	//	{
+	//	std::cout << "code 1" << std::endl;
+	//		momentary_acceleration_forward = tank_hull.get_acceleration_forward();
+	//		momentary_max_speed_forward = tank_hull.get_max_speed_forward();
+	//		momentary_speed_forward += _elapsed * momentary_acceleration_forward;
+
+	//		if (momentary_speed_forward > momentary_max_speed_forward)
+	//		{
+	//			momentary_speed_forward = momentary_max_speed_forward;
+	//		}
+
+	//		//enemy_body->SetAngularVelocity(hull_rotation_speed);
+	//	//	enemy_body->SetLinearVelocity(b2Vec2(b2Vec2(sin(enemy_body->GetAngle())*-momentary_speed_forward, cos(enemy_body->GetAngle())*momentary_speed_forward));
+
+	//		if (enemy_body->GetPosition().x == player_position.x)
+	//		{
+	//			at_destination = false;
+	//		}			
+	//	}
+
+	//if (enemy_body->GetPosition().x > (player_position.x / 30) && (player_position.x / 30) - enemy_body->GetPosition().x)
+	//	{
+	//	std::cout << "code 2" << std::endl;
+	//		enemy_body->SetAngularVelocity(hull_rotation_speed);
+
+
+	//		if (enemy_body->GetPosition().x == player_position.x)
+	//		{
+	//			at_destination = false;
+	//		}
+	//	}
+	//	
 	
 
 }

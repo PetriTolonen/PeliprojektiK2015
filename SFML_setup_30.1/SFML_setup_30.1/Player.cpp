@@ -258,7 +258,7 @@ void Player::set_position(float x, float y)
 
 float Player::rotate(float rotation_speed)
 {
-	return 0;//t->set_rotation(rotation_speed);
+	return 0;
 
 }
 
