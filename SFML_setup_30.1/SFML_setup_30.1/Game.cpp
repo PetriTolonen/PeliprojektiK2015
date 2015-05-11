@@ -102,7 +102,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	FixtureDef3.density = 10.f;
 	FixtureDef3.friction = 0.7f;
 	FixtureDef3.shape = &Shape2;
-	enemy_body2->SetUserData("enemy1");
+	enemy_body2->SetUserData("enemy2");
 	enemy_body2->CreateFixture(&FixtureDef2);
 	enemy_body2->SetTransform(b2Vec2(2048.0 / SCALE, ((screen_height / 2) + 1000) / SCALE), 0);
 	//Tank movement dampening
