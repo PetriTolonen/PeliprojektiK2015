@@ -69,7 +69,7 @@ Ammo::~Ammo()
 
 }
 
-void Ammo::set_velocity(float x, float y, b2Body *ammo_body)
+void Ammo::set_velocity(float x, float y)
 {
 	ammo_body->SetLinearVelocity(b2Vec2(x, y));
 }

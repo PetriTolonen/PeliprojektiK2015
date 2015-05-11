@@ -114,7 +114,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	FixtureDef3.shape = &Shape2;
 	enemy_body2->SetUserData("enemy2");
 	enemy_body2->CreateFixture(&FixtureDef2);
-	enemy_body2->SetTransform(b2Vec2(2048.0 / SCALE, ((screen_height / 2) + 1000) / SCALE), 0);
+	enemy_body2->SetTransform(b2Vec2(2048.0 / SCALE, ((screen_height / 2) + 2000) / SCALE), 0);
 	//Tank movement dampening
 	enemy_body2->SetLinearDamping(5);
 	enemy_body2->SetAngularDamping(10);
@@ -141,7 +141,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 	AiManager *ai_manager = new AiManager();
 	
-	//----Animation test----//
+	//----Hit_Explosion_Animation----//
 	sf::Texture animtexture;
 	animtexture.loadFromFile("hit_explosion_animation.png");
 
@@ -156,9 +156,9 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	Animation* currentAnimation = &explosion;
 
 	AnimatedSprite animatedSprite(sf::seconds(0.05f), true, false);
-	//----Animation test----//
+	//----Animation----//
 	
-	//----Animation test----//
+	//----Explosion_Animation----//
 	sf::Texture animtexture2;
 	animtexture2.loadFromFile("animation_cloud_explosion_512.png");
 
@@ -173,7 +173,37 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	Animation* currentAnimation2 = &explosion2;
 
 	AnimatedSprite animatedSprite2(sf::seconds(0.05f), true, false);
-	//----Animation test----//
+	//----Animation----//
+
+	//----Shooting_Animation----//
+	sf::Texture animtexture3;
+	animtexture3.loadFromFile("turret_shooting_animation.png");
+
+	Animation explosion3;
+	explosion3.setSpriteSheet(animtexture3);
+
+	for (int i = 0; i <= 16; i++)
+	{
+		explosion3.addFrame(sf::IntRect(i * 256, 0, 256, 256));
+	}
+
+	Animation* currentAnimation3 = &explosion3;
+
+	AnimatedSprite animatedSprite3(sf::seconds(0.05f), true, false);
+	animatedSprite3.setOrigin(128, 128);
+
+	//enemy_animations
+	Animation* currentAnimation4 = &explosion3;
+
+	AnimatedSprite animatedSprite4(sf::seconds(0.05f), true, false);
+	animatedSprite4.setOrigin(128, 128);
+
+	Animation* currentAnimation5 = &explosion3;
+
+	AnimatedSprite animatedSprite5(sf::seconds(0.05f), true, false);
+	animatedSprite5.setOrigin(128, 128);
+	//----Animation----//
+	
 	//
 	//b2d
 	//float SCALE = 30.f;
@@ -227,13 +257,13 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			world.Step(1.0f / 60.0f, 8, 4);
 			
 			//----Animation test----//
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	/*		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
 				animatedSprite.play(*currentAnimation);
 				sf::Vector2i pixel_pos = sf::Mouse::getPosition(*window);
 				sf::Vector2f coord_pos = window->mapPixelToCoords(pixel_pos);
 				animatedSprite.setPosition(coord_pos.x - 100, coord_pos.y - 100);
-			}
+			}*/
 
 
 	/*		if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
@@ -266,7 +296,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 					ammo_body = world.CreateBody(&ammoBodyDef);
 
 					b2PolygonShape shape_ammo;
-					shape_ammo.SetAsBox((10.f) / SCALE, (10.f) / SCALE);
+					shape_ammo.SetAsBox((10.f) / SCALE, (5.f) / SCALE);
 					b2FixtureDef AmmoFixtureDef;
 					/*AmmoFixtureDef.density = 0.02f;
 					AmmoFixtureDef.friction = 4.7f;*/
@@ -292,7 +322,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				x = round->get_velocity() * (-cos(player->get_rotation_turret() / (180.0f/b2_pi)));
 				y = round->get_velocity() * (-sin(player->get_rotation_turret() / (180.0f / b2_pi)));
 				
-				round->set_velocity(x, y, ammo_body);
+				round->set_velocity(x, y);
 				round->set_rotation(player->get_rotation_turret() / (180.0f / b2_pi));
 				
 				//std::cout << __LINE__  << "Fired main gun!"<< std::endl;
@@ -307,6 +337,11 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 				player->set_cooldown();
 				ammo_vector.push_back(round);
+
+				
+				animatedSprite3.setPosition((player->get_position().x) + (180 * (-cos(player->get_rotation_turret() / (180.0f / b2_pi)))), (player->get_position().y) + (180 * (-sin(player->get_rotation_turret() / (180.0f / b2_pi)))));
+				animatedSprite3.setRotation(player->get_rotation_turret()-90);
+				animatedSprite3.play(*currentAnimation3);
 				
 				}
 
@@ -340,7 +375,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 					ammo_body = world.CreateBody(&ammoBodyDef);
 
 					b2PolygonShape shape_ammo;
-					shape_ammo.SetAsBox((10.f) / SCALE, (10.f) / SCALE);
+					shape_ammo.SetAsBox((10.f) / SCALE, (5.f) / SCALE);
 					b2FixtureDef AmmoFixtureDef;
 					/*AmmoFixtureDef.density = 0.02f;
 					AmmoFixtureDef.friction = 4.7f;*/
@@ -366,7 +401,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 					x = round->get_velocity() * (-cos(enemy1->get_rotation_turret() / (180.0f / b2_pi)));
 					y = round->get_velocity() * (-sin(enemy1->get_rotation_turret() / (180.0f / b2_pi)));
 
-					round->set_velocity(x, y, ammo_body);
+					round->set_velocity(x, y);
 					round->set_rotation(enemy1->get_rotation_turret() / (180.0f / b2_pi));
 
 					//std::cout << __LINE__  << "Fired main gun!"<< std::endl;
@@ -381,6 +416,10 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 					enemy1->set_cooldown();
 					ammo_vector.push_back(round);
+
+					animatedSprite4.setPosition((enemy1->get_position().x) + (180 * (-cos(enemy1->get_rotation_turret() / (180.0f / b2_pi)))), (enemy1->get_position().y) + (180 * (-sin(enemy1->get_rotation_turret() / (180.0f / b2_pi)))));
+					animatedSprite4.setRotation(enemy1->get_rotation_turret() - 90);
+					animatedSprite4.play(*currentAnimation4);
 
 				}
 			}
@@ -410,7 +449,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 					ammo_body = world.CreateBody(&ammoBodyDef);
 
 					b2PolygonShape shape_ammo;
-					shape_ammo.SetAsBox((10.f) / SCALE, (10.f) / SCALE);
+					shape_ammo.SetAsBox((10.f) / SCALE, (5.f) / SCALE);
 					b2FixtureDef AmmoFixtureDef;
 					/*AmmoFixtureDef.density = 0.02f;
 					AmmoFixtureDef.friction = 4.7f;*/
@@ -436,7 +475,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 					x = round->get_velocity() * (-cos(enemy2->get_rotation_turret() / (180.0f / b2_pi)));
 					y = round->get_velocity() * (-sin(enemy2->get_rotation_turret() / (180.0f / b2_pi)));
 
-					round->set_velocity(x, y, ammo_body);
+					round->set_velocity(x, y);
 					round->set_rotation(enemy2->get_rotation_turret() / (180.0f / b2_pi));
 
 					//std::cout << __LINE__  << "Fired main gun!"<< std::endl;
@@ -452,25 +491,28 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 					enemy2->set_cooldown();
 					ammo_vector.push_back(round);
 
+					animatedSprite5.setPosition((enemy2->get_position().x) + (180 * (-cos(enemy2->get_rotation_turret() / (180.0f / b2_pi)))), (enemy2->get_position().y) + (180 * (-sin(enemy2->get_rotation_turret() / (180.0f / b2_pi)))));
+					animatedSprite5.setRotation(enemy2->get_rotation_turret() - 90);
+					animatedSprite5.play(*currentAnimation5);
 				}
 			}
 
 			if (player->get_health() <= 0 && player->get_has_animation_played() == false)
 			{
+				animatedSprite2.setPosition(player->get_position().x - 256, player->get_position().y - 256);
 				animatedSprite2.play(*currentAnimation2);
-				animatedSprite2.setPosition(player->get_position().x - 258, player->get_position().y - 258);
 				player->set_animation_has_played();
 			}
 			if (enemy1->get_health() <= 0 && enemy1->get_has_animation_played() == false)
-			{
+			{				
+				animatedSprite2.setPosition(enemy1->get_position().x - 256, enemy1->get_position().y - 256);
 				animatedSprite2.play(*currentAnimation2);
-				animatedSprite2.setPosition(enemy1->get_position().x - 258, enemy1->get_position().y - 258);
 				enemy1->set_animation_has_played();
 			}
 			if (enemy2->get_health() <= 0 && enemy2->get_has_animation_played() == false)
-			{
+			{				
+				animatedSprite2.setPosition(enemy2->get_position().x - 256, enemy2->get_position().y - 256);
 				animatedSprite2.play(*currentAnimation2);
-				animatedSprite2.setPosition(enemy2->get_position().x - 258, enemy2->get_position().y - 258);
 				enemy2->set_animation_has_played();
 			}
 
@@ -480,14 +522,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			//player->on_draw(window);*/
 			o_manager.update(event, window);
 			o_manager.draw(window);
-			//----Animation test----//
-			animatedSprite.update(elapsed);
-			animatedSprite2.update(elapsed);
-			window->draw(animatedSprite);
-			window->draw(animatedSprite2);
-			//----Animation test----//
-
-
+			
 			//---DrawAmmo---//
 			for (std::vector<Ammo*>::const_iterator iterator = ammo_vector.begin(), end = ammo_vector.end(); iterator != end; ++iterator)
 			{
@@ -495,6 +530,19 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				(*iterator)->on_draw(window);
 			}
 			//--------------//
+
+			//----Animations----//
+			animatedSprite.update(elapsed);
+			animatedSprite2.update(elapsed);
+			animatedSprite3.update(elapsed);
+			animatedSprite4.update(elapsed);
+			animatedSprite5.update(elapsed);
+			window->draw(animatedSprite);
+			window->draw(animatedSprite2);
+			window->draw(animatedSprite3);
+			window->draw(animatedSprite4);
+			window->draw(animatedSprite5);
+			//----Animations----//
 
 			/*if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{

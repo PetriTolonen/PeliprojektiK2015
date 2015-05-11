@@ -29,7 +29,7 @@ public:
 	b2Body* get_ammo_body();
 	void start_contact();
 	void end_contact();
-	void set_velocity(float x, float y, b2Body *ammo_body);
+	void set_velocity(float x, float y);
 	void set_coord(float _x, float _y);
 	void set_rotation(float rot);
 	int get_timer();
