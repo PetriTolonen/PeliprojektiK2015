@@ -182,25 +182,25 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	Animation explosion3;
 	explosion3.setSpriteSheet(animtexture3);
 
-	for (int i = 0; i <= 16; i++)
+	for (int i = 0; i <= 35; i++)
 	{
 		explosion3.addFrame(sf::IntRect(i * 256, 0, 256, 256));
 	}
 
 	Animation* currentAnimation3 = &explosion3;
 
-	AnimatedSprite animatedSprite3(sf::seconds(0.05f), true, false);
+	AnimatedSprite animatedSprite3(sf::seconds(0.03f), true, false);
 	animatedSprite3.setOrigin(128, 128);
 
 	//enemy_animations
 	Animation* currentAnimation4 = &explosion3;
 
-	AnimatedSprite animatedSprite4(sf::seconds(0.05f), true, false);
+	AnimatedSprite animatedSprite4(sf::seconds(0.03f), true, false);
 	animatedSprite4.setOrigin(128, 128);
 
 	Animation* currentAnimation5 = &explosion3;
 
-	AnimatedSprite animatedSprite5(sf::seconds(0.05f), true, false);
+	AnimatedSprite animatedSprite5(sf::seconds(0.03f), true, false);
 	animatedSprite5.setOrigin(128, 128);
 	//----Animation----//
 	
