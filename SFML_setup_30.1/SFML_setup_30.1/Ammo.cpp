@@ -11,7 +11,7 @@ Ammo::Ammo(std::string n, b2Body* ammo_body, float velo, int dmg, int pen, float
 	velocity = velo;
 	damage = dmg;
 	penetration = pen;
-	
+	timer = 60 * 2;
 	is_hit = false;
 }
 
@@ -28,6 +28,7 @@ Ammo::Ammo() :Object()
 
 void Ammo::on_update(sf::RenderWindow* win)
 {
+	timer--;
 	x = get_position().x*30.0f;
 	y = get_position().y*30.0f;
 	sprite_name.setRotation(ammo_body->GetAngle()*180.0f/b2_pi);
@@ -101,4 +102,9 @@ b2Body* Ammo::get_ammo_body()
 void Ammo::set_rotation(float rot)
 {
 	ammo_body->SetTransform(b2Vec2(get_position().x, get_position().y), rot);
+}
+
+int Ammo::get_timer()
+{
+	return timer;
 }

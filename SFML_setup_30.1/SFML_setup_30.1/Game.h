@@ -9,7 +9,7 @@
 #include "ObjectManager.h"
 #include "Ammo.h"
 #include "Enemy.h"
-//#include "Tank_hull.h"
+#include "AiManager.h"
 #include "SplashScreen.h"
 #include "MainMenu.h"
 
@@ -27,7 +27,7 @@ public:
 	
 	void fire_main_gun(b2World& world, int MouseX, int MouseY, Player *player, Ammo *ammo); //, Ammo *ammo);
 
-	void CreateBox(b2World& world, int MouseX, int MouseY);
+	//void CreateBox(b2World& world, int MouseX, int MouseY);
 
 private:
 	static const int screen_widht = 1920;
