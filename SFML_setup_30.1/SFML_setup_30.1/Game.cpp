@@ -77,16 +77,16 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	Shape2.SetAsBox((31.f) / SCALE, (66.f) / SCALE);
 
 	b2FixtureDef FixtureDef2;
-	b2Body* enemy_body = world.CreateBody(&BodyDef2);
+	b2Body* enemy_body1 = world.CreateBody(&BodyDef2);
 	FixtureDef2.density = 10.f;
 	FixtureDef2.friction = 0.7f;
 	FixtureDef2.shape = &Shape2;
-	enemy_body->SetUserData("box");
-	enemy_body->CreateFixture(&FixtureDef2);
-	enemy_body->SetTransform(b2Vec2(2048.0/ SCALE, ((screen_height / 2) +500)/ SCALE), 0);
+	enemy_body1->SetUserData("enemy1");
+	enemy_body1->CreateFixture(&FixtureDef2);
+	enemy_body1->SetTransform(b2Vec2(2048.0/ SCALE, ((screen_height / 2) +500)/ SCALE), 0);
 	//Tank movement dampening
-	enemy_body->SetLinearDamping(5);
-	enemy_body->SetAngularDamping(10);
+	enemy_body1->SetLinearDamping(5);
+	enemy_body1->SetAngularDamping(10);
 	//---enemy_b2_body---//
 	
 	//------ammo_b2_body----------//
@@ -99,11 +99,11 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	Tank_hull hull2("tank_hull", 0.4, 0.2, 1, 2, 1, 38000, 165);
 	Tank_turret turret2("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.5, 25);
 	Player *player = new Player(player_body, &hull, &turret, 0, 0, 0, 0, 0, 0, 0, 0);
-	Enemy *enemy = new Enemy(enemy_body, &hull2, &turret2, 0, 0, 0, 0, 0, 0, 0, 0);
+	Enemy *enemy1 = new Enemy(enemy_body1, &hull2, &turret2, 0, 0, 0, 0, 0, 0, 0, 0);
 	//player->set_body_position(500, 0);
 	//enemy->set_position(2048.0f + 250, 0 + (screen_height / 2) + 250);
 	o_manager.add_object(player);
-	o_manager.add_object(enemy);
+	o_manager.add_object(enemy1);
 
 	AiManager *ai_manager = new AiManager();
 
@@ -202,11 +202,11 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			}
 
 
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	/*		if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
 				animatedSprite2.play(*currentAnimation2);
 				animatedSprite2.setPosition(player->get_position().x - 258, player->get_position().y - 258);
-			}
+			}*/
 
 			
 
@@ -281,7 +281,15 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 			//----------------end of Main Gun------------------------------------------//
 
-			
+			if (enemy1->get_health() <= 0  && enemy1->get_has_died() == false)
+			{
+				animatedSprite2.play(*currentAnimation2);
+				animatedSprite2.setPosition(enemy1->get_position().x - 258, enemy1->get_position().y - 258);
+				std::cout << "enemy health: " << enemy1->get_health() << std::endl;
+
+				enemy1->set_animation_has_played();
+			}
+
 			window->setView(*view);
 			window->draw(map);
 			//player->update(event, window);
@@ -296,37 +304,37 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			//----Animation test----//
 
 						
-			for (b2Body* BodyIterator = world.GetBodyList(); BodyIterator != 0; BodyIterator = BodyIterator->GetNext())
-			{
-				if (BodyIterator->GetType() == b2_dynamicBody)
-				{
-					sf::Sprite Sprite;
-					Sprite.setTexture(BoxTexture);
-					Sprite.setOrigin(20.f, 20.f);
-					Sprite.setPosition(SCALE * BodyIterator->GetPosition().x, SCALE * BodyIterator->GetPosition().y);
-					Sprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
-					window->draw(Sprite);
-				}
+			//for (b2Body* BodyIterator = world.GetBodyList(); BodyIterator != 0; BodyIterator = BodyIterator->GetNext())
+			//{
+			///*	if (BodyIterator->GetType() == b2_dynamicBody)
+			//	{
+			//		sf::Sprite Sprite;
+			//		Sprite.setTexture(BoxTexture);
+			//		Sprite.setOrigin(20.f, 20.f);
+			//		Sprite.setPosition(SCALE * BodyIterator->GetPosition().x, SCALE * BodyIterator->GetPosition().y);
+			//		Sprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
+			//		window->draw(Sprite);
+			//	}*/
 
-				/*if (BodyIterator->GetType() == b2_kinematicBody)
-				{
-					sf::Sprite Sprite;
-					Sprite.setTexture(BoxTexture);
-					Sprite.setOrigin(16.f, 16.f);
-					Sprite.setPosition(SCALE * BodyIterator->GetPosition().x, SCALE * BodyIterator->GetPosition().y);
-					Sprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
-					window->draw(Sprite);
-				}*/
-				//if (BodyIterator->GetType() == b2_staticBody)
-				//{
-				//	sf::Sprite Sprite;
-				//	Sprite.setTexture(BoxTexture);
-				//	Sprite.setOrigin(16.f, 16.f);
-				//	Sprite.setPosition(SCALE * BodyIterator->GetPosition().x, SCALE * BodyIterator->GetPosition().y);
-				//	Sprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
-				//	window->draw(Sprite);
-				//}
-			}
+			//	/*if (BodyIterator->GetType() == b2_kinematicBody)
+			//	{
+			//		sf::Sprite Sprite;
+			//		Sprite.setTexture(BoxTexture);
+			//		Sprite.setOrigin(16.f, 16.f);
+			//		Sprite.setPosition(SCALE * BodyIterator->GetPosition().x, SCALE * BodyIterator->GetPosition().y);
+			//		Sprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
+			//		window->draw(Sprite);
+			//	}*/
+			//	//if (BodyIterator->GetType() == b2_staticBody)
+			//	//{
+			//	//	sf::Sprite Sprite;
+			//	//	Sprite.setTexture(BoxTexture);
+			//	//	Sprite.setOrigin(16.f, 16.f);
+			//	//	Sprite.setPosition(SCALE * BodyIterator->GetPosition().x, SCALE * BodyIterator->GetPosition().y);
+			//	//	Sprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
+			//	//	window->draw(Sprite);
+			//	//}
+			//}
 
 			//---DrawAmmo---//
 			for (std::vector<Ammo*>::const_iterator iterator = ammo_vector.begin(), end = ammo_vector.end(); iterator != end; ++iterator)
@@ -336,12 +344,12 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			}
 			//--------------//
 
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+			/*if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
 				sf::Vector2i pixel_pos = sf::Mouse::getPosition(*window);
 				sf::Vector2f coord_pos = window->mapPixelToCoords(pixel_pos);
 				CreateBox(world, coord_pos.x, coord_pos.y);
-			}
+			}*/
 
 
 			//window.draw(sprite_tank_hull);
@@ -365,10 +373,18 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				pos != ContactListener->_contacts.end(); ++pos) {
 				ContactCheck contact = *pos;
 				
-				if ((contact.fixtureA->GetBody()->GetUserData() == "ammo" && contact.fixtureB->GetBody()->GetUserData() == "box") ||
-					(contact.fixtureA->GetBody()->GetUserData() == "box" && contact.fixtureB->GetBody()->GetUserData() == "ammo"))
+				if ((contact.fixtureA->GetBody()->GetUserData() == "ammo" && contact.fixtureB->GetBody()->GetUserData() == "enemy1") ||
+					(contact.fixtureA->GetBody()->GetUserData() == "enemy1" && contact.fixtureB->GetBody()->GetUserData() == "ammo"))
 				{													
-					std::cout << "hittiahittia" << std::endl;
+					enemy1->reduce_health(1);
+					if (contact.fixtureA->GetBody()->GetUserData() == "ammo")
+					{
+						
+					}
+					if (contact.fixtureB->GetBody()->GetUserData() == "ammo")
+					{
+						
+					}
 				}
 				
 			}
@@ -384,7 +400,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 						)
 					{
 
-
+						
 						//(*it)->destroy();	
 						world.DestroyBody((*it)->get_ammo_body());
 						it = ammo_vector.erase(it);
@@ -397,7 +413,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			
 
 			//------------------------Handling_AI----------------------------------//
-				ai_manager->update(player, enemy);
+				ai_manager->update(player, enemy1);
 
 			//-------------------------End_of_Handling_AI--------------------------//
 
@@ -529,26 +545,26 @@ bool Game::is_exiting()
 		return false;
 }
 
-void Game::CreateBox(b2World& world, int MouseX, int MouseY)
-{
-	float SCALE = 30.f;
-	b2BodyDef BodyDef;
-	BodyDef.position = b2Vec2(MouseX / SCALE, MouseY / SCALE);
-	BodyDef.type = b2_dynamicBody;
-	b2Body* Body = world.CreateBody(&BodyDef);
-
-	b2PolygonShape Shape;
-	Shape.SetAsBox((20.f) / SCALE, (20.f) / SCALE);
-	b2FixtureDef FixtureDef;
-	FixtureDef.density = 1.f;
-	FixtureDef.friction = 0.7f;
-	FixtureDef.shape = &Shape;
-	//Body->CreateFixture(&FixtureDef);
-	Body->SetLinearDamping(3);
-	Body->SetAngularDamping(3);
-	Body->SetUserData("box");
-	Body->CreateFixture(&FixtureDef);
-}
+//void Game::CreateBox(b2World& world, int MouseX, int MouseY)
+//{
+//	float SCALE = 30.f;
+//	b2BodyDef BodyDef;
+//	BodyDef.position = b2Vec2(MouseX / SCALE, MouseY / SCALE);
+//	BodyDef.type = b2_dynamicBody;
+//	b2Body* Body = world.CreateBody(&BodyDef);
+//
+//	b2PolygonShape Shape;
+//	Shape.SetAsBox((20.f) / SCALE, (20.f) / SCALE);
+//	b2FixtureDef FixtureDef;
+//	FixtureDef.density = 1.f;
+//	FixtureDef.friction = 0.7f;
+//	FixtureDef.shape = &Shape;
+//	//Body->CreateFixture(&FixtureDef);
+//	Body->SetLinearDamping(3);
+//	Body->SetAngularDamping(3);
+//	Body->SetUserData("box");
+//	Body->CreateFixture(&FixtureDef);
+//}
 
 
 

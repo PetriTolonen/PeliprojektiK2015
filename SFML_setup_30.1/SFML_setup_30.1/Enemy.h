@@ -33,6 +33,9 @@ public:
 	void reduce_cooldown(int amount);
 	b2Body* get_body();
 	void move_to(sf::Vector2f player_position, float player_rotation);
+	int get_health();
+	bool get_has_died();
+	void set_animation_has_played();
 
 
 private:
@@ -70,6 +73,8 @@ private:
 	//------------------------------------//
 	sf::Vector2f distance_traveled;
 
-	float temp = 10;
+	bool animation_played;
+	float random_x;
+	float random_y;
 };
 #endif;

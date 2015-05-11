@@ -27,7 +27,7 @@ public:
 	
 	void fire_main_gun(b2World& world, int MouseX, int MouseY, Player *player, Ammo *ammo); //, Ammo *ammo);
 
-	void CreateBox(b2World& world, int MouseX, int MouseY);
+	//void CreateBox(b2World& world, int MouseX, int MouseY);
 
 private:
 	static const int screen_widht = 1920;
