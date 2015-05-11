@@ -62,6 +62,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	FixtureDef.density = 10.f;
 	FixtureDef.friction = 0.7f;
 	FixtureDef.shape = &Shape;
+	player_body->SetUserData("player");
 	player_body->CreateFixture(&FixtureDef);
 	player_body->SetTransform(b2Vec2(2048.0 / SCALE, (screen_height / 2) / SCALE),0);
 	//Tank movement dampening
@@ -89,6 +90,25 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	enemy_body1->SetAngularDamping(10);
 	//---enemy_b2_body---//
 	
+	//---enemy_b2_body---//
+	b2BodyDef BodyDef3;
+	BodyDef3.type = b2_dynamicBody;
+
+	b2PolygonShape Shape3;
+	Shape3.SetAsBox((31.f) / SCALE, (66.f) / SCALE);
+
+	b2FixtureDef FixtureDef3;
+	b2Body* enemy_body2 = world.CreateBody(&BodyDef2);
+	FixtureDef3.density = 10.f;
+	FixtureDef3.friction = 0.7f;
+	FixtureDef3.shape = &Shape2;
+	enemy_body2->SetUserData("enemy1");
+	enemy_body2->CreateFixture(&FixtureDef2);
+	enemy_body2->SetTransform(b2Vec2(2048.0 / SCALE, ((screen_height / 2) + 1000) / SCALE), 0);
+	//Tank movement dampening
+	enemy_body2->SetLinearDamping(5);
+	enemy_body2->SetAngularDamping(10);
+	//---enemy_b2_body---//
 	//------ammo_b2_body----------//
 	//----------------//
 	
@@ -98,19 +118,18 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	Tank_turret turret("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.5, 25);
 	Tank_hull hull2("tank_hull", 0.4, 0.2, 1, 2, 1, 38000, 165);
 	Tank_turret turret2("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.5, 25);
+	Tank_hull hull3("tank_hull", 0.4, 0.2, 1, 2, 1, 38000, 165);
+	Tank_turret turret3("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.5, 25);
 	Player *player = new Player(player_body, &hull, &turret, 0, 0, 0, 0, 0, 0, 0, 0);
 	Enemy *enemy1 = new Enemy(enemy_body1, &hull2, &turret2, 0, 0, 0, 0, 0, 0, 0, 0);
+	Enemy *enemy2 = new Enemy(enemy_body2, &hull3, &turret3, 0, 0, 0, 0, 0, 0, 0, 0);
 	//player->set_body_position(500, 0);
 	//enemy->set_position(2048.0f + 250, 0 + (screen_height / 2) + 250);
 	o_manager.add_object(player);
 	o_manager.add_object(enemy1);
+	o_manager.add_object(enemy2);
 
 	AiManager *ai_manager = new AiManager();
-
-	
-
-	
-
 
 	//----Animation test----//
 	sf::Texture animtexture;
@@ -280,14 +299,164 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			}
 
 			//----------------end of Main Gun------------------------------------------//
+			
+			//---enemy1_firing---//
+			if (enemy1->get_health() <= 0)
+			{
+				enemy1->set_can_fire_false();
+			}
+			
+			else if (player->get_position().y - enemy1->get_position().y < 600 || enemy1->get_health()>0)
+			{
+				
 
-			if (enemy1->get_health() <= 0  && enemy1->get_has_died() == false)
+				if (enemy1->get_can_fire() == true)
+				{
+
+					//--ammo_b2_body-----//
+
+					b2Body* ammo_body;
+
+					b2BodyDef ammoBodyDef;
+					ammoBodyDef.position = b2Vec2((((enemy1->get_position().x) + (-cos(enemy1->get_rotation_turret() / (180.0f / b2_pi))) * 90) / SCALE), ((enemy1->get_position().y) + (-sin(enemy1->get_rotation_turret() / (180.0f / b2_pi))) * 90) / SCALE);
+					ammoBodyDef.type = b2_kinematicBody;
+					//ammoBodyDef.bullet = true;
+
+					ammo_body = world.CreateBody(&ammoBodyDef);
+
+					b2PolygonShape shape_ammo;
+					shape_ammo.SetAsBox((10.f) / SCALE, (10.f) / SCALE);
+					b2FixtureDef AmmoFixtureDef;
+					/*AmmoFixtureDef.density = 0.02f;
+					AmmoFixtureDef.friction = 4.7f;*/
+
+					AmmoFixtureDef.shape = &shape_ammo;
+					ammo_body->SetUserData("ammo");
+					ammo_body->CreateFixture(&AmmoFixtureDef);
+
+
+
+					//------------------------//
+
+					Ammo *round = new Ammo("ammo", ammo_body, 12.0f, 1.0, 3.0, enemy1->get_position().x, enemy1->get_position().y);
+
+					float x = 0;
+					float y = 0;
+
+
+					//x = (player->get_rotation_turret());
+					//y = (player->get_rotation_turret());
+
+
+					x = round->get_velocity() * (-cos(enemy1->get_rotation_turret() / (180.0f / b2_pi)));
+					y = round->get_velocity() * (-sin(enemy1->get_rotation_turret() / (180.0f / b2_pi)));
+
+					round->set_velocity(x, y, ammo_body);
+					round->set_rotation(enemy1->get_rotation_turret() / (180.0f / b2_pi));
+
+					//std::cout << __LINE__  << "Fired main gun!"<< std::endl;
+					//float ammo_location_x = (player->get_position().x);
+					//float ammo_location_y = (player->get_position().y);
+					//
+					//
+					//
+					//Ammo *round = new Ammo(BodyDef2);
+					//o_manager.add_object(round);
+					//round->set_position(ammo_location_x, ammo_location_y + 10);
+
+					enemy1->set_cooldown();
+					ammo_vector.push_back(round);
+
+				}
+			}
+
+			//---enemy2_firing---//
+			if (enemy2->get_health() <= 0)
+			{
+				enemy2->set_can_fire_false();
+			}
+			
+			else if (player->get_position().y - enemy2->get_position().y < 600 || enemy2->get_health()>0)
+			{
+
+
+				if (enemy2->get_can_fire() == true)
+				{
+
+					//--ammo_b2_body-----//
+
+					b2Body* ammo_body;
+
+					b2BodyDef ammoBodyDef;
+					ammoBodyDef.position = b2Vec2((((enemy2->get_position().x) + (-cos(enemy2->get_rotation_turret() / (180.0f / b2_pi))) * 90) / SCALE), ((enemy2->get_position().y) + (-sin(enemy2->get_rotation_turret() / (180.0f / b2_pi))) * 90) / SCALE);
+					ammoBodyDef.type = b2_kinematicBody;
+					//ammoBodyDef.bullet = true;
+
+					ammo_body = world.CreateBody(&ammoBodyDef);
+
+					b2PolygonShape shape_ammo;
+					shape_ammo.SetAsBox((10.f) / SCALE, (10.f) / SCALE);
+					b2FixtureDef AmmoFixtureDef;
+					/*AmmoFixtureDef.density = 0.02f;
+					AmmoFixtureDef.friction = 4.7f;*/
+
+					AmmoFixtureDef.shape = &shape_ammo;
+					ammo_body->SetUserData("ammo");
+					ammo_body->CreateFixture(&AmmoFixtureDef);
+
+
+
+					//------------------------//
+
+					Ammo *round = new Ammo("ammo", ammo_body, 12.0f, 1.0, 3.0, enemy2->get_position().x, enemy2->get_position().y);
+
+					float x = 0;
+					float y = 0;
+
+
+					//x = (player->get_rotation_turret());
+					//y = (player->get_rotation_turret());
+
+
+					x = round->get_velocity() * (-cos(enemy2->get_rotation_turret() / (180.0f / b2_pi)));
+					y = round->get_velocity() * (-sin(enemy2->get_rotation_turret() / (180.0f / b2_pi)));
+
+					round->set_velocity(x, y, ammo_body);
+					round->set_rotation(enemy2->get_rotation_turret() / (180.0f / b2_pi));
+
+					//std::cout << __LINE__  << "Fired main gun!"<< std::endl;
+					//float ammo_location_x = (player->get_position().x);
+					//float ammo_location_y = (player->get_position().y);
+					//
+					//
+					//
+					//Ammo *round = new Ammo(BodyDef2);
+					//o_manager.add_object(round);
+					//round->set_position(ammo_location_x, ammo_location_y + 10);
+
+					enemy2->set_cooldown();
+					ammo_vector.push_back(round);
+
+				}
+			}
+
+			if (player->get_health() <= 0 && player->get_has_animation_played() == false)
+			{
+				animatedSprite2.play(*currentAnimation2);
+				animatedSprite2.setPosition(player->get_position().x - 258, player->get_position().y - 258);
+				player->set_animation_has_played();
+			}
+			if (enemy1->get_health() <= 0 && enemy1->get_has_animation_played() == false)
 			{
 				animatedSprite2.play(*currentAnimation2);
 				animatedSprite2.setPosition(enemy1->get_position().x - 258, enemy1->get_position().y - 258);
-				std::cout << "enemy health: " << enemy1->get_health() << std::endl;
-
 				enemy1->set_animation_has_played();
+			}
+			if (enemy2->get_health() <= 0 && enemy2->get_has_animation_played() == false)
+			{
+				animatedSprite2.play(*currentAnimation2);
+				animatedSprite2.setPosition(enemy1->get_position().x - 258, enemy1->get_position().y - 258);
+				enemy2->set_animation_has_played();
 			}
 
 			window->setView(*view);
@@ -302,40 +471,8 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			window->draw(animatedSprite);
 			window->draw(animatedSprite2);
 			//----Animation test----//
-
-						
-			//for (b2Body* BodyIterator = world.GetBodyList(); BodyIterator != 0; BodyIterator = BodyIterator->GetNext())
-			//{
-			///*	if (BodyIterator->GetType() == b2_dynamicBody)
-			//	{
-			//		sf::Sprite Sprite;
-			//		Sprite.setTexture(BoxTexture);
-			//		Sprite.setOrigin(20.f, 20.f);
-			//		Sprite.setPosition(SCALE * BodyIterator->GetPosition().x, SCALE * BodyIterator->GetPosition().y);
-			//		Sprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
-			//		window->draw(Sprite);
-			//	}*/
-
-			//	/*if (BodyIterator->GetType() == b2_kinematicBody)
-			//	{
-			//		sf::Sprite Sprite;
-			//		Sprite.setTexture(BoxTexture);
-			//		Sprite.setOrigin(16.f, 16.f);
-			//		Sprite.setPosition(SCALE * BodyIterator->GetPosition().x, SCALE * BodyIterator->GetPosition().y);
-			//		Sprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
-			//		window->draw(Sprite);
-			//	}*/
-			//	//if (BodyIterator->GetType() == b2_staticBody)
-			//	//{
-			//	//	sf::Sprite Sprite;
-			//	//	Sprite.setTexture(BoxTexture);
-			//	//	Sprite.setOrigin(16.f, 16.f);
-			//	//	Sprite.setPosition(SCALE * BodyIterator->GetPosition().x, SCALE * BodyIterator->GetPosition().y);
-			//	//	Sprite.setRotation(BodyIterator->GetAngle() * 180 / b2_pi);
-			//	//	window->draw(Sprite);
-			//	//}
-			//}
-
+								
+			
 			//---DrawAmmo---//
 			for (std::vector<Ammo*>::const_iterator iterator = ammo_vector.begin(), end = ammo_vector.end(); iterator != end; ++iterator)
 			{
@@ -366,6 +503,8 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 			//---------reduce gun cooldown-----------------//
 			player->reduce_cooldown(1);
+			enemy1->reduce_cooldown(1);
+			enemy2->reduce_cooldown(1);
 
 			//-------------------check contacts------------------------------------//
 			std::vector<ContactCheck>::iterator pos;
@@ -373,18 +512,20 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				pos != ContactListener->_contacts.end(); ++pos) {
 				ContactCheck contact = *pos;
 				
+				if ((contact.fixtureA->GetBody()->GetUserData() == "ammo" && contact.fixtureB->GetBody()->GetUserData() == "player") ||
+					(contact.fixtureA->GetBody()->GetUserData() == "player" && contact.fixtureB->GetBody()->GetUserData() == "ammo"))
+				{
+					player->reduce_health(1);
+				}
 				if ((contact.fixtureA->GetBody()->GetUserData() == "ammo" && contact.fixtureB->GetBody()->GetUserData() == "enemy1") ||
 					(contact.fixtureA->GetBody()->GetUserData() == "enemy1" && contact.fixtureB->GetBody()->GetUserData() == "ammo"))
 				{													
 					enemy1->reduce_health(1);
-					if (contact.fixtureA->GetBody()->GetUserData() == "ammo")
-					{
-						
-					}
-					if (contact.fixtureB->GetBody()->GetUserData() == "ammo")
-					{
-						
-					}
+				}
+				if ((contact.fixtureA->GetBody()->GetUserData() == "ammo" && contact.fixtureB->GetBody()->GetUserData() == "enemy2") ||
+					(contact.fixtureA->GetBody()->GetUserData() == "enemy2" && contact.fixtureB->GetBody()->GetUserData() == "ammo"))
+				{
+					enemy2->reduce_health(1);
 				}
 				
 			}
@@ -395,9 +536,9 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			std::vector<Ammo*>::iterator it = ammo_vector.begin();
 				while ( it != ammo_vector.end())
 				{
-					if (((*it)->get_position().x * SCALE)> player->get_position().x + (500) || ((*it)->get_position().x * SCALE)< player->get_position().x - (500) ||
+					if ((*it)->get_timer() <= 0 )/*(((*it)->get_position().x * SCALE)> player->get_position().x + (500) || ((*it)->get_position().x * SCALE)< player->get_position().x - (500) ||
 						((*it)->get_position().y * SCALE)> player->get_position().y + (300) || ((*it)->get_position().y * SCALE)< player->get_position().y - (300)
-						)
+						)*/
 					{
 
 						
@@ -413,7 +554,10 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			
 
 			//------------------------Handling_AI----------------------------------//
-				ai_manager->update(player, enemy1);
+			ai_manager->update(player, enemy1);
+			ai_manager->update(player, enemy2);
+			
+				
 
 			//-------------------------End_of_Handling_AI--------------------------//
 

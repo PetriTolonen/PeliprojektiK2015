@@ -34,9 +34,9 @@ public:
 	b2Body* get_body();
 	void move_to(sf::Vector2f player_position, float player_rotation);
 	int get_health();
-	bool get_has_died();
+	bool get_has_animation_played();
 	void set_animation_has_played();
-
+	void set_can_fire_false();
 
 private:
 	bool at_destination;

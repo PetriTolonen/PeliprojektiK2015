@@ -54,7 +54,7 @@ void Enemy::on_draw(sf::RenderWindow* win)
 		t_hull->get_sprite().setColor(sf::Color(200, 0, 0));
 		t_turret->get_sprite().setColor(sf::Color(200, 0, 0));
 	}
-	if (health < 0)
+	if (health <= 0)
 	{
 		t_hull->get_sprite().setColor(sf::Color(50, 0, 0));
 		t_turret->get_sprite().setColor(sf::Color(50, 0, 0));
@@ -67,11 +67,6 @@ void Enemy::on_draw(sf::RenderWindow* win)
 void Enemy::reduce_health(int amount)
 {
 	health -= amount;
-
-	if (health == 0)
-	{
-
-	}
 }
 
 void Enemy::set_position(float x, float y)
@@ -106,6 +101,18 @@ sf::Vector2f Enemy::get_position()
 
 bool Enemy::get_can_fire()
 {
+	if (momentary_cooldown <= 0)
+	{
+		can_fire = true;
+		//std::cout << __LINE__ << "Main gun was fired succesfully" << std::endl;
+
+	}
+	else
+	{
+		can_fire = false;
+		//std::cout << __LINE__ << " failed to fire the main gun" << std::endl;
+	}
+
 	return can_fire;
 }
 
@@ -122,7 +129,7 @@ b2Body* Enemy::get_body()
 void Enemy::move_to(sf::Vector2f player_position, float player_rotation)
 {
 	//----------------------turret_rotation_towards_player--------------------------------//
-	if (health>0)
+	if (health>=0)
 	{
 		sf::Vector2f coord_pos = player_position;
 
@@ -225,7 +232,7 @@ int Enemy::get_health()
 	return health;
 }
 
-bool Enemy::get_has_died()
+bool Enemy::get_has_animation_played()
 {
 	return animation_played;
 }
@@ -233,6 +240,16 @@ bool Enemy::get_has_died()
 void Enemy::set_animation_has_played()
 {
 	animation_played = true;
+}
+
+void Enemy::reduce_cooldown(int amount)
+{
+	momentary_cooldown -= amount;
+}
+
+void Enemy::set_can_fire_false()
+{
+	can_fire = false;
 }
 //
 ////-------------------------------rotate-----------------------------------------------//

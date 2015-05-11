@@ -17,6 +17,10 @@ Player::Player(b2Body* player_body, Tank_hull* t, Tank_turret* tt, float msf, fl
 	momentary_max_speed_backward = mmsb;
 	momentum = m;
 	momentary_cooldown = mcd;
+
+	health = 100;
+
+	animation_has_played = false;
 }
 
 Player::~Player(void)
@@ -31,219 +35,221 @@ void Player::update(sf::Event event, sf::RenderWindow* win)
 
 void Player::on_update(sf::Event event, sf::RenderWindow* win)
 {
-
-	////----turret_to_mouse----//
-
-	sf::Vector2i pixel_pos = sf::Mouse::getPosition(*win);
-	sf::Vector2f coord_pos = win->mapPixelToCoords(pixel_pos);
-
-	float dx = x - coord_pos.x;
-	float dy = y - coord_pos.y;
-	float rotation = (atan2(dy, dx)) * 180 / M_PI;
-
-	float rotation2 = (rotation + 180) - tt->get_rotation();
-
-	if (rotation2 < 0)
+	if (health >= 0)
 	{
-		rotation2 += 360;
-	}
-	
-	//If tank turret close to mouse rotation set exactly to mouse rotation
-	if (rotation2 < 180+0.6 && rotation2 > 180 - 0.6)
-	{
-		tt->get_sprite().setRotation(rotation);
-	}
-	else
-	{
-		if (rotation2 >180)
+		////----turret_to_mouse----//
+
+		sf::Vector2i pixel_pos = sf::Mouse::getPosition(*win);
+		sf::Vector2f coord_pos = win->mapPixelToCoords(pixel_pos);
+
+		float dx = x - coord_pos.x;
+		float dy = y - coord_pos.y;
+		float rotation = (atan2(dy, dx)) * 180 / M_PI;
+
+		float rotation2 = (rotation + 180) - tt->get_rotation();
+
+		if (rotation2 < 0)
 		{
-			tt->get_sprite().rotate(tt->get_traverse_speed()* 10 * _elapsed);
-
-		}
-		if (rotation2 <180)
-		{
-			tt->get_sprite().rotate(-tt->get_traverse_speed()*10 * _elapsed);
-		}
-	
-		
-	}
-	//std::cout << rotation + 180 << " " << tt->get_rotation() << std::endl;
-	//std::cout << tt->get_rotation() <<"                  " << rotation +180<<  std::endl;
-	
-	//----------------Key_Pressing_check--------------------------------------//
-	//Checks movement stuff
-	
-	
-
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-	{
-		momentary_acceleration_forward = tank_hull.get_acceleration_forward();
-		momentary_max_speed_forward = tank_hull.get_max_speed_forward();
-		momentary_speed_forward += _elapsed * momentary_acceleration_forward;
-
-
-
-		if (momentary_speed_forward > momentary_max_speed_forward)
-		{
-			momentary_speed_forward = momentary_max_speed_forward;
+			rotation2 += 360;
 		}
 
-		player_body->SetLinearVelocity(b2Vec2(sin(player_body->GetAngle())*-momentary_speed_forward, cos(player_body->GetAngle())*momentary_speed_forward));
-		//set_position(x + (sin(t->get_rotation()*M_PI/180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI/180)*momentary_speed_forward));
-
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-	{
-		momentary_acceleration_backward = tank_hull.get_acceleration_backward();
-		momentary_max_speed_backward = tank_hull.get_max_speed_backward();
-		momentary_speed_backward += _elapsed * momentary_acceleration_backward;
-
-		if (momentary_speed_backward > momentary_max_speed_backward)
+		//If tank turret close to mouse rotation set exactly to mouse rotation
+		if (rotation2 < 180 + 0.6 && rotation2 > 180 - 0.6)
 		{
-			momentary_speed_backward = momentary_max_speed_backward;
+			tt->get_sprite().setRotation(rotation);
 		}
-		player_body->SetLinearVelocity(b2Vec2(sin(player_body->GetAngle())*momentary_speed_backward, cos(player_body->GetAngle())*-momentary_speed_backward));
-		//set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_backward));
+		else
+		{
+			if (rotation2 >180)
+			{
+				tt->get_sprite().rotate(tt->get_traverse_speed() * 10 * _elapsed);
 
-	}
-
-	//---Setting_sprite_postion---//
-	set_position(player_body->GetPosition().x, player_body->GetPosition().y);
-	//----------------------------//
-	/*		is_moving_backward = true;
-			backward_is_pressed = true;*/
+			}
+			if (rotation2 <180)
+			{
+				tt->get_sprite().rotate(-tt->get_traverse_speed() * 10 * _elapsed);
+			}
 
 
+		}
+		//std::cout << rotation + 180 << " " << tt->get_rotation() << std::endl;
+		//std::cout << tt->get_rotation() <<"                  " << rotation +180<<  std::endl;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
-		player_body->SetAngularVelocity(hull_rotation_speed);
-	}
+		//----------------Key_Pressing_check--------------------------------------//
+		//Checks movement stuff
 
-	/*	if (is_moving_forward == true)
+
+
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		{
+			momentary_acceleration_forward = tank_hull.get_acceleration_forward();
+			momentary_max_speed_forward = tank_hull.get_max_speed_forward();
+			momentary_speed_forward += _elapsed * momentary_acceleration_forward;
+
+
+
+			if (momentary_speed_forward > momentary_max_speed_forward)
+			{
+				momentary_speed_forward = momentary_max_speed_forward;
+			}
+
+			player_body->SetLinearVelocity(b2Vec2(sin(player_body->GetAngle())*-momentary_speed_forward, cos(player_body->GetAngle())*momentary_speed_forward));
+			//set_position(x + (sin(t->get_rotation()*M_PI/180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI/180)*momentary_speed_forward));
+
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		{
+			momentary_acceleration_backward = tank_hull.get_acceleration_backward();
+			momentary_max_speed_backward = tank_hull.get_max_speed_backward();
+			momentary_speed_backward += _elapsed * momentary_acceleration_backward;
+
+			if (momentary_speed_backward > momentary_max_speed_backward)
+			{
+				momentary_speed_backward = momentary_max_speed_backward;
+			}
+			player_body->SetLinearVelocity(b2Vec2(sin(player_body->GetAngle())*momentary_speed_backward, cos(player_body->GetAngle())*-momentary_speed_backward));
+			//set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_backward));
+
+		}
+
+		//---Setting_sprite_postion---//
+		set_position(player_body->GetPosition().x, player_body->GetPosition().y);
+		//----------------------------//
+		/*		is_moving_backward = true;
+		backward_is_pressed = true;*/
+
+
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		{
+			player_body->SetAngularVelocity(hull_rotation_speed);
+		}
+
+		/*	if (is_moving_forward == true)
 		{*/
-	
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
-		player_body->SetAngularVelocity(-hull_rotation_speed);
-		
-	}
-	
-	//---Setting_sprite_rotation---//
-	t->get_sprite().setRotation((player_body->GetAngle() * (180.0f / M_PI)));
-	//-----------------------------//
 
-	//---Distance travelled.---//
-	if (player_body->GetPosition().y*30.0 > distance_traveled.y)
-	{
-		distance_traveled.y = player_body->GetPosition().y*30.0;
-	}
-	if (player_body->GetPosition().x*30.0 > 0 + (1920 / 2) && player_body->GetPosition().x*30.0 < 4096.f - (1920 / 2))
-	{
-		distance_traveled.x = player_body->GetPosition().x*30.0;
-	}
-	
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		{
+			player_body->SetAngularVelocity(-hull_rotation_speed);
 
-	//----------------------------------------------------Key realease events--------------------------------//
-	//The tank is required to accelerate everytime it stops
-	
-	//if (event.type == sf::Event::KeyReleased)
-	//{
-	//	if (event.key.code == sf::Keyboard::W)
-	//	{
-	//		forward_is_pressed = false;
-	//		//debug
-	//		std::cout << __LINE__ << " - forward_is_pressed = false" << std::endl;
-	//		momentary_speed_forward = 0;
-	//	}
-	//			
-	//}
+		}
+
+		//---Setting_sprite_rotation---//
+		t->get_sprite().setRotation((player_body->GetAngle() * (180.0f / M_PI)));
+		//-----------------------------//
+
+		//---Distance travelled.---//
+		if (player_body->GetPosition().y*30.0 > distance_traveled.y)
+		{
+			distance_traveled.y = player_body->GetPosition().y*30.0;
+		}
+		if (player_body->GetPosition().x*30.0 > 0 + (1920 / 2) && player_body->GetPosition().x*30.0 < 4096.f - (1920 / 2))
+		{
+			distance_traveled.x = player_body->GetPosition().x*30.0;
+		}
 
 
-	//if (event.type == sf::Event::KeyReleased)
-	//{
-	//	if (event.key.code == sf::Keyboard::S)
-	//	{
-	//		backward_is_pressed = false;
-	//		//debug
-	//		std::cout << __LINE__ << " - backward_is_pressed = false" << std::endl;
-	//	}
-	//}
+		//----------------------------------------------------Key realease events--------------------------------//
+		//The tank is required to accelerate everytime it stops
 
-	////----------------------------slow down forward movement-------------------------------------------------------------//
-	//
-	//if (forward_is_pressed == false)
-	//{
-	//	momentary_speed_forward -= 0.10;
-	//	if (momentary_speed_forward <= 0.05)
-	//	{
-	//		momentary_speed_forward = 0;
-	//		is_moving_forward = false;
-	//		//debug 
-	//		//std::cout << __LINE__ << " - is_moving_forward = false" << std::endl;
-	//	}
-
-	//}
-
-	//if (backward_is_pressed == true)
-	//{
-	//	momentary_speed_backward += _elapsed * momentary_acceleration_backward;
-	//	momentary_speed_forward -= (0.20 + momentary_speed_backward);
-
-	//	if (momentary_speed_forward <= 0.05)
-	//	{
-	//		momentary_speed_forward = 0;
-	//		is_moving_forward = false;
-	//		//debug
-	//		//std::cout << __LINE__ << " - is_moving_forward = false" << std::endl;
-	//	}
-
-	//}
+		//if (event.type == sf::Event::KeyReleased)
+		//{
+		//	if (event.key.code == sf::Keyboard::W)
+		//	{
+		//		forward_is_pressed = false;
+		//		//debug
+		//		std::cout << __LINE__ << " - forward_is_pressed = false" << std::endl;
+		//		momentary_speed_forward = 0;
+		//	}
+		//			
+		//}
 
 
-	//-------------------slow down backward movement-----------------------------------------------------------------------------------------//
-	//
-	//if (backward_is_pressed == false)
-	//{
-	//	momentary_speed_backward -= 0.10;
-	//	if (momentary_speed_backward <= 0.05)
-	//	{
-	//		momentary_speed_backward = 0;
-	//		is_moving_backward = false;
-	//	}
-	//}
+		//if (event.type == sf::Event::KeyReleased)
+		//{
+		//	if (event.key.code == sf::Keyboard::S)
+		//	{
+		//		backward_is_pressed = false;
+		//		//debug
+		//		std::cout << __LINE__ << " - backward_is_pressed = false" << std::endl;
+		//	}
+		//}
 
-	
-	//-----------------for sliding-----------------------------------------------------------------------------------------------------------//
+		////----------------------------slow down forward movement-------------------------------------------------------------//
+		//
+		//if (forward_is_pressed == false)
+		//{
+		//	momentary_speed_forward -= 0.10;
+		//	if (momentary_speed_forward <= 0.05)
+		//	{
+		//		momentary_speed_forward = 0;
+		//		is_moving_forward = false;
+		//		//debug 
+		//		//std::cout << __LINE__ << " - is_moving_forward = false" << std::endl;
+		//	}
 
-	/*if (is_moving_forward == true && forward_is_pressed == false)
-	{
+		//}
+
+		//if (backward_is_pressed == true)
+		//{
+		//	momentary_speed_backward += _elapsed * momentary_acceleration_backward;
+		//	momentary_speed_forward -= (0.20 + momentary_speed_backward);
+
+		//	if (momentary_speed_forward <= 0.05)
+		//	{
+		//		momentary_speed_forward = 0;
+		//		is_moving_forward = false;
+		//		//debug
+		//		//std::cout << __LINE__ << " - is_moving_forward = false" << std::endl;
+		//	}
+
+		//}
+
+
+		//-------------------slow down backward movement-----------------------------------------------------------------------------------------//
+		//
+		//if (backward_is_pressed == false)
+		//{
+		//	momentary_speed_backward -= 0.10;
+		//	if (momentary_speed_backward <= 0.05)
+		//	{
+		//		momentary_speed_backward = 0;
+		//		is_moving_backward = false;
+		//	}
+		//}
+
+
+		//-----------------for sliding-----------------------------------------------------------------------------------------------------------//
+
+		/*if (is_moving_forward == true && forward_is_pressed == false)
+		{
 		set_position(x + (sin(t->get_rotation()*M_PI / 180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI / 180)*momentary_speed_forward));
-	}
+		}
 
-	if (is_moving_backward == true && backward_is_pressed == false)
-	{
+		if (is_moving_backward == true && backward_is_pressed == false)
+		{
 		set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_backward));
-	}*/
+		}*/
 
 
-	//----------------------momentum to move tank forward after key is released------------------------------------//
-	//to move tank even if key is released to make it feel more like a tank.
+		//----------------------momentum to move tank forward after key is released------------------------------------//
+		//to move tank even if key is released to make it feel more like a tank.
 
-	
 
-	//if (is_moving_forward == true) // && !event.KeyPressed)
-	//{
-	//	set_position(x + (sin(t->get_rotation()*M_PI / 180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI / 180)*momentary_speed_forward));
-	//}
-	//
-	//if (is_moving_backward == true) // && !event.KeyPressed)
-	//{
-	//	set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_backward));
-	//}
-	//
-	//
+
+		//if (is_moving_forward == true) // && !event.KeyPressed)
+		//{
+		//	set_position(x + (sin(t->get_rotation()*M_PI / 180)*-momentary_speed_forward), y + (cos(t->get_rotation()*M_PI / 180)*momentary_speed_forward));
+		//}
+		//
+		//if (is_moving_backward == true) // && !event.KeyPressed)
+		//{
+		//	set_position(x + (sin(t->get_rotation()*M_PI / 180)*momentary_speed_backward), y + (cos(t->get_rotation()*M_PI / 180)*-momentary_speed_backward));
+		//}
+		//
+		//
+	}	
 }
 
 void Player::set_position(float x, float y)
@@ -270,6 +276,11 @@ sf::Vector2f Player::get_position()
 
 void Player::on_draw(sf::RenderWindow* win)
 {
+	if (health <= 0)
+	{
+		t->get_sprite().setColor(sf::Color(20, 20, 20));
+		tt->get_sprite().setColor(sf::Color(20, 20, 20));
+	}
 	t->on_draw(win);
 	tt->on_draw(win);
 }
@@ -342,6 +353,25 @@ void Player::set_body_position(float x, float y)
 
 }
 
+void Player::set_animation_has_played()
+{
+	animation_has_played = true;
+}
+
+int Player::get_health()
+{
+	return health;
+}
+
+bool Player::get_has_animation_played()
+{
+	return animation_has_played;
+}
+
+void Player::reduce_health(int amount)
+{
+	health -= amount;
+}
 	
 	////----turret_to_mouse----//
 

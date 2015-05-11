@@ -32,6 +32,7 @@ public:
 	void set_velocity(float x, float y, b2Body *ammo_body);
 	void set_coord(float _x, float _y);
 	void set_rotation(float rot);
+	int get_timer();
 
 protected:
 	b2Body* ammo_body;
@@ -43,6 +44,7 @@ protected:
 	float y;
 	float radians;
 	bool is_hit;
+	int timer;
 
 	
 

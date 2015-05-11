@@ -42,6 +42,10 @@ public:
 	void set_cooldown();
 	void reduce_cooldown(int amount);
 
+	void set_animation_has_played();
+	int get_health();
+	bool get_has_animation_played();
+
 private:
 	
 	int health;
@@ -88,6 +92,8 @@ private:
 	*/
 
 	sf::Vector2f distance_traveled;
+
+	bool animation_has_played;
 };
 
 
