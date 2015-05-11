@@ -12,6 +12,7 @@
 #include "AiManager.h"
 #include "SplashScreen.h"
 #include "MainMenu.h"
+#include "GameOver.h"
 
 #include "Box2D\Box2D.h"
 #include "ContactChecker.h"
@@ -44,13 +45,16 @@ private:
 	static bool is_exiting();
 	static void show_splash_screen(sf::RenderWindow *window);
 	static void show_menu(sf::RenderWindow *window); //, MainMenu *main_menu);
+	static void show_game_over(sf::RenderWindow *window);
 	MainMenu main_menu;
 	enum game_state {
 		uninitialized,
 		showing_splash,
 		paused,
 		showing_menu,
-		playing,exiting
+		playing,
+		showing_game_over,
+		exiting
 	};
 	static game_state _game_state;
 	Ammo ammo();
@@ -60,5 +64,7 @@ private:
 	//b2Fixture *box_fixture;
 
 	MyContactListener *ContactListener;
+
+	int time_passed_after_death;
 };
 #endif

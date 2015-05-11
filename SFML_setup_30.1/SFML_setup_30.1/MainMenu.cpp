@@ -70,7 +70,7 @@ MainMenu::menu_result MainMenu::get_menu_response(sf::RenderWindow* win)
 			}
 			if (menu_event.type == sf::Event::KeyPressed)
 			{
-				if (menu_event.key.code == sf::Keyboard::Escape)
+				if (menu_event.key.code == sf::Keyboard::Return)
 				{
 					return play;
 				}

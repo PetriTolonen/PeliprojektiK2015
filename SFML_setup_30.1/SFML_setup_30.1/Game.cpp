@@ -44,6 +44,16 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	BoxTexture.loadFromFile("box.png");
 	//--------------------------//
 
+	//---death_image--//
+	sf::Texture image;
+	if (image.loadFromFile("game_over.png") != true)
+	{
+		return;
+	}
+
+	sf::Sprite game_over_sprite(image);
+	//---after_death_timer---//
+	time_passed_after_death = 60 * 10;
 
 	//---------Contact Listener-----------------//
 	ContactListener = new MyContactListener();
@@ -201,6 +211,11 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			show_splash_screen(window);
 			break;
 		}
+		case Game::showing_game_over:
+		{
+			show_game_over(window);
+			break;
+		}		
 		case Game::playing:
 		{
 			window->clear(sf::Color(100, 200, 0));
@@ -232,7 +247,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 		//-----------------Firing Main Gun--------------------------------------//
 
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && player->get_health()>0)
 			{
 
 
@@ -310,7 +325,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			{
 				
 
-				if (enemy1->get_can_fire() == true)
+				if (enemy1->get_can_fire() == true && player->get_health()>0)
 				{
 
 					//--ammo_b2_body-----//
@@ -380,7 +395,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			{
 
 
-				if (enemy2->get_can_fire() == true)
+				if (enemy2->get_can_fire() == true && player->get_health()>0)
 				{
 
 					//--ammo_b2_body-----//
@@ -455,7 +470,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			if (enemy2->get_health() <= 0 && enemy2->get_has_animation_played() == false)
 			{
 				animatedSprite2.play(*currentAnimation2);
-				animatedSprite2.setPosition(enemy1->get_position().x - 258, enemy1->get_position().y - 258);
+				animatedSprite2.setPosition(enemy2->get_position().x - 258, enemy2->get_position().y - 258);
 				enemy2->set_animation_has_played();
 			}
 
@@ -488,18 +503,22 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				CreateBox(world, coord_pos.x, coord_pos.y);
 			}*/
 
-
+		
 			//window.draw(sprite_tank_hull);
 			//window.draw(sprite_tank_turret);
 			window->draw(map2);
-			window->display();
+		
 
-			if (event.type == sf::Event::Closed) _game_state = Game::exiting;
-
-			if (event.type == sf::Event::KeyPressed)
+			//---after_player_dies---//
+			if (player->get_health() < 0)
 			{
-				if (event.key.code == sf::Keyboard::Escape) show_menu(window);
+				window->setView(window->getDefaultView());
+				window->draw(game_over_sprite);
 			}
+			//---after_player_dies---//
+
+			//---Draw_display---//
+			window->display();
 
 			//---------reduce gun cooldown-----------------//
 			player->reduce_cooldown(1);
@@ -564,9 +583,26 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			break;
 		}
 	}
-	
 
+	if (event.type == sf::Event::Closed) _game_state = Game::exiting;
+
+	if (event.type == sf::Event::KeyPressed)
+	{
+		if (event.key.code == sf::Keyboard::Escape) show_menu(window);
+	}	
 	
+	//---wait_before_final_gameover---//
+	if (player->get_health() < 0)
+	{
+		time_passed_after_death--;
+		
+		if (time_passed_after_death <= 0)
+		{
+			show_game_over(window);
+		}		
+	}
+
+
 	}
 	delete ContactListener;
 	window->close();
@@ -679,6 +715,13 @@ void Game::show_menu(sf::RenderWindow *window)
 		break;
 
 	}
+}
+
+void Game::show_game_over(sf::RenderWindow *window)
+{
+	GameOver game_over;
+	game_over.show(window);
+	_game_state = exiting;
 }
 
 bool Game::is_exiting()

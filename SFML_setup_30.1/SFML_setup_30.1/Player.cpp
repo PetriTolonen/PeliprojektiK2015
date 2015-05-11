@@ -35,7 +35,7 @@ void Player::update(sf::Event event, sf::RenderWindow* win)
 
 void Player::on_update(sf::Event event, sf::RenderWindow* win)
 {
-	if (health >= 0)
+	if (health > 0)
 	{
 		////----turret_to_mouse----//
 
@@ -113,9 +113,7 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 
 		}
 
-		//---Setting_sprite_postion---//
-		set_position(player_body->GetPosition().x, player_body->GetPosition().y);
-		//----------------------------//
+		
 		/*		is_moving_backward = true;
 		backward_is_pressed = true;*/
 
@@ -134,10 +132,6 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 			player_body->SetAngularVelocity(-hull_rotation_speed);
 
 		}
-
-		//---Setting_sprite_rotation---//
-		t->get_sprite().setRotation((player_body->GetAngle() * (180.0f / M_PI)));
-		//-----------------------------//
 
 		//---Distance travelled.---//
 		if (player_body->GetPosition().y*30.0 > distance_traveled.y)
@@ -250,6 +244,14 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 		//
 		//
 	}	
+	//---Setting_sprite_postion---//
+	set_position(player_body->GetPosition().x, player_body->GetPosition().y);
+	//----------------------------//
+
+	//---Setting_sprite_rotation---//
+	t->get_sprite().setRotation((player_body->GetAngle() * (180.0f / M_PI)));
+	//-----------------------------//
+
 }
 
 void Player::set_position(float x, float y)
