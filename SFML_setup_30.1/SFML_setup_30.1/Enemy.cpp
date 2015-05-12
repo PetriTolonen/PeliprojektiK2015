@@ -22,11 +22,22 @@ Enemy::Enemy(b2Body* enemy_body, Tank_hull* t, Tank_turret* tt, float msf, float
 	at_destination = true;
 
 	//player position random offsets
-	random_x = rand() % 150 + 75;
-	random_y = rand() % 150 + 75;
+	rng_decider = rand() % 1;
+	if (rng_decider == 1)
+	{
+		random_x = rand() % 375 + 120;
+		random_y = rand() % 375 + 120;
+	}
+	else
+	{
+		random_x = rand() % -375 - 120;
+		random_y = rand() % -375 - 120;
+	}
+
 
 	health = 20;
 	animation_played = false;
+	timer = 100;
 }
 
 Enemy::~Enemy(void)
@@ -128,6 +139,20 @@ b2Body* Enemy::get_body()
 
 void Enemy::move_to(sf::Vector2f player_position, float player_rotation)
 {
+
+	std::cout << timer << std::endl;
+	if (timer <= 0)
+	{
+		timer = 0;
+		random_x = rand() % 275 + 70;
+		random_y = rand() % 275 + 70;
+	}
+	timer--;
+	if (timer <= 0)
+	{
+		timer = 100;
+	}
+
 	//----------------------turret_rotation_towards_player--------------------------------//
 	if (health>=0)
 	{
@@ -182,13 +207,7 @@ void Enemy::move_to(sf::Vector2f player_position, float player_rotation)
 			body_rotation2 -= 360;
 		}
 
-		//std::cout << body_rotation2 << "  " << body_rotation << std::endl;
-		//if (body_rotation2 < 0)
-		//{
-		//	body_rotation2 += 360;
-		//	
-		//}
-		//else
+
 
 		if (body_rotation2 + 90 >180)
 		{
@@ -214,8 +233,8 @@ void Enemy::move_to(sf::Vector2f player_position, float player_rotation)
 		}*/
 
 
-		momentary_acceleration_forward = tank_hull.get_acceleration_forward();
-		momentary_max_speed_forward = tank_hull.get_max_speed_forward();
+		momentary_acceleration_forward = t_hull->get_acceleration_forward();
+		momentary_max_speed_forward = t_hull->get_max_speed_forward();
 		momentary_speed_forward += _elapsed * momentary_acceleration_forward;
 
 		if (momentary_speed_forward > momentary_max_speed_forward)
