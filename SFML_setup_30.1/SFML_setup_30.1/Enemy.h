@@ -79,6 +79,8 @@ private:
 	bool animation_played;
 	float random_x;
 	float random_y;
+	float rng_decider;
+	float timer;
 	bool score_given;
 };
 #endif;
