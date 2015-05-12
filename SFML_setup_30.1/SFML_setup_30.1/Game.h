@@ -72,5 +72,6 @@ private:
 
 	bool restart_once;
 	int level_move_count;
+	int modulo_int;
 };
 #endif

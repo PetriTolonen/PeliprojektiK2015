@@ -23,7 +23,12 @@ void Game::run()
 	view->rotate(180);
 	
 	level_creation();
+
+	map3.setPosition(0, 4096);
+	map4.setPosition(0, 4096);
+
 	level_move_count = 0;
+	modulo_int = 0;
 
 	begin_of_game = 0;
 	_game_state = Game::showing_splash;
@@ -525,24 +530,33 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				animatedSprite2.play(*currentAnimation2);
 				enemy2->set_animation_has_played();
 			}
-			
-			
-			if ((player->get_distance_traveled().y - (level_move_count * 4096))>(4096+screen_height/2))
+				
+			if ((player->get_distance_traveled().y - (level_move_count * 4096))>(4096-screen_height/2))
 			{
-				int modululo = 0;
-				modululo = (level_move_count % 2);
+				int modulo_eka = 0;
+				modulo_eka = (modulo_int % 2);
 
-				if (modululo == 0)
+				if (modulo_eka == 0)
 				{
-					map3.setPosition(0, level_move_count * 4096);
-					map4.setPosition(0, level_move_count * 4096);
+					int modululo = 0;
+					modululo = (level_move_count % 2);
+					if (modululo == 0)
+					{
+						map3.setPosition(0, (level_move_count + 1) * 4096);
+						map4.setPosition(0, (level_move_count + 1) * 4096);
+					}
+					else
+					{
+						map.setPosition(0, (level_move_count + 1) * 4096);
+						map2.setPosition(0, (level_move_count + 1) * 4096);
+					}
+					level_move_count++;
 				}
 				else
 				{
-					map.setPosition(0, level_move_count * 4096);
-					map2.setPosition(0, level_move_count * 4096);
+					modulo_int++;
 				}
-				level_move_count++;
+				
 			}
 
 			window->setView(*view);
@@ -592,11 +606,11 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			font.loadFromFile("impact.ttf");
 			// Create a text
 			std::ostringstream re_text;
-			re_text << "distance travelled " << player->get_distance_traveled().y;
+			re_text << "Score " << score;
 
 			sf::Text text;
 			text.setFont(font);
-			text.setCharacterSize(140);
+			text.setCharacterSize(100);
 			text.setStyle(sf::Text::Bold);
 			text.setColor(sf::Color::Yellow);
 			text.setString(re_text.str());
@@ -606,7 +620,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			sf::FloatRect textRect = text.getLocalBounds();
 			text.setOrigin(textRect.left + textRect.width / 2.0f,
 				textRect.top + textRect.height / 2.0f);
-			text.setPosition(sf::Vector2f(screen_widht / 2, 150 + screen_height / 2));
+			text.setPosition(sf::Vector2f(screen_widht*0.3, (screen_height)*0.9));
 			window->draw(text);
 
 
