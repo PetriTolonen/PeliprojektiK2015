@@ -37,6 +37,8 @@ private:
 	int level_trees[256];
 	TileMap map;
 	TileMap map2;
+	TileMap map3;
+	TileMap map4;
 
 	static ObjectManager o_manager;
 
@@ -66,5 +68,9 @@ private:
 	MyContactListener *ContactListener;
 
 	int time_passed_after_death;
+	int score;
+
+	bool restart_once;
+	int level_move_count;
 };
 #endif

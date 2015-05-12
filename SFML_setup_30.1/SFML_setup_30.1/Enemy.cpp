@@ -27,6 +27,7 @@ Enemy::Enemy(b2Body* enemy_body, Tank_hull* t, Tank_turret* tt, float msf, float
 
 	health = 20;
 	animation_played = false;
+	score_given = false;
 }
 
 Enemy::~Enemy(void)
@@ -250,6 +251,21 @@ void Enemy::reduce_cooldown(int amount)
 void Enemy::set_can_fire_false()
 {
 	can_fire = false;
+}
+
+bool Enemy::get_has_score_given()
+{
+	return score_given;
+}
+
+void Enemy::set_score_given_false()
+{
+	score_given = false;
+}
+
+void Enemy::set_score_given_true()
+{
+	score_given = true;
 }
 //
 ////-------------------------------rotate-----------------------------------------------//

@@ -1,5 +1,6 @@
 #include "Game.h"
 
+#include <sstream>
 #include "AnimatedSprite.h"
 
 
@@ -22,6 +23,7 @@ void Game::run()
 	view->rotate(180);
 	
 	level_creation();
+	level_move_count = 0;
 
 	begin_of_game = 0;
 	_game_state = Game::showing_splash;
@@ -55,6 +57,8 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	//---after_death_timer---//
 	time_passed_after_death = 60 * 10;
 
+	score = 0;
+	restart_once = false;
 	//---------Contact Listener-----------------//
 	ContactListener = new MyContactListener();
 	world.SetContactListener(ContactListener);
@@ -224,6 +228,8 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	//view->setCenter(player.get_position());
 	
 	sf::Clock clock;
+	sf::Clock score_clock;
+	
 	while (!is_exiting())
 	{
 		sf::Event event;
@@ -251,7 +257,11 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			window->clear(sf::Color(100, 200, 0));
 
 			sf::Time elapsed = clock.restart();
-
+			if (restart_once == false)
+			{
+				score_clock.restart();
+				restart_once = true;
+			}
 			set_view(view, player);
 
 			world.Step(1.0f / 60.0f, 8, 4);
@@ -515,9 +525,29 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				animatedSprite2.play(*currentAnimation2);
 				enemy2->set_animation_has_played();
 			}
+			
+			
+			if ((player->get_distance_traveled().y - (level_move_count * 4096))>(4096+screen_height/2))
+			{
+				int modululo = 0;
+				modululo = (level_move_count % 2);
+
+				if (modululo == 0)
+				{
+					map3.setPosition(0, level_move_count * 4096);
+					map4.setPosition(0, level_move_count * 4096);
+				}
+				else
+				{
+					map.setPosition(0, level_move_count * 4096);
+					map2.setPosition(0, level_move_count * 4096);
+				}
+				level_move_count++;
+			}
 
 			window->setView(*view);
 			window->draw(map);
+			window->draw(map3);
 			//player->update(event, window);
 			//player->on_draw(window);*/
 			o_manager.update(event, window);
@@ -555,15 +585,58 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			//window.draw(sprite_tank_hull);
 			//window.draw(sprite_tank_turret);
 			window->draw(map2);
+			window->draw(map4);
 		
+			// Declare and load a font
+			sf::Font font;
+			font.loadFromFile("impact.ttf");
+			// Create a text
+			std::ostringstream re_text;
+			re_text << "distance travelled " << player->get_distance_traveled().y;
+
+			sf::Text text;
+			text.setFont(font);
+			text.setCharacterSize(140);
+			text.setStyle(sf::Text::Bold);
+			text.setColor(sf::Color::Yellow);
+			text.setString(re_text.str());
+
+			// Draw it
+			window->setView(window->getDefaultView());
+			sf::FloatRect textRect = text.getLocalBounds();
+			text.setOrigin(textRect.left + textRect.width / 2.0f,
+				textRect.top + textRect.height / 2.0f);
+			text.setPosition(sf::Vector2f(screen_widht / 2, 150 + screen_height / 2));
+			window->draw(text);
+
 
 			//---after_player_dies---//
 			if (player->get_health() < 0)
 			{
+				// Declare and load a font
+				sf::Font font;
+				font.loadFromFile("impact.ttf");
+				// Create a text
+				std::ostringstream score_text;
+				score_text << "SCORE " << score;
+				
+				sf::Text text;
+				text.setFont(font);
+				text.setCharacterSize(140);
+				text.setStyle(sf::Text::Bold);
+				text.setColor(sf::Color::Yellow);
+				text.setString(score_text.str());
+				
+				// Draw it
 				window->setView(window->getDefaultView());
+				sf::FloatRect textRect = text.getLocalBounds();
+				text.setOrigin(textRect.left + textRect.width / 2.0f,
+					textRect.top + textRect.height / 2.0f);
+				text.setPosition(sf::Vector2f(screen_widht / 2, 150 + screen_height / 2));
 				window->draw(game_over_sprite);
+				window->draw(text);
 			}
-			//---after_player_dies---//
+			//-----------------------//
 
 			//---Draw_display---//
 			window->display();
@@ -618,6 +691,20 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				}
 
 			//-----------------------------------------------------------------------//
+				sf::Time score_elapsed = score_clock.getElapsedTime();
+				if (enemy1->get_health() < 0 || enemy2->get_health() < 0)
+				{
+					if (enemy1->get_health() < 0 && enemy1->get_has_score_given() == false)
+					{
+						score += score_elapsed.asMilliseconds() * 1;
+						enemy1->set_score_given_true();
+					}
+					if (enemy2->get_health() < 0 && enemy2->get_has_score_given() == false)
+					{
+						score++;
+						enemy2->set_score_given_true();
+					}
+				}
 
 			
 			//------------------------Handling_AI----------------------------------//
@@ -723,6 +810,68 @@ void Game::level_creation()
 			};
 		
 			map2.load("tileset_trees.png", sf::Vector2u(256, 256), level_trees, 16, 16);
+
+			const int level2[] =
+			{
+				0, 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0,
+				3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 3, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0,
+				0, 3, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 1, 2, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 3,
+				3, 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0,
+				0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0,
+				3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0,
+				3, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1, 2, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0,
+				0, 3, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3, 3, 0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0,
+				0, 0, 0, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 1, 2, 0, 0, 3, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0,
+				3, 0, 3, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 3, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 0, 3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 3, 0,
+				0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0,
+				3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1, 2, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 3, 3,
+				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 0,
+				0, 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0,
+				3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 3, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0,
+				0, 3, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 1, 2, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 3,
+				3, 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0,
+				0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0,
+				3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0,
+				3, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1, 2, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0,
+				0, 3, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3, 3, 0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0,
+				0, 0, 0, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 1, 2, 0, 0, 3, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0,
+				3, 0, 3, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 3, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 0, 3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 3, 0,
+				0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0,
+				3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1, 2, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 3, 3,
+				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 0,
+			};
+
+			map3.load("tileset_green_backround.png", sf::Vector2u(128, 128), level2, 32, 32);
+
+
+			//Give me some trees...
+			const int level_trees2[] =
+			{
+				1, 2, 0, 3, 1, 1, 2, 0, 0, 1, 2, 2, 3, 1, 1, 1,
+				2, 1, 0, 3, 0, 0, 2, 0, 0, 1, 2, 0, 3, 1, 0, 1,
+				1, 1, 1, 1, 3, 3, 2, 0, 0, 3, 3, 3, 3, 2, 3, 1,
+				3, 1, 0, 1, 1, 0, 1, 0, 0, 1, 2, 3, 3, 1, 0, 1,
+				3, 2, 3, 3, 0, 0, 3, 0, 0, 3, 2, 3, 3, 3, 0, 1,
+				1, 3, 0, 1, 1, 1, 3, 0, 0, 2, 1, 0, 1, 1, 3, 1,
+				2, 2, 2, 3, 3, 0, 1, 0, 0, 2, 2, 1, 1, 1, 3, 1,
+				1, 1, 0, 3, 1, 0, 1, 0, 0, 1, 2, 0, 3, 1, 0, 1,
+				1, 2, 0, 3, 1, 1, 2, 0, 0, 1, 2, 2, 3, 1, 1, 1,
+				2, 1, 0, 3, 0, 0, 2, 0, 0, 1, 2, 0, 3, 1, 0, 1,
+				1, 1, 1, 1, 3, 3, 2, 0, 0, 3, 3, 3, 3, 2, 3, 1,
+				3, 1, 0, 1, 1, 0, 1, 0, 0, 1, 2, 3, 3, 1, 0, 1,
+				3, 2, 3, 3, 0, 0, 3, 0, 0, 3, 2, 3, 3, 3, 0, 1,
+				1, 3, 0, 1, 1, 1, 3, 0, 0, 2, 1, 0, 1, 1, 3, 1,
+				2, 2, 2, 3, 3, 0, 1, 0, 0, 2, 2, 1, 1, 1, 3, 1,
+				1, 1, 0, 3, 1, 0, 1, 0, 0, 1, 2, 0, 3, 1, 0, 1,
+			};
+
+			map4.load("tileset_trees.png", sf::Vector2u(256, 256), level_trees2, 16, 16);
 }
 
 void Game::set_view(sf::View *view, Player *player)

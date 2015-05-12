@@ -37,6 +37,9 @@ public:
 	bool get_has_animation_played();
 	void set_animation_has_played();
 	void set_can_fire_false();
+	bool get_has_score_given();
+	void set_score_given_false();
+	void set_score_given_true();
 
 private:
 	bool at_destination;
@@ -76,5 +79,6 @@ private:
 	bool animation_played;
 	float random_x;
 	float random_y;
+	bool score_given;
 };
 #endif;
