@@ -89,7 +89,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	player_body->SetAngularDamping(10);
 	//---player_b2_body---//
 
-	//---enemy_b2_body---//
+	//---enemy1_b2_body---//
 	b2BodyDef BodyDef2;
 	BodyDef2.type = b2_dynamicBody;
 
@@ -107,9 +107,9 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	//Tank movement dampening
 	enemy_body1->SetLinearDamping(5);
 	enemy_body1->SetAngularDamping(10);
-	//---enemy_b2_body---//
+	//----------------//
 	
-	//---enemy_b2_body---//
+	//---enemy2_b2_body---//
 	b2BodyDef BodyDef3;
 	BodyDef3.type = b2_dynamicBody;
 
@@ -117,21 +117,37 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	Shape3.SetAsBox((31.f) / SCALE, (66.f) / SCALE);
 
 	b2FixtureDef FixtureDef3;
-	b2Body* enemy_body2 = world.CreateBody(&BodyDef2);
+	b2Body* enemy_body2 = world.CreateBody(&BodyDef3);
 	FixtureDef3.density = 10.f;
 	FixtureDef3.friction = 0.7f;
-	FixtureDef3.shape = &Shape2;
+	FixtureDef3.shape = &Shape3;
 	enemy_body2->SetUserData("enemy2");
-	enemy_body2->CreateFixture(&FixtureDef2);
+	enemy_body2->CreateFixture(&FixtureDef3);
 	enemy_body2->SetTransform(b2Vec2(2048.0 / SCALE, ((screen_height / 2) + 2000) / SCALE), 0);
 	//Tank movement dampening
 	enemy_body2->SetLinearDamping(5);
 	enemy_body2->SetAngularDamping(10);
-	//---enemy_b2_body---//
-	//------ammo_b2_body----------//
 	//----------------//
 	
-	
+	//---enemy3_b2_body---//
+	b2BodyDef BodyDef4;
+	BodyDef4.type = b2_dynamicBody;
+
+	b2PolygonShape Shape4;
+	Shape4.SetAsBox((31.f) / SCALE, (66.f) / SCALE);
+
+	b2FixtureDef FixtureDef4;
+	b2Body* enemy_body3 = world.CreateBody(&BodyDef4);
+	FixtureDef4.density = 10.f;
+	FixtureDef4.friction = 0.7f;
+	FixtureDef4.shape = &Shape4;
+	enemy_body3->SetUserData("enemy3");
+	enemy_body3->CreateFixture(&FixtureDef4);
+	enemy_body3->SetTransform(b2Vec2(2048.0 / SCALE, ((screen_height / 2) + 3500) / SCALE), 0);
+	//Tank movement dampening
+	enemy_body3->SetLinearDamping(5);
+	enemy_body3->SetAngularDamping(10);
+	//----------------//
 
 	Tank_hull hull("tank_hull", 1.2, 0.2, 1, 7, 1, 38000, 165);
 	Tank_turret turret("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 1.2, 200);
@@ -139,14 +155,18 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	Tank_turret turret2("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.8, 250);
 	Tank_hull hull3("tank_hull", 0.6, 0.2, 1, 5, 1, 38000, 165);
 	Tank_turret turret3("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.6, 250);
+	Tank_hull hull4("tank_hull", 0.6, 0.2, 1, 5, 1, 38000, 165);
+	Tank_turret turret4("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.6, 250);
 	Player *player = new Player(player_body, &hull, &turret, 0, 0, 0, 0, 0, 0, 0, 0);
 	Enemy *enemy1 = new Enemy(enemy_body1, &hull2, &turret2, 0, 0, 0, 0, 0, 0, 0, 0);
 	Enemy *enemy2 = new Enemy(enemy_body2, &hull3, &turret3, 0, 0, 0, 0, 0, 0, 0, 0);
+	Enemy *enemy3 = new Enemy(enemy_body3, &hull4, &turret4, 0, 0, 0, 0, 0, 0, 0, 0);
 	//player->set_body_position(500, 0);
 	//enemy->set_position(2048.0f + 250, 0 + (screen_height / 2) + 250);
 	o_manager.add_object(player);
 	o_manager.add_object(enemy1);
 	o_manager.add_object(enemy2);
+	o_manager.add_object(enemy3);
 
 	AiManager *ai_manager = new AiManager();
 	
@@ -212,6 +232,11 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 	AnimatedSprite animatedSprite5(sf::seconds(0.03f), true, false);
 	animatedSprite5.setOrigin(128, 128);
+
+	Animation* currentAnimation6 = &explosion3;
+
+	AnimatedSprite animatedSprite6(sf::seconds(0.03f), true, false);
+	animatedSprite6.setOrigin(128, 128);
 	//----Animation----//
 	
 	//
@@ -513,6 +538,79 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				}
 			}
 
+			//---enemy3_firing---//
+			if (enemy3->get_health() <= 0)
+			{
+				enemy3->set_can_fire_false();
+			}
+
+			else if (player->get_position().y - enemy3->get_position().y < 600 || enemy3->get_health()>0)
+			{
+
+
+				if (enemy3->get_can_fire() == true && player->get_health()>0)
+				{
+
+					//--ammo_b2_body-----//
+
+					b2Body* ammo_body;
+
+					b2BodyDef ammoBodyDef;
+					ammoBodyDef.position = b2Vec2((((enemy3->get_position().x) + (-cos(enemy3->get_rotation_turret() / (180.0f / b2_pi))) * 90) / SCALE), ((enemy3->get_position().y) + (-sin(enemy3->get_rotation_turret() / (180.0f / b2_pi))) * 90) / SCALE);
+					ammoBodyDef.type = b2_kinematicBody;
+					//ammoBodyDef.bullet = true;
+
+					ammo_body = world.CreateBody(&ammoBodyDef);
+
+					b2PolygonShape shape_ammo;
+					shape_ammo.SetAsBox((10.f) / SCALE, (5.f) / SCALE);
+					b2FixtureDef AmmoFixtureDef;
+					/*AmmoFixtureDef.density = 0.02f;
+					AmmoFixtureDef.friction = 4.7f;*/
+
+					AmmoFixtureDef.shape = &shape_ammo;
+					ammo_body->SetUserData("ammo");
+					ammo_body->CreateFixture(&AmmoFixtureDef);
+
+
+
+					//------------------------//
+
+					Ammo *round = new Ammo("ammo", ammo_body, 12.0f, 1.0, 3.0, enemy3->get_position().x, enemy3->get_position().y);
+
+					float x = 0;
+					float y = 0;
+
+
+					//x = (player->get_rotation_turret());
+					//y = (player->get_rotation_turret());
+
+
+					x = round->get_velocity() * (-cos(enemy3->get_rotation_turret() / (180.0f / b2_pi)));
+					y = round->get_velocity() * (-sin(enemy3->get_rotation_turret() / (180.0f / b2_pi)));
+
+					round->set_velocity(x, y);
+					round->set_rotation(enemy3->get_rotation_turret() / (180.0f / b2_pi));
+
+					//std::cout << __LINE__  << "Fired main gun!"<< std::endl;
+					//float ammo_location_x = (player->get_position().x);
+					//float ammo_location_y = (player->get_position().y);
+					//
+					//
+					//
+					//Ammo *round = new Ammo(BodyDef2);
+					//o_manager.add_object(round);
+					//round->set_position(ammo_location_x, ammo_location_y + 10);
+
+					enemy3->set_cooldown();
+					ammo_vector.push_back(round);
+
+					animatedSprite5.setPosition((enemy3->get_position().x) + (180 * (-cos(enemy3->get_rotation_turret() / (180.0f / b2_pi)))), (enemy3->get_position().y) + (180 * (-sin(enemy3->get_rotation_turret() / (180.0f / b2_pi)))));
+					animatedSprite5.setRotation(enemy3->get_rotation_turret() - 90);
+					animatedSprite5.play(*currentAnimation6);
+				}
+			}
+
 			if (player->get_health() <= 0 && player->get_has_animation_played() == false)
 			{
 				animatedSprite2.setPosition(player->get_position().x - 256, player->get_position().y - 256);
@@ -530,6 +628,12 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				animatedSprite2.setPosition(enemy2->get_position().x - 256, enemy2->get_position().y - 256);
 				animatedSprite2.play(*currentAnimation2);
 				enemy2->set_animation_has_played();
+			}
+			if (enemy3->get_health() <= 0 && enemy3->get_has_animation_played() == false)
+			{
+				animatedSprite2.setPosition(enemy3->get_position().x - 256, enemy3->get_position().y - 256);
+				animatedSprite2.play(*currentAnimation2);
+				enemy3->set_animation_has_played();
 			}
 				
 			if ((player->get_distance_traveled().y - (level_move_count * 4096))>(4096-screen_height/2))
@@ -580,6 +684,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			player->reduce_cooldown(1);
 			enemy1->reduce_cooldown(1);
 			enemy2->reduce_cooldown(1);
+			enemy3->reduce_cooldown(1);
 
 			//-------------------check contacts------------------------------------//
 			std::vector<ContactCheck>::iterator pos;
@@ -630,6 +735,20 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 						animatedSprite.setPosition(contact.fixtureB->GetBody()->GetPosition().x*SCALE, contact.fixtureB->GetBody()->GetPosition().y*SCALE);
 					}
 				}
+				if ((contact.fixtureA->GetBody()->GetUserData() == "ammo" && contact.fixtureB->GetBody()->GetUserData() == "enemy3") ||
+					(contact.fixtureA->GetBody()->GetUserData() == "enemy3" && contact.fixtureB->GetBody()->GetUserData() == "ammo"))
+				{
+					enemy3->reduce_health(1);
+					animatedSprite.play(*currentAnimation);
+					if (contact.fixtureA->GetBody()->GetUserData() == "ammo")
+					{
+						animatedSprite.setPosition(contact.fixtureA->GetBody()->GetPosition().x*SCALE, contact.fixtureA->GetBody()->GetPosition().y*SCALE);
+					}
+					if (contact.fixtureB->GetBody()->GetUserData() == "ammo")
+					{
+						animatedSprite.setPosition(contact.fixtureB->GetBody()->GetPosition().x*SCALE, contact.fixtureB->GetBody()->GetPosition().y*SCALE);
+					}
+				}
 
 			}
 			//--------------------------------------------------------------------------//
@@ -663,11 +782,13 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			animatedSprite3.update(elapsed);
 			animatedSprite4.update(elapsed);
 			animatedSprite5.update(elapsed);
+			animatedSprite6.update(elapsed);
 			window->draw(animatedSprite);
 			window->draw(animatedSprite2);
 			window->draw(animatedSprite3);
 			window->draw(animatedSprite4);
 			window->draw(animatedSprite5);
+			window->draw(animatedSprite6);
 			//----Animations----//
 
 			/*if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
@@ -762,7 +883,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 			
 				sf::Time score_elapsed = score_clock.getElapsedTime();
-				if (enemy1->get_health() <= 0 || enemy2->get_health() <= 0)
+				if (enemy1->get_health() <= 0 || enemy2->get_health() <= 0 || enemy3->get_health() <= 0)
 				{
 					if (enemy1->get_health() <= 0 && enemy1->get_has_score_given() == false)
 					{
@@ -774,13 +895,18 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 						score += score_elapsed.asSeconds() * 10;
 						enemy2->set_score_given_true();
 					}
+					if (enemy3->get_health() <= 0 && enemy3->get_has_score_given() == false)
+					{
+						score += score_elapsed.asSeconds() * 10;
+						enemy3->set_score_given_true();
+					}
 				}
 
 			
 			//------------------------Handling_AI----------------------------------//
 			ai_manager->update(player, enemy1);
 			ai_manager->update(player, enemy2);
-
+			ai_manager->update(player, enemy3);
 			
 
 			//-------------------------End_of_Handling_AI--------------------------//
