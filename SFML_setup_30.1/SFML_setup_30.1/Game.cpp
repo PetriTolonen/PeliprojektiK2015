@@ -165,6 +165,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	Animation* currentAnimation = &explosion;
 
 	AnimatedSprite animatedSprite(sf::seconds(0.05f), true, false);
+	animatedSprite.setOrigin(128, 128);
 	//----Animation----//
 	
 	//----Explosion_Animation----//
@@ -575,6 +576,87 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			}
 			//--------------//
 
+			//---------reduce gun cooldown-----------------//
+			player->reduce_cooldown(1);
+			enemy1->reduce_cooldown(1);
+			enemy2->reduce_cooldown(1);
+
+			//-------------------check contacts------------------------------------//
+			std::vector<ContactCheck>::iterator pos;
+			for (pos = ContactListener->_contacts.begin();
+				pos != ContactListener->_contacts.end(); ++pos) {
+				ContactCheck contact = *pos;
+
+				if ((contact.fixtureA->GetBody()->GetUserData() == "ammo" && contact.fixtureB->GetBody()->GetUserData() == "player") ||
+					(contact.fixtureA->GetBody()->GetUserData() == "player" && contact.fixtureB->GetBody()->GetUserData() == "ammo"))
+				{
+					player->reduce_health(1);
+					animatedSprite.play(*currentAnimation);
+					if (contact.fixtureA->GetBody()->GetUserData() == "ammo")
+					{
+						animatedSprite.setPosition(contact.fixtureA->GetBody()->GetPosition().x*SCALE, contact.fixtureA->GetBody()->GetPosition().y*SCALE);
+					}
+					if (contact.fixtureB->GetBody()->GetUserData() == "ammo")
+					{
+						animatedSprite.setPosition(contact.fixtureB->GetBody()->GetPosition().x*SCALE, contact.fixtureB->GetBody()->GetPosition().y*SCALE);
+					}
+					
+				}
+				if ((contact.fixtureA->GetBody()->GetUserData() == "ammo" && contact.fixtureB->GetBody()->GetUserData() == "enemy1") ||
+					(contact.fixtureA->GetBody()->GetUserData() == "enemy1" && contact.fixtureB->GetBody()->GetUserData() == "ammo"))
+				{
+					enemy1->reduce_health(1);
+					animatedSprite.play(*currentAnimation);
+					if (contact.fixtureA->GetBody()->GetUserData() == "ammo")
+					{
+						animatedSprite.setPosition(contact.fixtureA->GetBody()->GetPosition().x*SCALE, contact.fixtureA->GetBody()->GetPosition().y*SCALE);
+					}
+					if (contact.fixtureB->GetBody()->GetUserData() == "ammo")
+					{
+						animatedSprite.setPosition(contact.fixtureB->GetBody()->GetPosition().x*SCALE, contact.fixtureB->GetBody()->GetPosition().y*SCALE);
+					}
+				}
+				if ((contact.fixtureA->GetBody()->GetUserData() == "ammo" && contact.fixtureB->GetBody()->GetUserData() == "enemy2") ||
+					(contact.fixtureA->GetBody()->GetUserData() == "enemy2" && contact.fixtureB->GetBody()->GetUserData() == "ammo"))
+				{
+					enemy2->reduce_health(1);
+					animatedSprite.play(*currentAnimation);
+					if (contact.fixtureA->GetBody()->GetUserData() == "ammo")
+					{
+						animatedSprite.setPosition(contact.fixtureA->GetBody()->GetPosition().x*SCALE, contact.fixtureA->GetBody()->GetPosition().y*SCALE);
+					}
+					if (contact.fixtureB->GetBody()->GetUserData() == "ammo")
+					{
+						animatedSprite.setPosition(contact.fixtureB->GetBody()->GetPosition().x*SCALE, contact.fixtureB->GetBody()->GetPosition().y*SCALE);
+					}
+				}
+
+			}
+			//--------------------------------------------------------------------------//
+
+			//-----------------------Go through ammo and delete-----------------------------------------------//
+
+			std::vector<Ammo*>::iterator it = ammo_vector.begin();
+			while (it != ammo_vector.end())
+			{
+				if ((*it)->get_timer() <= 0)/*(((*it)->get_position().x * SCALE)> player->get_position().x + (500) || ((*it)->get_position().x * SCALE)< player->get_position().x - (500) ||
+											((*it)->get_position().y * SCALE)> player->get_position().y + (300) || ((*it)->get_position().y * SCALE)< player->get_position().y - (300)
+											)*/
+				{
+
+
+					//(*it)->destroy();	
+					world.DestroyBody((*it)->get_ammo_body());
+					it = ammo_vector.erase(it);
+				}
+				else
+					it++;
+			}
+
+			//-----------------------------------------------------------------------//
+
+
+
 			//----Animations----//
 			animatedSprite.update(elapsed);
 			animatedSprite2.update(elapsed);
@@ -598,11 +680,11 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 		
 			//window.draw(sprite_tank_hull);
 			//window.draw(sprite_tank_turret);
+			
+			//---Draw_trees---//
 			window->draw(map2);
 			window->draw(map4);
 		
-			//---Score_during_playing---//
-			
 			if (player->get_health() > 0)
 			{
 				// Declare and load a font
@@ -630,7 +712,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 
 			//---after_player_dies---//
-			if (player->get_health() < 0)
+			if (player->get_health() <= 0)
 			{
 				// Declare and load a font
 				sf::Font font;
@@ -638,14 +720,14 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				// Create a text
 				std::ostringstream score_text;
 				score_text << "SCORE " << score;
-				
+
 				sf::Text text;
 				text.setFont(font);
 				text.setCharacterSize(140);
 				text.setStyle(sf::Text::Bold);
 				text.setColor(sf::Color::Yellow);
 				text.setString(score_text.str());
-				
+
 				// Draw it
 				window->setView(window->getDefaultView());
 				sf::FloatRect textRect = text.getLocalBounds();
@@ -660,56 +742,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			//---Draw_display---//
 			window->display();
 
-			//---------reduce gun cooldown-----------------//
-			player->reduce_cooldown(1);
-			enemy1->reduce_cooldown(1);
-			enemy2->reduce_cooldown(1);
-
-			//-------------------check contacts------------------------------------//
-			std::vector<ContactCheck>::iterator pos;
-			for (pos = ContactListener->_contacts.begin();
-				pos != ContactListener->_contacts.end(); ++pos) {
-				ContactCheck contact = *pos;
-				
-				if ((contact.fixtureA->GetBody()->GetUserData() == "ammo" && contact.fixtureB->GetBody()->GetUserData() == "player") ||
-					(contact.fixtureA->GetBody()->GetUserData() == "player" && contact.fixtureB->GetBody()->GetUserData() == "ammo"))
-				{													
-					player->reduce_health(1);
-				}
-				if ((contact.fixtureA->GetBody()->GetUserData() == "ammo" && contact.fixtureB->GetBody()->GetUserData() == "enemy1") ||
-					(contact.fixtureA->GetBody()->GetUserData() == "enemy1" && contact.fixtureB->GetBody()->GetUserData() == "ammo"))
-				{													
-					enemy1->reduce_health(1);
-				}
-				if ((contact.fixtureA->GetBody()->GetUserData() == "ammo" && contact.fixtureB->GetBody()->GetUserData() == "enemy2") ||
-					(contact.fixtureA->GetBody()->GetUserData() == "enemy2" && contact.fixtureB->GetBody()->GetUserData() == "ammo"))
-				{
-					enemy2->reduce_health(1);
-				}
-				
-			}
-			//--------------------------------------------------------------------------//
-
-			//-----------------------Go through ammo and delete-----------------------------------------------//
 			
-			std::vector<Ammo*>::iterator it = ammo_vector.begin();
-				while ( it != ammo_vector.end())
-				{
-					if ((*it)->get_timer() <= 0 )/*(((*it)->get_position().x * SCALE)> player->get_position().x + (500) || ((*it)->get_position().x * SCALE)< player->get_position().x - (500) ||
-						((*it)->get_position().y * SCALE)> player->get_position().y + (300) || ((*it)->get_position().y * SCALE)< player->get_position().y - (300)
-						)*/
-					{
-
-
-						//(*it)->destroy();	
-						world.DestroyBody((*it)->get_ammo_body());
-						it = ammo_vector.erase(it);
-					}
-					else
-						it++;
-				}
-
-			//-----------------------------------------------------------------------//
 				sf::Time score_elapsed = score_clock.getElapsedTime();
 				if (enemy1->get_health() < 0 || enemy2->get_health() < 0)
 				{
@@ -734,7 +767,9 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 			//-------------------------End_of_Handling_AI--------------------------//
 
-			break;
+			//---Score_during_playing---//
+
+			break;			
 		}
 	}
 

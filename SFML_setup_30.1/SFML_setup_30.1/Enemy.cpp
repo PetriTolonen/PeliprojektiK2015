@@ -155,7 +155,7 @@ void Enemy::move_to(sf::Vector2f player_position, float player_rotation)
 	}
 
 	//----------------------turret_rotation_towards_player--------------------------------//
-	if (health>=0)
+	if (health>0)
 	{
 		sf::Vector2f coord_pos = player_position;
 
