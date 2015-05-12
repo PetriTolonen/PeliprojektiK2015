@@ -83,10 +83,10 @@ void Player::on_update(sf::Event event, sf::RenderWindow* win)
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		{
-			momentary_acceleration_forward = tank_hull.get_acceleration_forward();
-			momentary_max_speed_forward = tank_hull.get_max_speed_forward();
-			momentary_speed_forward += _elapsed * momentary_acceleration_forward;
-
+			momentary_acceleration_forward = t->get_acceleration_forward();
+			momentary_max_speed_forward = t->get_max_speed_forward();
+			momentary_speed_forward += _elapsed *momentary_acceleration_forward; //_elapsed
+			std::cout << momentary_max_speed_forward << std::endl;
 
 
 			if (momentary_speed_forward > momentary_max_speed_forward)
