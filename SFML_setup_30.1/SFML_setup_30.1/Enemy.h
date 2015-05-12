@@ -41,6 +41,8 @@ public:
 	void set_score_given_false();
 	void set_score_given_true();
 
+	void set_body_position(float x, float y);
+
 private:
 	bool at_destination;
 	int health;

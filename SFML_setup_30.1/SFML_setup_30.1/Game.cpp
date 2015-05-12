@@ -723,7 +723,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 					textRect2.top + textRect2.height / 2.0f);
 
 				text.setPosition(sf::Vector2f(screen_widht*0.2, (screen_height)*0.1));
-				text2.setPosition(sf::Vector2f(screen_widht*0.2, (screen_height)*0.05));
+				text2.setPosition(sf::Vector2f(screen_widht*0.2, (screen_height)*0.03));
 				window->draw(text);
 				window->draw(text2);
 			}
@@ -781,7 +781,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			ai_manager->update(player, enemy1);
 			ai_manager->update(player, enemy2);
 
-				
+			
 
 			//-------------------------End_of_Handling_AI--------------------------//
 

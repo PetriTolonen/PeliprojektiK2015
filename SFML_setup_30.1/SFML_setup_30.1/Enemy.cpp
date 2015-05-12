@@ -140,13 +140,11 @@ b2Body* Enemy::get_body()
 
 void Enemy::move_to(sf::Vector2f player_position, float player_rotation)
 {
-
-	std::cout << timer << std::endl;
-	if (timer <= 0)
+	if (timer <= 1)
 	{
 		timer = 0;
-		random_x = rand() % 275 + 70;
-		random_y = rand() % 275 + 70;
+		random_x = rand() % 600;
+		random_y = rand() % 600;
 	}
 	timer--;
 	if (timer <= 0)
@@ -194,8 +192,8 @@ void Enemy::move_to(sf::Vector2f player_position, float player_rotation)
 		//----------------------end_of_turret_rotation_towards_player--------------------------------//
 
 
-		float dbx = x - coord_pos.x + random_x;
-		float dby = y - coord_pos.y + random_y;
+		float dbx = x - 300 -coord_pos.x + random_x;
+		float dby = y - 300 -coord_pos.y + random_y;
 
 		float body_rotation = (atan2(dby, dbx)) * 180 / M_PI;
 
@@ -245,6 +243,13 @@ void Enemy::move_to(sf::Vector2f player_position, float player_rotation)
 
 		enemy_body->SetLinearVelocity(b2Vec2(b2Vec2(sin(enemy_body->GetAngle())*-momentary_speed_forward, cos(enemy_body->GetAngle())*momentary_speed_forward)));
 	}
+	else if (y < player_position.y-700)
+	{
+		float xr = (rand() % 4097);
+		set_body_position((0 + xr)/30, (player_position.y+2000)/30);
+		health = 20;
+		score_given = false;
+	}
 }
 
 int Enemy::get_health()
@@ -285,6 +290,11 @@ void Enemy::set_score_given_false()
 void Enemy::set_score_given_true()
 {
 	score_given = true;
+}
+
+void Enemy::set_body_position(float x, float y)
+{
+	enemy_body->SetTransform(b2Vec2(x, y), 0);
 }
 //
 ////-------------------------------rotate-----------------------------------------------//
