@@ -154,9 +154,9 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	Tank_hull hull2("tank_hull", 0.6, 0.2, 1, 7, 1, 38000, 165);
 	Tank_turret turret2("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.8, 250);
 	Tank_hull hull3("tank_hull", 0.6, 0.2, 1, 7, 1, 38000, 165);
-	Tank_turret turret3("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.6, 250);
-	Tank_hull hull4("tank_hull", 0.6, 0.2, 1, 5, 1, 38000, 165);
-	Tank_turret turret4("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.6, 250);
+	Tank_turret turret3("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.8, 250);
+	Tank_hull hull4("tank_hull", 0.6, 0.2, 1, 7, 1, 38000, 165);
+	Tank_turret turret4("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.8, 250);
 	Player *player = new Player(player_body, &hull, &turret, 0, 0, 0, 0, 0, 0, 0, 0);
 	Enemy *enemy1 = new Enemy(enemy_body1, &hull2, &turret2, 0, 0, 0, 0, 0, 0, 0, 0);
 	Enemy *enemy2 = new Enemy(enemy_body2, &hull3, &turret3, 0, 0, 0, 0, 0, 0, 0, 0);
