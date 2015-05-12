@@ -701,13 +701,31 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				text.setColor(sf::Color::Yellow);
 				text.setString(re_text.str());
 
+				font.loadFromFile("impact.ttf");
+				// Create a text
+				std::ostringstream he_text;
+				he_text << "Health " << player->get_health();
+
+				sf::Text text2;
+				text2.setFont(font);
+				text2.setCharacterSize(50);
+				text2.setStyle(sf::Text::Bold);
+				text2.setColor(sf::Color::Red);
+				text2.setString(he_text.str());
+
 				// Draw it
 				window->setView(window->getDefaultView());
 				sf::FloatRect textRect = text.getLocalBounds();
 				text.setOrigin(textRect.left + textRect.width / 2.0f,
 					textRect.top + textRect.height / 2.0f);
-				text.setPosition(sf::Vector2f(screen_widht*0.3, (screen_height)*0.9));
+				sf::FloatRect textRect2 = text2.getLocalBounds();
+				text2.setOrigin(textRect2.left + textRect2.width / 2.0f,
+					textRect2.top + textRect2.height / 2.0f);
+
+				text.setPosition(sf::Vector2f(screen_widht*0.2, (screen_height)*0.1));
+				text2.setPosition(sf::Vector2f(screen_widht*0.2, (screen_height)*0.05));
 				window->draw(text);
+				window->draw(text2);
 			}
 
 
@@ -744,14 +762,14 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 			
 				sf::Time score_elapsed = score_clock.getElapsedTime();
-				if (enemy1->get_health() < 0 || enemy2->get_health() < 0)
+				if (enemy1->get_health() <= 0 || enemy2->get_health() <= 0)
 				{
-					if (enemy1->get_health() < 0 && enemy1->get_has_score_given() == false)
+					if (enemy1->get_health() <= 0 && enemy1->get_has_score_given() == false)
 					{
 						score += score_elapsed.asSeconds() * 10;
 						enemy1->set_score_given_true();
 					}
-					if (enemy2->get_health() < 0 && enemy2->get_has_score_given() == false)
+					if (enemy2->get_health() <= 0 && enemy2->get_has_score_given() == false)
 					{
 						score += score_elapsed.asSeconds() * 10;
 						enemy2->set_score_given_true();
