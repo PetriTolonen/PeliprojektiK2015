@@ -30,7 +30,8 @@ void ObjectManager::add_object(Object* const object) {
 
 	bool add = !contains_object(object);
 
-	if (add) {
+	if (add) 
+	{
 		objects.push_back(object);
 	}
 }
@@ -52,7 +53,8 @@ void ObjectManager::update(sf::Event event, sf::RenderWindow* win)
 			return;
 		}
 		e->update(event, win);
-	});
+	}); 
+
 }
 
 void ObjectManager::draw(sf::RenderWindow* win)

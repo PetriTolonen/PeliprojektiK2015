@@ -8,6 +8,7 @@ Object::Object() : enabled(true), destroyed(false)
 
 Object::~Object()
 {
+	destroyed = true;
 }
 
 void Object::set_texture(std::string texture_name)
