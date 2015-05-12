@@ -940,7 +940,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	}	
 
 	//---wait_before_final_gameover---//
-	if (player->get_health() < 0)
+	if (player->get_health() <= 0)
 	{
 		time_passed_after_death--;
 		
