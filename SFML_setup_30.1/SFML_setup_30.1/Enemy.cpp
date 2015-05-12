@@ -249,6 +249,7 @@ void Enemy::move_to(sf::Vector2f player_position, float player_rotation)
 		set_body_position((0 + xr)/30, (player_position.y+2000)/30);
 		health = 20;
 		score_given = false;
+		animation_played = false;
 	}
 }
 

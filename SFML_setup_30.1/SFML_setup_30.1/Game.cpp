@@ -195,14 +195,14 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	Animation explosion2;
 	explosion2.setSpriteSheet(animtexture2);
 
-	for (int i = 0; i <= 16; i++)
+	for (int i = 0; i <= 31; i++)
 	{
 		explosion2.addFrame(sf::IntRect(i * 512, 0, 512, 512));
 	}
 
 	Animation* currentAnimation2 = &explosion2;
 
-	AnimatedSprite animatedSprite2(sf::seconds(0.05f), true, false);
+	AnimatedSprite animatedSprite2(sf::seconds(0.03f), true, false);
 	//----Animation----//
 
 	//----Shooting_Animation----//
