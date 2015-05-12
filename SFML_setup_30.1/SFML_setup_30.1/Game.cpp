@@ -601,27 +601,32 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			window->draw(map2);
 			window->draw(map4);
 		
-			// Declare and load a font
-			sf::Font font;
-			font.loadFromFile("impact.ttf");
-			// Create a text
-			std::ostringstream re_text;
-			re_text << "Score " << score;
+			//---Score_during_playing---//
+			
+			if (player->get_health() > 0)
+			{
+				// Declare and load a font
+				sf::Font font;
+				font.loadFromFile("impact.ttf");
+				// Create a text
+				std::ostringstream re_text;
+				re_text << "Score " << score;
 
-			sf::Text text;
-			text.setFont(font);
-			text.setCharacterSize(100);
-			text.setStyle(sf::Text::Bold);
-			text.setColor(sf::Color::Yellow);
-			text.setString(re_text.str());
+				sf::Text text;
+				text.setFont(font);
+				text.setCharacterSize(100);
+				text.setStyle(sf::Text::Bold);
+				text.setColor(sf::Color::Yellow);
+				text.setString(re_text.str());
 
-			// Draw it
-			window->setView(window->getDefaultView());
-			sf::FloatRect textRect = text.getLocalBounds();
-			text.setOrigin(textRect.left + textRect.width / 2.0f,
-				textRect.top + textRect.height / 2.0f);
-			text.setPosition(sf::Vector2f(screen_widht*0.3, (screen_height)*0.9));
-			window->draw(text);
+				// Draw it
+				window->setView(window->getDefaultView());
+				sf::FloatRect textRect = text.getLocalBounds();
+				text.setOrigin(textRect.left + textRect.width / 2.0f,
+					textRect.top + textRect.height / 2.0f);
+				text.setPosition(sf::Vector2f(screen_widht*0.3, (screen_height)*0.9));
+				window->draw(text);
+			}
 
 
 			//---after_player_dies---//
@@ -710,12 +715,12 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				{
 					if (enemy1->get_health() < 0 && enemy1->get_has_score_given() == false)
 					{
-						score += score_elapsed.asMilliseconds() * 1;
+						score += score_elapsed.asSeconds() * 10;
 						enemy1->set_score_given_true();
 					}
 					if (enemy2->get_health() < 0 && enemy2->get_has_score_given() == false)
 					{
-						score++;
+						score += score_elapsed.asSeconds() * 10;
 						enemy2->set_score_given_true();
 					}
 				}
