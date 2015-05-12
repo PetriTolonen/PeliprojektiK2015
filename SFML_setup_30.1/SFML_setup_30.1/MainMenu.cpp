@@ -1,4 +1,5 @@
 #include "MainMenu.h"
+#include <iostream>
 
 MainMenu::menu_result MainMenu::show(sf::RenderWindow* win)
 {
@@ -20,6 +21,7 @@ MainMenu::menu_result MainMenu::show(sf::RenderWindow* win)
 	exit_button.rect.height = 1023;
 	exit_button.rect.top = 383;
 	exit_button.rect.width = 560;
+	
 	exit_button.action = exit;
 
 	menu_items.push_back(play_button);
@@ -29,13 +31,14 @@ MainMenu::menu_result MainMenu::show(sf::RenderWindow* win)
 	win->draw(sprite);
 	win->display();
 
-	return get_menu_response(win);
+	return get_menu_response(win, &sprite);
 }
 
 MainMenu::menu_result MainMenu::handle_click(int x, int y)
 {
 	std::list<menu_item>::iterator it;
 
+	std::cout << x << " " << y << std::endl;
 	for (it = menu_items.begin(); it != menu_items.end(); it++)
 	{
 		sf::Rect<int> menu_item_rect = (*it).rect;
@@ -51,7 +54,7 @@ MainMenu::menu_result MainMenu::handle_click(int x, int y)
 	return none;
 }
 
-MainMenu::menu_result MainMenu::get_menu_response(sf::RenderWindow* win)
+MainMenu::menu_result MainMenu::get_menu_response(sf::RenderWindow* win, sf::Sprite* sprite)
 {
 	sf::Event menu_event;
 
@@ -60,6 +63,31 @@ MainMenu::menu_result MainMenu::get_menu_response(sf::RenderWindow* win)
 
 		while (win->pollEvent(menu_event))
 		{
+			//Window Resized?
+			if (menu_event.type == sf::Event::Resized)
+			{
+				//The Window was Resized - Maintain Aspect Ratio
+				float AspectX = (float)win->getSize().x / 1920;
+				float AspectY = (float)win->getSize().y / 1080;
+
+				//Find Which Is the smaller aspect
+				if (AspectX < AspectY)
+				{
+					//Resize Y To Fit
+					sf::Vector2u tempSize = sf::Vector2u(win->getSize().x, (int)(AspectX * 1080));
+					win->setSize(tempSize);
+				}
+				else if (AspectX > AspectY)
+				{
+					//Resize X To Fit
+					sf::Vector2u tempSize = sf::Vector2u((int)(AspectY * 1920), win->getSize().y);
+					win->setSize(tempSize);
+				}
+			}
+
+			win->draw(*sprite);
+			win->display();
+
 			if (menu_event.type == sf::Event::MouseButtonPressed)
 			{
 				return handle_click(menu_event.mouseButton.x, menu_event.mouseButton.y);

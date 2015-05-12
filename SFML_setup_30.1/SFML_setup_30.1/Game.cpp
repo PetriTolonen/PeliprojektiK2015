@@ -878,6 +878,28 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			}
 			//-----------------------//
 
+			//Window Resized?
+			if (event.type == sf::Event::Resized)
+			{
+				//The Window was Resized - Maintain Aspect Ratio
+				float AspectX = (float)window->getSize().x / screen_widht;
+				float AspectY = (float)window->getSize().y / screen_height;
+
+				//Find Which Is the smaller aspect
+				if (AspectX < AspectY)
+				{
+					//Resize Y To Fit
+					sf::Vector2u tempSize = sf::Vector2u(window->getSize().x, (int)(AspectX * screen_height));
+					window->setSize(tempSize);
+				}
+				else if (AspectX > AspectY)
+				{
+					//Resize X To Fit
+					sf::Vector2u tempSize = sf::Vector2u((int)(AspectY * screen_widht), window->getSize().y);
+					window->setSize(tempSize);
+				}
+			}
+
 			//---Draw_display---//
 			window->display();
 
@@ -923,7 +945,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	{
 		if (event.key.code == sf::Keyboard::Escape) show_menu(window);
 	}	
-	
+
 	//---wait_before_final_gameover---//
 	if (player->get_health() < 0)
 	{

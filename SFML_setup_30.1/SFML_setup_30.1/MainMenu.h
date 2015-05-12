@@ -22,7 +22,7 @@ public:
 
 	menu_result show(sf::RenderWindow* win);
 private:
-	menu_result get_menu_response(sf::RenderWindow* win);
+	menu_result get_menu_response(sf::RenderWindow* win, sf::Sprite* sprite);
 	menu_result handle_click(int x, int y);
 	std::list<menu_item> menu_items;
 };
