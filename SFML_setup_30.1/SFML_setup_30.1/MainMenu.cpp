@@ -37,8 +37,6 @@ MainMenu::menu_result MainMenu::show(sf::RenderWindow* win)
 MainMenu::menu_result MainMenu::handle_click(int x, int y)
 {
 	std::list<menu_item>::iterator it;
-
-	std::cout << x << " " << y << std::endl;
 	for (it = menu_items.begin(); it != menu_items.end(); it++)
 	{
 		sf::Rect<int> menu_item_rect = (*it).rect;
