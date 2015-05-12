@@ -63,7 +63,6 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	time_passed_after_death = 60 * 10;
 
 	score = 0;
-	restart_once = false;
 	//---------Contact Listener-----------------//
 	ContactListener = new MyContactListener();
 	world.SetContactListener(ContactListener);
@@ -259,7 +258,6 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	//view->setCenter(player.get_position());
 	
 	sf::Clock clock;
-	sf::Clock score_clock;
 	
 	while (!is_exiting())
 	{
@@ -288,11 +286,6 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			window->clear(sf::Color(100, 200, 0));
 
 			sf::Time elapsed = clock.restart();
-			if (restart_once == false)
-			{
-				score_clock.restart();
-				restart_once = true;
-			}
 			set_view(view, player);
 
 			world.Step(1.0f / 60.0f, 8, 4);
@@ -904,22 +897,22 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			window->display();
 
 			
-				sf::Time score_elapsed = score_clock.getElapsedTime();
+
 				if (enemy1->get_health() <= 0 || enemy2->get_health() <= 0 || enemy3->get_health() <= 0)
 				{
 					if (enemy1->get_health() <= 0 && enemy1->get_has_score_given() == false)
 					{
-						score += score_elapsed.asSeconds() * 10;
+						score += 0.1*player->get_distance_traveled().y * 1;
 						enemy1->set_score_given_true();
 					}
 					if (enemy2->get_health() <= 0 && enemy2->get_has_score_given() == false)
 					{
-						score += score_elapsed.asSeconds() * 10;
+						score += 0.1*player->get_distance_traveled().y * 1;
 						enemy2->set_score_given_true();
 					}
 					if (enemy3->get_health() <= 0 && enemy3->get_has_score_given() == false)
 					{
-						score += score_elapsed.asSeconds() * 10;
+						score += 0.1*player->get_distance_traveled().y * 1;
 						enemy3->set_score_given_true();
 					}
 				}
