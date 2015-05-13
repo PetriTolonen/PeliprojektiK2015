@@ -63,6 +63,34 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	time_passed_after_death = 60 * 10;
 
 	score = 0;
+
+	//---cooldownbar---//
+	sf::Texture cooldown_texture;
+	if (cooldown_texture.loadFromFile("box.png") != true)
+	{
+		return;
+	}
+
+	sf::Sprite cooldown_sprite(cooldown_texture);
+	//---player_life_bar---//
+	
+	sf::Texture player_healtbar_texture;
+	if (player_healtbar_texture.loadFromFile("box.png") != true)
+	{
+		return;
+	}
+
+	sf::Sprite player_healtbar_sprite(player_healtbar_texture);
+	
+	sf::Texture player_healtbar_texture_backround;
+	if (player_healtbar_texture_backround.loadFromFile("life_bar_back.png") != true)
+	{
+		return;
+	}
+
+	sf::Sprite player_healtbar__backround_sprite(player_healtbar_texture_backround);
+
+
 	//---------Contact Listener-----------------//
 	ContactListener = new MyContactListener();
 	world.SetContactListener(ContactListener);
@@ -799,6 +827,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			window->draw(map2);
 			window->draw(map4);
 		
+			//---Information_hud---//
 			if (player->get_health() > 0)
 			{
 				// Declare and load a font
@@ -818,7 +847,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				font.loadFromFile("impact.ttf");
 				// Create a text
 				std::ostringstream he_text;
-				he_text << "Health " << player->get_health();
+				he_text << "Health: ";
 
 				sf::Text text2;
 				text2.setFont(font);
@@ -836,10 +865,21 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				text2.setOrigin(textRect2.left + textRect2.width / 2.0f,
 					textRect2.top + textRect2.height / 2.0f);
 
+				player_healtbar_sprite.setOrigin(sf::Vector2f(0, 20));
+				player_healtbar_sprite.setPosition(screen_widht*0.14, screen_height*0.2);
+				player_healtbar_sprite.setScale(sf::Vector2f(0.1*player->get_health(), 1));
+				
+				player_healtbar__backround_sprite.setOrigin(sf::Vector2f(0, 20));
+				player_healtbar__backround_sprite.setPosition(screen_widht*0.14, screen_height*0.2);
+				player_healtbar__backround_sprite.setScale(sf::Vector2f(0.1*100, 1));
+
 				text.setPosition(sf::Vector2f(screen_widht*0.2, (screen_height)*0.1));
-				text2.setPosition(sf::Vector2f(screen_widht*0.2, (screen_height)*0.03));
+				text2.setPosition(sf::Vector2f(screen_widht*0.1, (screen_height)*0.2));
 				window->draw(text);
 				window->draw(text2);
+				window->draw(player_healtbar__backround_sprite);
+				window->draw(player_healtbar_sprite);
+				
 			}
 
 
