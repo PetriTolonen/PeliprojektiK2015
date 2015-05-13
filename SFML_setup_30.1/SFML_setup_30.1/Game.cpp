@@ -102,7 +102,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	FixtureDef2.shape = &Shape2;
 	enemy_body1->SetUserData("enemy1");
 	enemy_body1->CreateFixture(&FixtureDef2);
-	enemy_body1->SetTransform(b2Vec2(2048.0/ SCALE, ((screen_height / 2) +500)/ SCALE), 0);
+	enemy_body1->SetTransform(b2Vec2(2048.0/ SCALE, ((screen_height / 2) +1500)/ SCALE), 0);
 	//Tank movement dampening
 	enemy_body1->SetLinearDamping(5);
 	enemy_body1->SetAngularDamping(10);
@@ -674,7 +674,11 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 			//--------------//
 
 			//---------reduce gun cooldown-----------------//
-			player->reduce_cooldown(1);
+			if (player->get_cooldown() > 0)
+			{
+				player->reduce_cooldown(1);
+			}
+			
 			enemy1->reduce_cooldown(1);
 			enemy2->reduce_cooldown(1);
 			enemy3->reduce_cooldown(1);
@@ -827,6 +831,18 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				text2.setColor(sf::Color::Red);
 				text2.setString(he_text.str());
 
+				//Create a text
+				std::ostringstream cd_text;
+				cd_text << "Weapon cooldown " << player->get_cooldown();
+
+				sf::Text text3;
+				text3.setFont(font);
+				text3.setCharacterSize(50);
+				text3.setStyle(sf::Text::Bold);
+				text3.setColor(sf::Color::Yellow);
+				text3.setString(cd_text.str());
+				
+			
 				// Draw it
 				window->setView(window->getDefaultView());
 				sf::FloatRect textRect = text.getLocalBounds();
@@ -835,11 +851,16 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 				sf::FloatRect textRect2 = text2.getLocalBounds();
 				text2.setOrigin(textRect2.left + textRect2.width / 2.0f,
 					textRect2.top + textRect2.height / 2.0f);
+				sf::FloatRect textRect3 = text3.getLocalBounds();
+				text3.setOrigin(textRect3.left + textRect3.width / 2.0f,
+					textRect3.top + textRect3.height / 2.0f);
 
 				text.setPosition(sf::Vector2f(screen_widht*0.2, (screen_height)*0.1));
 				text2.setPosition(sf::Vector2f(screen_widht*0.2, (screen_height)*0.03));
+				text3.setPosition(sf::Vector2f(screen_widht*0.2, (screen_height)*0.18));
 				window->draw(text);
 				window->draw(text2);
+				window->draw(text3);
 			}
 
 
