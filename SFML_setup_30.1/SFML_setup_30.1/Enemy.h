@@ -46,14 +46,13 @@ public:
 private:
 	bool at_destination;
 	int health;
-	//sf::Sprite player_sprite_hull;
 	b2Body* enemy_body;
 	Tank_turret* t_turret;
 	Tank_hull* t_hull;
 	float x;
 	float y;
-	float turret_rotation_speed; //= 0;
-	float hull_rotation_speed; //= 0;
+	float turret_rotation_speed;
+	float hull_rotation_speed;
 	//----------Clock-----------------//
 	sf::Time t1 = sf::seconds(0.1f);
 	float _elapsed = t1.asSeconds();

@@ -19,8 +19,6 @@ public:
 	int get_damage();
 	int get_penetration();
 
-	//sf::Vector2f get_position();
-
 	void on_draw(sf::RenderWindow* win);
 
 	b2Vec2 get_position();

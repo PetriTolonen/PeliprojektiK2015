@@ -185,14 +185,14 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	enemy_body3->SetAngularDamping(10);
 	//----------------//
 
-	Tank_hull hull("tank_hull", 1.2, 0.2, 1, 5, 1, 38000, 165);
-	Tank_turret turret("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 1.2, 200);
-	Tank_hull hull2("tank_hull", 0.6, 0.2, 1, 7, 1, 38000, 165);
-	Tank_turret turret2("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.8, 250);
-	Tank_hull hull3("tank_hull", 0.6, 0.2, 1, 7, 1, 38000, 165);
-	Tank_turret turret3("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.8, 250);
-	Tank_hull hull4("tank_hull", 0.6, 0.2, 1, 7, 1, 38000, 165);
-	Tank_turret turret4("tank_tower", 10, 10, 10, 10, 45, 100, 0.8, 1.5, 0.8, 250);
+	Tank_hull hull("tank_hull", 1.2, 0.2, 1, 7, 1, 38000, 165);
+	Tank_turret turret("tank_tower", 45, 1.4, 200);
+	Tank_hull hull2("tank_hull", 0.6, 0.2, 1, 9, 1, 38000, 165);
+	Tank_turret turret2("tank_tower", 45, 1.2, 250);
+	Tank_hull hull3("tank_hull", 0.6, 0.2, 1, 9, 1, 38000, 165);
+	Tank_turret turret3("tank_tower", 45, 1.2, 250);
+	Tank_hull hull4("tank_hull", 0.6, 0.2, 1, 9, 1, 38000, 165);
+	Tank_turret turret4("tank_tower", 45, 1.2, 250);
 	Player *player = new Player(player_body, &hull, &turret, 0, 0, 0, 0, 0, 0, 0, 0);
 	Enemy *enemy1 = new Enemy(enemy_body1, &hull2, &turret2, 0, 0, 0, 0, 0, 0, 0, 0);
 	Enemy *enemy2 = new Enemy(enemy_body2, &hull3, &turret3, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -403,7 +403,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 					//------------------------//
 
-					Ammo *round = new Ammo("ammo", ammo_body, 12.0f, 1.0, 3.0, enemy1->get_position().x, enemy1->get_position().y);
+					Ammo *round = new Ammo("ammo", ammo_body, 16.0f, 1.0, 3.0, enemy1->get_position().x, enemy1->get_position().y);
 
 					float x = 0;
 					float y = 0;
@@ -461,7 +461,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 					//------------------------//
 
-					Ammo *round = new Ammo("ammo", ammo_body, 12.0f, 1.0, 3.0, enemy2->get_position().x, enemy2->get_position().y);
+					Ammo *round = new Ammo("ammo", ammo_body, 16.0f, 1.0, 3.0, enemy2->get_position().x, enemy2->get_position().y);
 
 					float x = 0;
 					float y = 0;
@@ -519,7 +519,7 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 
 					//------------------------//
 
-					Ammo *round = new Ammo("ammo", ammo_body, 12.0f, 1.0, 3.0, enemy3->get_position().x, enemy3->get_position().y);
+					Ammo *round = new Ammo("ammo", ammo_body, 16.0f, 1.0, 3.0, enemy3->get_position().x, enemy3->get_position().y);
 
 					float x = 0;
 					float y = 0;

@@ -39,13 +39,6 @@ void Object::set_position(sf::Vector2f vector)
 	sprite_name.setPosition(vector);
 }
 
-/*
-void Object::set_rotation(float r)
-{
-	sprite_name.setRotation(r);
-}
-*/
-
 void Object::set_position(float x, float y)
 {
 	sprite_name.setPosition(x, y);
@@ -86,5 +79,4 @@ sf::Sprite&Object::get_sprite()
 
 void Object::on_update(sf::Event event, sf::RenderWindow* win)
 {
-
 }
