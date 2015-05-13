@@ -18,15 +18,10 @@ public:
 	void update(sf::Event event, sf::RenderWindow* win);
 	void on_draw(sf::RenderWindow* win);
 	void reduce_health(int amount);
-
 	void set_position(float x, float y);
-	
-	
-
 	float get_rotation();
 	float get_rotation_turret();
 	int get_cooldown();
-	
 	sf::Vector2f get_position();
 	bool get_can_fire();
 	void set_cooldown();
@@ -40,7 +35,6 @@ public:
 	bool get_has_score_given();
 	void set_score_given_false();
 	void set_score_given_true();
-
 	void set_body_position(float x, float y);
 
 private:
@@ -52,15 +46,13 @@ private:
 	float x;
 	float y;
 	float turret_rotation_speed;
-	float hull_rotation_speed;
+	float hull_rotation_speed; 
 	//----------Clock-----------------//
 	sf::Time t1 = sf::seconds(0.1f);
 	float _elapsed = t1.asSeconds();
 	//-----------Main Gun---------------------//
 	int momentary_cooldown = 0;
 	bool can_fire = true;
-
-
 	//---------Tank_hull_statistics------//
 	Tank_hull tank_hull;
 	float M_PI = 3.14159265358979323846;
@@ -73,10 +65,8 @@ private:
 	float momentary_max_speed_backward = 0;
 	float momentum = 0;
 	float weight = 0;
-
 	//------------------------------------//
 	sf::Vector2f distance_traveled;
-
 	bool animation_played;
 	float random_x;
 	float random_y;

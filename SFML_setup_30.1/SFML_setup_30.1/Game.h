@@ -24,8 +24,7 @@ public:
 	void update();
 	void gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_menu);
 	void level_creation();
-	void set_view(sf::View *view, Player *player);
-	
+	void set_view(sf::View *view, Player *player);	
 	void fire_main_gun(b2World& world, int MouseX, int MouseY, Player *player, Ammo *ammo);
 
 private:
@@ -37,14 +36,11 @@ private:
 	TileMap map2;
 	TileMap map3;
 	TileMap map4;
-
 	static ObjectManager o_manager;
-
 	int begin_of_game;
-
 	static bool is_exiting();
 	static void show_splash_screen(sf::RenderWindow *window);
-	static void show_menu(sf::RenderWindow *window); //, MainMenu *main_menu);
+	static void show_menu(sf::RenderWindow *window);
 	static void show_game_over(sf::RenderWindow *window);
 	MainMenu main_menu;
 	enum game_state {
@@ -59,12 +55,9 @@ private:
 	static game_state _game_state;
 	Ammo ammo();
 	std::vector<Ammo*> ammo_vector;
-
 	MyContactListener *ContactListener;
-
 	int time_passed_after_death;
 	int score;
-
 	int level_move_count;
 	int modulo_int;
 };

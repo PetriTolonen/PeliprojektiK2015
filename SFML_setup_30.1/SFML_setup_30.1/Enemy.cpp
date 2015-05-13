@@ -6,10 +6,8 @@ Enemy::Enemy(b2Body* enemy_body, Tank_hull* t, Tank_turret* tt, float msf, float
 	this->enemy_body = enemy_body;
 	this->t_hull = t;
 	this->t_turret = tt;
-
 	turret_rotation_speed = tt->get_traverse_speed();
 	hull_rotation_speed = t->get_traverse_speed();
-
 	momentary_speed_forward = msf;
 	momentary_max_speed_backward = msb;
 	momentary_acceleration_forward = maf;
@@ -32,8 +30,7 @@ Enemy::Enemy(b2Body* enemy_body, Tank_hull* t, Tank_turret* tt, float msf, float
 		random_x = rand() % -375 - 120;
 		random_y = rand() % -375 - 120;
 	}
-
-
+	
 	health = 20;
 	animation_played = false;
 	score_given = false;
@@ -49,7 +46,6 @@ void Enemy::on_update(sf::Event, sf::RenderWindow* win)
 {
 
 	set_position(enemy_body->GetPosition().x, enemy_body->GetPosition().y);
-
 	t_hull->get_sprite().setRotation((enemy_body->GetAngle() * (180.0f / M_PI)));
 }
 
@@ -205,7 +201,7 @@ void Enemy::move_to(sf::Vector2f player_position, float player_rotation)
 
 
 		if (body_rotation2 + 90 >180)
-		{
+		{			
 			enemy_body->SetAngularVelocity(hull_rotation_speed);
 
 		}
