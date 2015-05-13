@@ -1,11 +1,12 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "Tank.h"
 #include "IncludeHelper.h"
 #include "Object.h"
 #include "Box2D\Box2D.h"
 #include "Ammo.h"
+#include "Tank_hull.h"
+#include "Tank_turret.h"
 
 class Player : public Object
 {
@@ -28,13 +29,11 @@ public:
 
 	sf::Vector2f get_position();
 	void on_draw(sf::RenderWindow* win);
-	//float get_position_x();
-	//float get_position_y();
 	void set_body_position(float x, float y);
 	void set_position(float x, float y);
 	float rotate(float rotation_speed);
 	void set_rotation(float rot);
-	void set_weight(float weight_hull); // + float weight_turret); sitten kun turret implementoidaan
+	void set_weight(float weight_hull);
 	
 
 	sf::Vector2f get_distance_traveled();
@@ -49,14 +48,13 @@ public:
 private:
 	
 	int health;
-	//sf::Sprite player_sprite_hull;
 	b2Body* player_body;
 	Tank_turret* tt;
 	Tank_hull* t;
 	float x;
 	float y;
-	float turret_rotation_speed; //= 0;
-	float hull_rotation_speed; //= 0;
+	float turret_rotation_speed;
+	float hull_rotation_speed;
 	//----------Clock-----------------//
 	sf::Time t1 = sf::seconds(0.1f);
 	float _elapsed = t1.asSeconds();
@@ -84,12 +82,6 @@ private:
 
 	bool forward_is_pressed = false;
 	bool backward_is_pressed = false;
-	//std::string tank_name;
-
-	/*
-	float momentary_acceleration_forward = tank_hull.get_acceleration_forward();
-	float momentary_max_speed_forward = tank_hull.get_max_speed_forward();
-	*/
 
 	sf::Vector2f distance_traveled;
 

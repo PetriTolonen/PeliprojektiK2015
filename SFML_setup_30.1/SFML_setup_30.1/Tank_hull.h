@@ -1,7 +1,6 @@
 #ifndef TANK_HULL_H
 #define TANK_HULL_H
 
-#include "Tank_part.h"
 #include "Object.h"
 
 class Tank_hull : public Object
