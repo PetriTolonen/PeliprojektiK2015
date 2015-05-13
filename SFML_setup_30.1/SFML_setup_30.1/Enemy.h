@@ -1,12 +1,12 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include "Tank.h"
 #include "IncludeHelper.h"
 #include "Object.h"
 #include "Box2D\Box2D.h"
 #include "Ammo.h"
-
+#include "Tank_hull.h"
+#include "Tank_turret.h"
 
 
 class Enemy : public Object

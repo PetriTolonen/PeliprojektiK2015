@@ -26,9 +26,7 @@ public:
 	void level_creation();
 	void set_view(sf::View *view, Player *player);
 	
-	void fire_main_gun(b2World& world, int MouseX, int MouseY, Player *player, Ammo *ammo); //, Ammo *ammo);
-
-	//void CreateBox(b2World& world, int MouseX, int MouseY);
+	void fire_main_gun(b2World& world, int MouseX, int MouseY, Player *player, Ammo *ammo);
 
 private:
 	static const int screen_widht = 1920;
@@ -61,9 +59,6 @@ private:
 	static game_state _game_state;
 	Ammo ammo();
 	std::vector<Ammo*> ammo_vector;
-
-	//b2Fixture *ammo_fixture;
-	//b2Fixture *box_fixture;
 
 	MyContactListener *ContactListener;
 

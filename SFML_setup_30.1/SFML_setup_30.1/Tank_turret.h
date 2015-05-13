@@ -1,7 +1,6 @@
 #ifndef TANK_TURRET_H
 #define TANK_TURRET_H
 
-#include "Tank_part.h"
 #include "Object.h"
 
 class Tank_turret : public Object

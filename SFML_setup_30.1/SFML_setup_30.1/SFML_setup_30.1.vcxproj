@@ -151,13 +151,9 @@
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SplashScreen.cpp" />
-    <ClCompile Include="Tank.cpp" />
     <ClCompile Include="Tank_hull.cpp" />
-    <ClCompile Include="Tank_part.cpp" />
     <ClCompile Include="Tank_turret.cpp" />
     <ClCompile Include="TileMap.cpp" />
-    <ClCompile Include="Weapon.cpp" />
-    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Box2D\Box2D.h" />
@@ -222,13 +218,9 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SplashScreen.h" />
-    <ClInclude Include="Tank.h" />
     <ClInclude Include="Tank_hull.h" />
-    <ClInclude Include="Tank_part.h" />
     <ClInclude Include="Tank_turret.h" />
     <ClInclude Include="TileMap.h" />
-    <ClInclude Include="Weapon.h" />
-    <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SFML_setup_30.1.rc" />

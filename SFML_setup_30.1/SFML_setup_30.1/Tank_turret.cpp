@@ -7,7 +7,6 @@ Tank_turret::Tank_turret(std::string tank_turret_name, int af, int al, int ari, 
 	texture_name = tank_turret_name + "_256.png";
 	set_texture(texture_name);
 	object_texture.setSmooth(true);
-	//name = n;
 	armor_front = af;
 	armor_left = al;
 	armor_rear = ari;
@@ -24,7 +23,6 @@ Tank_turret::Tank_turret(std::string tank_turret_name, int af, int al, int ari, 
 Tank_turret::Tank_turret() : Object()
 {
 	texture_name = "tank_tower_256.png";
-	//name = "panzer part";
 	set_texture(texture_name);
 	armor_front = 15;
 	armor_left = 15;
@@ -53,7 +51,7 @@ void Tank_turret::rotate(float angle)
 
 void Tank_turret::on_draw(sf::RenderWindow* win)
 {
-	win->draw(sprite_name);//hull_sprite_name);
+	win->draw(sprite_name);
 }
 
 void Tank_turret::on_update()
