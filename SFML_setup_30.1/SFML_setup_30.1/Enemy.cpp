@@ -6,11 +6,8 @@ Enemy::Enemy(b2Body* enemy_body, Tank_hull* t, Tank_turret* tt, float msf, float
 	this->enemy_body = enemy_body;
 	this->t_hull = t;
 	this->t_turret = tt;
-
 	turret_rotation_speed = tt->get_traverse_speed();
 	hull_rotation_speed = t->get_traverse_speed();
-	//enemy_body->SetUserData(this);
-
 	momentary_speed_forward = msf;
 	momentary_max_speed_backward = msb;
 	momentary_acceleration_forward = maf;
@@ -33,8 +30,7 @@ Enemy::Enemy(b2Body* enemy_body, Tank_hull* t, Tank_turret* tt, float msf, float
 		random_x = rand() % -375 - 120;
 		random_y = rand() % -375 - 120;
 	}
-
-
+	
 	health = 20;
 	animation_played = false;
 	score_given = false;
@@ -50,7 +46,6 @@ void Enemy::on_update(sf::Event, sf::RenderWindow* win)
 {
 
 	set_position(enemy_body->GetPosition().x, enemy_body->GetPosition().y);
-
 	t_hull->get_sprite().setRotation((enemy_body->GetAngle() * (180.0f / M_PI)));
 }
 
@@ -116,13 +111,11 @@ bool Enemy::get_can_fire()
 	if (momentary_cooldown <= 0)
 	{
 		can_fire = true;
-		//std::cout << __LINE__ << "Main gun was fired succesfully" << std::endl;
 
 	}
 	else
 	{
 		can_fire = false;
-		//std::cout << __LINE__ << " failed to fire the main gun" << std::endl;
 	}
 
 	return can_fire;
@@ -209,28 +202,14 @@ void Enemy::move_to(sf::Vector2f player_position, float player_rotation)
 
 
 		if (body_rotation2 + 90 >180)
-		{
-			//t_turret->get_sprite().rotate(t_turret->get_traverse_speed() * 10 * _elapsed);
+		{			
 			enemy_body->SetAngularVelocity(hull_rotation_speed);
 
 		}
 		if (body_rotation2 + 90<180)
 		{
-			//t_turret->get_sprite().rotate(-t_turret->get_traverse_speed() * 10 * _elapsed);
 			enemy_body->SetAngularVelocity(-hull_rotation_speed);
 		}
-
-
-		/*if (at_destination == false)
-		{
-		temp--;
-		if (temp <= 0)
-		{
-		at_destination == true;
-		temp = 1000;
-		}
-		}*/
-
 
 		momentary_acceleration_forward = t_hull->get_acceleration_forward();
 		momentary_max_speed_forward = t_hull->get_max_speed_forward();
@@ -297,36 +276,3 @@ void Enemy::set_body_position(float x, float y)
 {
 	enemy_body->SetTransform(b2Vec2(x, y), 0);
 }
-//
-////-------------------------------rotate-----------------------------------------------//
-//float x_player = t_turret->get_position().x;
-//float y_player = t_turret->get_position().y;
-//
-//float rotation = (atan2(y_player, x_player)) * 180 / M_PI;
-//float rotation2 = (rotation + 180) - t_turret->get_rotation();
-//
-//if (rotation2 < 0)
-//{
-//	rotation2 += 360;
-//}
-//
-//
-//if (rotation2 < 180 + 0.6 && rotation2 > 180 - 0.6)
-//{
-//	t_turret->get_sprite().setRotation(rotation);
-//}
-//else
-//{
-//	if (rotation2 >180)
-//	{
-//		t_turret->get_sprite().rotate(t_turret->get_traverse_speed() * 10 * _elapsed);
-//
-//	}
-//	if (rotation2 <180)
-//	{
-//		t_turret->get_sprite().rotate(-t_turret->get_traverse_speed() * 10 * _elapsed);
-//	}
-//
-//
-//}
-////---------------------------end rotation------------------------------------------//

@@ -15,24 +15,17 @@ void Game::run()
 	sf::Vector2i screen_dimensions(screen_widht, screen_height);
 	sf::RenderWindow *window = new sf::RenderWindow(sf::VideoMode(screen_dimensions.x, screen_dimensions.y), "Tank Hunter Arcade");	
 	window->setFramerateLimit(60);
-
 	//------View setup------//
 	sf::View *view = new sf::View(sf::FloatRect(0, 0, screen_dimensions.x, screen_dimensions.y));
-	//view.reset(sf::FloatRect(0, 0, screen_dimensions.x, screen_dimensions.y));
 	view->setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
-	view->rotate(180);
-	
+	view->rotate(180);	
 	level_creation();
-
 	map3.setPosition(0, 4096);
 	map4.setPosition(0, 4096);
-
 	level_move_count = 0;
 	modulo_int = 0;
-
 	begin_of_game = 0;
-	_game_state = Game::showing_splash;
-	
+	_game_state = Game::showing_splash;	
 	gameloop(window, view, main_menu);	
 }
 
@@ -107,7 +100,6 @@ void Game::gameloop(sf::RenderWindow *window, sf::View *view, MainMenu *main_men
 	//---player_b2_body---//
 	float SCALE = 30.f;
 	b2BodyDef BodyDef;
-	//BodyDef.position = b2Vec2(2048.0f / SCALE, (screen_height / 2) / SCALE);
 	BodyDef.type = b2_dynamicBody;
 	b2Body* player_body = world.CreateBody(&BodyDef);
 

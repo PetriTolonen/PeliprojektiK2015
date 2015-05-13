@@ -16,7 +16,7 @@ public:
 	void set_position(sf::Vector2f vector);
 	void set_position(float x, float y);
 	void set_rotation(float r);
-	void rotate();//float r);
+	void rotate();
 	bool is_destroyed() const;
 	void destroy();
 	void update(sf::Event event, sf::RenderWindow* win);

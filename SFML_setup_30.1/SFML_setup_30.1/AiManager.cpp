@@ -15,10 +15,7 @@ sf::Vector2f AiManager::get_player_position(Player* player)
 	return player->get_position();
 }
 
-void AiManager::move_to(sf::Vector2f player_position, Enemy* enemy)
-{
-	
-}
+
 
 void AiManager::update(Player* player, Enemy* enemy)
 {

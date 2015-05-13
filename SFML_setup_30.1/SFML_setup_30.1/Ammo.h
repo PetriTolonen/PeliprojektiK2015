@@ -15,14 +15,9 @@ public:
 	~Ammo();
 
 	void on_update(sf::RenderWindow* win);
-
 	int get_damage();
 	int get_penetration();
-
-	//sf::Vector2f get_position();
-
 	void on_draw(sf::RenderWindow* win);
-
 	b2Vec2 get_position();
 	void set_position(float x, float y);
 	float get_velocity();
